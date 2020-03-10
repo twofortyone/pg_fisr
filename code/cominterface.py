@@ -40,6 +40,15 @@ class Opendss:
     def get_voltages(self):
         return self.DSSBus.VMagAngle
 
+    def get_bus_names(self):
+        return self.DSSCircuit.AllBusNames
+
+    def get_bus_vmagpu(self):
+        return self.DSSCircuit.AllBusVmagPu
+
+    def get_bus_vmag(self):
+        return self.DSSCircuit.AllBusVmag
+
     # voltajes = DSSBus.VMagAngle
     # nombre = DSSBus.Name
     # print(nombre, voltajes)
