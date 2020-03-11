@@ -15,8 +15,10 @@ class Opendss:
         self.DSSSolution = self.DSSCircuit.Solution  # Return an interface to the solution object
         self.DSSParallel = self.DSSCircuit.Parallel  # Delivers a handler for the parallel dispatch interface
         self.DSSLines = self.DSSCircuit.Lines  # Return interface to lines collection
+        self.DSSLoads = self.DSSCircuit.Loads  # Return interface to loads collection
         self.DSSBus = self.DSSCircuit.ActiveBus  # Return the interface to the active bus
         self.DSSCtrlQueue = self.DSSCircuit.CtrlQueue  # Interface to the main control queue
+        self.DSSCktElement = self.DSSCircuit.ActiveCktElement  # Return interface to active element
         self.DSSStart = self.DSSObj.Start(0)
         if self.DSSStart:
             print("OpenDSS Engine started successfully")
@@ -31,17 +33,14 @@ class Opendss:
     def get_version(self):
         return self.DSSObj.Version
 
-    def send_command(self, command):
-        self.DSSText.Command = command
-
-    def solve(self):
-        self.DSSSolution.Solve()
-
     def get_voltages(self):
         return self.DSSBus.VMagAngle
 
-    def get_bus_names(self):
+    def get_buses(self):
         return self.DSSCircuit.AllBusNames
+
+    def get_active_element(self):
+        return self.DSSCktElement.Name
 
     def get_bus_vmagpu(self):
         return self.DSSCircuit.AllBusVmagPu
@@ -49,7 +48,45 @@ class Opendss:
     def get_bus_vmag(self):
         return self.DSSCircuit.AllBusVmag
 
-    # voltajes = DSSBus.VMagAngle
-    # nombre = DSSBus.Name
-    # print(nombre, voltajes)
-    # print(DSSCircuit.AllBusVmag)
+    def get_lines(self):
+        return self.DSSLines.AllNames
+
+    def get_loads(self):
+        return self.DSSLoads.AllNames
+
+    def get_ae_busnames(self):
+        return self.DSSCktElement.BusNames
+
+    def get_ae_data(self):
+        currents = self.DSSCktElement.CurrentsMagAng
+        voltages = self.DSSCktElement.Voltages
+        enabled = self.DSSCktElement.Enabled
+        return currents, voltages, enabled
+
+    def get_ae_currents(self):
+        return self.DSSCktElement.CurrentsMagAng
+
+    # Verify if the active element is open given the terminal
+    def ae_is_open(self, term):
+        return self.DSSCktElement.IsOpen(term, 1)
+
+    def send_command(self, command):
+        self.DSSText.Command = command
+
+    def solve(self):
+        self.DSSSolution.Solve()
+
+    def set_active_element(self, element):
+        self.DSSCircuit.SetActiveElement(element)
+
+    def open_element(self, term):
+        self.DSSCktElement.Open(term, 0)
+
+    def close_element(self, term):
+        self.DSSCktElement.Close(term, 0)
+
+
+
+
+
+
