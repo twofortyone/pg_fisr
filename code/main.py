@@ -1,5 +1,4 @@
 import circuit
-import numpy as np
 
 path = 'D:\Bus_37\ieee37.dss'
 # print(com.get_path(), com.get_version())
@@ -8,7 +7,7 @@ path = 'D:\Bus_37\ieee37.dss'
 circuit = circuit.Circuit(path)
 lines = circuit.get_lines()
 index = 0
-#
+
 # for i in lines:
 #     circuit.open_switch(i, 1)
 #     circuit.open_switch(i, 2)

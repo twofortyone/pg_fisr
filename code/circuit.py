@@ -47,9 +47,18 @@ class Circuit:
 
     def is_line_open(self, line, term):
         self.set_active_line(line)
-        line = self.get_active_element()
+        line = self.get_ae_name()
         status = self.com.ae_is_open(term)
         return line, status
+
+    def num_load_offline(self):
+        count = 0
+        for i in self.loads:
+            self.set_active_load(i)
+            current = self.get_ae_currents()[0]
+            if current <= 0.5:
+                count += 1
+        return count
 
     def get_buses(self):
         return self.buses
@@ -83,11 +92,3 @@ class Circuit:
             load_buses.append([i, buses[0]])
         return load_buses
 
-    def num_load_offline(self):
-        count = 0
-        for i in self.loads:
-            self.set_active_load(i)
-            current = self.get_ae_currents()[0]
-            if current <= 0.5:
-                count += 1
-        return count
