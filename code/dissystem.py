@@ -11,10 +11,12 @@ class DistributionSystem:
         self.start_tie = tie  # Tie switches list
         self.switches_num = len(switches)
         self.failure = None  # Line failure
-        self.switches_obs = None  # Switches state
-        self.failures_obs = None
-        self.opened_switches = None
-        self.closed_switches = None
+        self.switches_obs = []  # Switches state
+        self.failures_obs = []
+        self.opened_switches = []
+        self.closed_switches = []
+
+        self.sys_start()
 
     def sys_start(self):
         # Fill 1 for sectionalizing switch
@@ -25,24 +27,23 @@ class DistributionSystem:
             pos = find_element(self.switches_name, self.start_tie[i])
             self.switches_obs[pos] = 0
 
-        self.opened_switches = self.get_opened_switches()
-        self.closed_switches = self.get_closed_switches()
+        self.update_switches()
 
-    def possible_close_actions(self, failure):
-        switches = self.switches_obs
-        actions = []
-        for i in range(len(switches)):
-            if i != failure and switches[i] == 0:
-                actions.append(i)
-        return actions
-
-    def possible_open_actions(self, ):
-        switches = self.switches_obs
-        actions = []
-        for i in range(len(switches)):
-            if switches[i] == 1:
-                actions.append(i)
-        return actions
+    # def possible_close_actions(self, current_):
+    #     switches = self.switches_obs
+    #     actions = []
+    #     for i in range(len(switches)):
+    #         if i != current_ and switches[i] == 0:
+    #             actions.append(i)
+    #     return actions
+    #
+    # def possible_open_actions(self, current_switches):
+    #     cs = current_switches
+    #     to_open = self.closed_switches.copy()
+    #     for i in cs:
+    #         if i in to_open:
+    #             to_open.remove(i)
+    #     return to_open
 
     # Action methods
     def close_switch(self, switch):
@@ -52,6 +53,7 @@ class DistributionSystem:
         obs = self.switches_obs
         if 0 <= switch < len(obs):
             obs[switch] = 1
+        self.update_switches()
 
     def open_switch(self, switch):
         """Open a switch
@@ -60,6 +62,15 @@ class DistributionSystem:
         obs = self.switches_obs
         if 0 <= switch < len(obs):
             obs[switch] = 0
+        self.update_switches()
+
+    def update_switches(self):
+        self.opened_switches = self.get_opened_switches()
+        self.closed_switches = self.get_closed_switches()
+
+    def sort_opened_switches(self):
+        return self.opened_switches.sort()
+
 
     # Getters methods
     def get_opened_switches(self):
@@ -77,10 +88,14 @@ class DistributionSystem:
         return create_name_list(1, obs)
 
     def get_switches_names(self, arg):
+        """Find the switche name
+        :param arg: switches_obs list
+        :return names: list with tha names of the switches
+        """
         names = []
-        switches_names = self.switches_name
+        sn = self.switches_name
         for i in arg:
-            names.append(switches_names[i])
+            names.append(sn[i])
         return names
 
 

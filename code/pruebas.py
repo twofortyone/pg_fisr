@@ -3,6 +3,7 @@ import numpy as np
 from scipy.special import comb
 from itertools import combinations
 from dissystem import DistributionSystem
+from fisr_env import FisrEnvironment
 
 def estados(tie, switches):
     num_estados = comb(switches, tie)
@@ -19,11 +20,12 @@ def start_state(tie, sw):
     return states
 
 
-states = start_state(2, 6)
+states = start_state(5,7)
 
-#index = states.index((3,4,5,6,7))
-#print(index)
+index = states.index((3,4,5,6,7))
+print(index)
 
+# Modelamiento del sistema de distribucion
 nodes = ['N0', 'N1', 'N2', 'N3', 'N4', 'N5', 'N6']
 switches = ['S1', 'S2', 'S3', 'S6', 'T4', 'T5']
 tie = ['T4', 'T5']
@@ -31,20 +33,19 @@ tie = ['T4', 'T5']
 bus33 = DistributionSystem(nodes, switches, tie)
 bus33.sys_start()
 sw = bus33.switches_name
-close = bus33.possible_close_actions(3)
-for i in close:
-    print(sw[i])
-
 f = bus33.switches_obs
-b = bus33.get_opened_switches()
-c = bus33.get_closed_switches()
+b = bus33.opened_switches
+c = bus33.closed_switches
 
-print(b, c)
-
-d = bus33.possible_close_actions(1)
-print(d)
+print(sw, f, b, c)
 
 names = bus33.get_switches_names(b)
-
 print(names)
 
+# h = bus33.possible_open_actions([1])
+# print(h)
+
+print('--------------------------')
+env = FisrEnvironment()
+obs = env.get_observation()
+print(obs)
