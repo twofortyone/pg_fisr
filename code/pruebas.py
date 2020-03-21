@@ -4,6 +4,7 @@ from scipy.special import comb
 from itertools import combinations
 from dissystem import DistributionSystem
 from fisr_env import FisrEnvironment
+from dissystem import ToPython
 
 def estados(tie, switches):
     num_estados = comb(switches, tie)
@@ -27,24 +28,27 @@ print(index)
 
 # Modelamiento del sistema de distribucion
 nodes = ['N0', 'N1', 'N2', 'N3', 'N4', 'N5']
-switches_conn = [('N0','N1'), ('N1','N2'),('N1','N3'),('N2','N4'),('N3','N4'),('N4','N5')]
+conn = [('N0','N1'), ('N1','N2'),('N1','N3'), ('N4','N5'), ('N2','N4'),('N3','N4')]
 switches = ['S1', 'S2', 'S3', 'S6', 'T4', 'T5']
 tie = ['T4', 'T5']
 
-bus33 = DistributionSystem(nodes, switches, tie, switches_conn)
+system_data = ToPython(nodes, switches, tie, conn)
+bus33 = DistributionSystem(system_data)
 bus33.sys_start()
-sw = bus33.switches_name
+
 f = bus33.switches_obs
 b = bus33.opened_switches
 c = bus33.closed_switches
 
-print(sw, f, b, c)
+print(f, b, c)
 
-names = bus33.get_switches_names(b)
-print(names)
-
-adj = bus33.create_adjacency_matrix()
+adj = bus33.get_adj_matrix()
 print(adj)
+
+print(bus33.conn)
+
+#for i in range(int(input('Number of iteractions'))):
+#    f = input('ingrese falla')
 
 # h = bus33.possible_open_actions([1])
 # print(h)
@@ -53,3 +57,21 @@ print(adj)
 # env = FisrEnvironment()
 # obs = env.get_observation()
 # print(obs)
+
+# def possible_close_actions(self, current_):
+#     switches = self.switches_obs
+#     actions = []
+#     for i in range(len(switches)):
+#         if i != current_ and switches[i] == 0:
+#             actions.append(i)
+#     return actions
+#
+# def possible_open_actions(self, current_switches):
+#     cs = current_switches
+#     to_open = self.closed_switches.copy()
+#     for i in cs:
+#         if i in to_open:
+#             to_open.remove(i)
+#     return to_open
+
+
