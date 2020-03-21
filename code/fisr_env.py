@@ -8,12 +8,13 @@ import numpy as np
 class FisrEnvironment(BaseEnvironment):
     """Implements the environment  
     """
-
+    
     def __init__(self):
         nodes = ['N0', 'N1', 'N2', 'N3', 'N4', 'N5', 'N6']
         switches = ['S1', 'S2', 'S3', 'S6', 'T4', 'T5']
+        switches_conn = [('N0','N1'), ('N1','N2'),('N1','N3'),('N2','N4'),('N3','N4'),('N4','N5')]
         tie = ['T4', 'T5']
-        self.dsystem = DistributionSystem(nodes,switches,tie)
+        self.dsystem = DistributionSystem(nodes,switches,tie, switches_conn)
         
         self.current_state = [None, None, None, None]
         reward = None
