@@ -37,15 +37,33 @@ bus33 = DistributionSystem(system_data)
 bus33.sys_start()
 
 f = bus33.switches_obs
+g = bus33.nodes_obs
 b = bus33.opened_switches
 c = bus33.closed_switches
 
-print(f, b, c)
+print(f, g, b, c)
 
 adj = bus33.get_adj_matrix()
 print(adj)
 
+print(system_data.switches)
+print(system_data.nodes)
 print(bus33.conn)
+
+print('-----------------------------')
+print('-----------------------------')
+
+for x in range(len(f)):
+    bus33.do_failure(x)
+    print('switches ', bus33.switches_obs)
+    print('nodes ', bus33.nodes_obs)
+    print('closed s ', bus33.closed_switches)
+    print('opened ', bus33.opened_switches)
+    print('nodes offline ', bus33.num_nodes_offline())
+    print(bus33.nodes_adj_matrix)
+    print('-----------------------------')
+    bus33.close_switch(x)
+
 
 #for i in range(int(input('Number of iteractions'))):
 #    f = input('ingrese falla')

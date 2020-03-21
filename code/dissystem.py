@@ -31,8 +31,7 @@ class DistributionSystem:
         self.nodes_adj_matrix[pos1, pos2] = 0
         self.nodes_adj_matrix[pos2, pos1] = 0
         # update node obs
-        for x in nodes:
-            self.nodes_obs[x] = 0
+        self.update_node_obs()
 
     def connect_nodes(self, switch):
         nodes = self.conn[switch]
@@ -41,8 +40,7 @@ class DistributionSystem:
         self.nodes_adj_matrix[pos1, pos2] = 1
         self.nodes_adj_matrix[pos2, pos1] = 1
         # update node obs
-        for x in nodes:
-            self.nodes_obs[x] = 1
+        self.update_node_obs()
 
     def is_node_offline(self, node):
         check = True
@@ -71,7 +69,8 @@ class DistributionSystem:
         return adj
 
     def update_node_obs(self):
-
+        for x in range(len(self.nodes_obs)):
+            self.nodes_obs[x] = 0
         for i in range(len(self.nodes_obs)):
             for j in range(len(self.nodes_obs)):
                 if self.nodes_adj_matrix[i, j] == 1:
@@ -86,19 +85,27 @@ class DistributionSystem:
         """Close a switch
         :param switch: index of the switch in switches_name
         """
-        if 0 <= switch < len(self.switches_obs):
-            self.switches_obs[switch] = 1
-        self.update_switches()
-        self.connect_nodes(switch)
+        obs = self.switches_obs
+        if 0 <= switch < len(obs) and obs[switch] == 0:
+            obs[switch] = 1
+            # update opened and closed switch list
+            self.closed_switches.append(switch)
+            self.opened_switches.remove(switch)
+            # update nodes connection
+            self.connect_nodes(switch)
 
     def open_switch(self, switch):
         """Open a switch
         :param switch: index of the switch in switches_name
         """
-        if 0 <= switch < len(self.switches_obs):
-            self.switches_obs[switch] = 0
-        self.update_switches()
-        self.isolate_nodes(switch)
+        obs = self.switches_obs
+        if 0 <= switch < len(obs) and obs[switch] == 1:
+            obs[switch] = 0
+            # update opened and closed switch list
+            self.closed_switches.remove(switch)
+            self.opened_switches.append(switch)
+            # update node connections
+            self.isolate_nodes(switch)
 
     def update_switches(self):
         self.closed_switches = get_cond_list(1, self.switches_obs)
@@ -106,6 +113,12 @@ class DistributionSystem:
 
     def sort_opened_switches(self):
         return self.opened_switches.sort()
+    
+    # --------------------------------
+    # FAILURE's METHODS
+    # --------------------------------
+    def do_failure(self, line):
+        self.open_switch(line)
 
 
 class ToPython:
