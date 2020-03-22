@@ -17,7 +17,7 @@ def estados(tie, switches):
 
 def start_state(tie, sw):
     switches = np.arange(1, sw + 1)
-    states = list(combinations(switches, tie))
+    states = tuple(combinations(switches, tie))
     return states
 
 
@@ -34,7 +34,7 @@ tie = ['T4', 'T5']
 
 system_data = ToPython(nodes, switches, tie, conn)
 bus33 = DistributionSystem(system_data)
-bus33.sys_start()
+
 
 f = bus33.switches_obs
 g = bus33.nodes_obs

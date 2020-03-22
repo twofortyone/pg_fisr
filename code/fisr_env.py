@@ -1,7 +1,7 @@
 from environment import BaseEnvironment
 from dissystem import DistributionSystem
+from dissystem import ToPython
 from itertools import combinations
-from scipy.special import comb
 import numpy as np
 
 
@@ -10,68 +10,53 @@ class FisrEnvironment(BaseEnvironment):
     """
     
     def __init__(self):
-        nodes = ['N0', 'N1', 'N2', 'N3', 'N4', 'N5', 'N6']
-        switches = ['S1', 'S2', 'S3', 'S6', 'T4', 'T5']
-        switches_conn = [('N0','N1'), ('N1','N2'),('N1','N3'),('N2','N4'),('N3','N4'),('N4','N5')]
-        tie = ['T4', 'T5']
-        self.dsystem = DistributionSystem(nodes,switches,tie, switches_conn)
-        
-        self.current_state = [None, None, None, None]
+
+        nodes = ['N0', 'N1', 'N2', 'N3', 'N4', 'N5']  # Node list
+        conn = [('N0', 'N1'), ('N1', 'N2'), ('N1', 'N3'), ('N4', 'N5'), ('N2', 'N4'), ('N3', 'N4')]
+        switches = ['S1', 'S2', 'S3', 'S6', 'T4', 'T5']  # Switch list
+        tie = ['T4', 'T5']  # Tie switch list
+        self.system_data = ToPython(nodes, switches, tie, conn)  # Convert system data to python system
+        self.system = DistributionSystem(self.system_data)  # Create a distribution system model
+
+        self.states = self.get_states()  # States depending on number of total and tie switches
         reward = None
         observation = None
         termination = None
         self.reward_obs_term = [reward, observation, termination]
+        # Until here
+        self.current_state = [None, None, None, None]
 
     def env_init(self, env_info={}):
-        """Setup forn the environment called when the experiment first starts
-        
-        :param: env_info: information about the environment
-        """
-
         self.reward_obs_term = [0.0, None, False]
+        return NotImplementedError
 
-        # self.switches = env_info.get('num_switches')
-        self.start_tie_switches = [33, 34, 35, 36, 37]
-
-        return self.reward_obs_term[1]
-
-    def env_start(self, state):
+    def env_start(self):
         raise NotImplementedError
 
+    def get_states(self):
+        ns = len(self.system.switches_obs)
+        nt = len(self.system.start_tie_obs)
+        switches = np.arange(1, ns+1)
+        states = tuple(combinations((switches, nt)))
+        return states
+
     def get_observation(self):
-        num_sw = len(self.dsystem.switches_obs)
-        num_tie = len(self.dsystem.opened_switches)
-        print(num_sw,num_tie)
-        switches = np.arange(1, num_sw +1)
-        states = list(combinations(switches,num_tie))
-        print(switches,states)
-        tie = tuple(self.dsystem.opened_switches)
-        print(tie)
-        return states.index(tie)
+        current_state = self.system.sort_opened_switches()
+        pos = self.states.index(current_state)
+        return pos
 
     def env_step(self, action):
-        """A step taken by the environment
-
-        :param action: the action taken by the agent
-        :return self.reward_obs_term (float, state, boolean): a tuple 
-            of the reward, state observation and boolean indicating if it's terminal        
-        """
-        reward = 0
-
-        self.reward_obs_term (reward)
+        return NotImplementedError
 
     def env_cleanup(self):
-        """Cleanup done after the environment ends"""
-        self.dsystem.sys_start()
+        return NotImplementedError
 
     def env_message(self, message):
-        """A message asking the environment for information
-
-        :param message (string): the message passed to the environment
-        :return string: the response (or answer) to the message
-        """
         if message == "what is the current reward?":
             return "{}".format(self.reward_obs_term[0])
 
         # else
         return "I don't know how to respond to your message"
+
+
+

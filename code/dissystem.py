@@ -7,7 +7,7 @@ class DistributionSystem:
 
         self.sd = system
         self.conn = self.sd.get_conn()
-        self.start_tie = self.sd.get_tie()
+        self.start_tie_obs = self.sd.get_tie()
         # Variables declaration
         self.nodes_obs = self.sd.get_nodes()
         self.nodes_adj_matrix = self.get_adj_matrix()
@@ -60,7 +60,7 @@ class DistributionSystem:
             adj[pos1, pos2] = 1
             adj[pos2, pos1] = 1
 
-        for x in self.start_tie:
+        for x in self.start_tie_obs:
             z = self.conn[x]
             pos1 = z[0]
             pos2 = z[1]

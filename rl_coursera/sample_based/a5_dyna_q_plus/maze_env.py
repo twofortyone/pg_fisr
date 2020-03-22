@@ -4,6 +4,7 @@ from environment import BaseEnvironment
 
 import numpy as np
 
+
 class MazeEnvironment(BaseEnvironment):
     """Implements the environment for an RLGlue environment
 
@@ -83,23 +84,23 @@ class MazeEnvironment(BaseEnvironment):
         col = self.current_state[1]
 
         # update current_state with the action (also check validity of action)
-        if action == 0: # up
+        if action == 0:   # up
             if not (self.out_of_bounds(row-1, col) or self.is_obstacle(row-1, col)):
                 self.current_state = [row-1, col]
 
-        elif action == 1: # right
+        elif action == 1:  # right
             if not (self.out_of_bounds(row, col+1) or self.is_obstacle(row, col+1)):
                 self.current_state = [row, col+1]
 
-        elif action == 2: # down
+        elif action == 2:  # down
             if not (self.out_of_bounds(row+1, col) or self.is_obstacle(row+1, col)):
                 self.current_state = [row+1, col]
 
-        elif action == 3: # left
+        elif action == 3:  # left
             if not (self.out_of_bounds(row, col-1) or self.is_obstacle(row, col-1)):
                 self.current_state = [row, col-1]
 
-        if self.current_state == self.end_state: # terminate if goal is reached
+        if self.current_state == self.end_state:  # terminate if goal is reached
             reward = 1.0
             is_terminal = True
 
@@ -125,8 +126,6 @@ class MazeEnvironment(BaseEnvironment):
 
         # else
         return "I don't know how to respond to your message"
-
-
 
 
 class ShortcutMazeEnvironment(BaseEnvironment):
