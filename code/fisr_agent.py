@@ -43,22 +43,38 @@ class QLearningAgent(BaseAgent):
             action = self.argmax(current_q)
 
         # Perform an update 
-        qsa = self.q[self.prev_state, self.prev_action]
-        aux = reward + self.discount * np.amax(current_q) - qsa
-        self.q[self.prev_state, self.prev_action] = qsa + self.step_size * aux
+        ps = self.prev_state
+        pa = self.prev_action
+        aux = reward + self.discount * np.amax(current_q) - self.q[ps, pa]
+        self.q[ps, pa] = self.q[ps, pa] + self.step_size * aux
 
         self.prev_state = state
         self.prev_action = action
         return action 
 
     def agent_end(self, reward):
-        raise NotImplementedError
+        """Run when the agent teminates 
+        :param reward(float): the reward the agent received for 
+        entering the terminal state         
+        """
+        # perform the last update in the episode 
+        ps = self.prev_state
+        pa = self.prev_action
+        qsa = self.q[ps, pa]
+        self.q[ps, pa] = qsa + self.step_size*(reward-qsa)
 
     def agent_cleanup(self):
-        raise NotImplementedError
+        self.prev_state = None 
 
     def agent_message(self, message):
-        raise NotImplementedError
+        """A function used to pass information from the agent to the experiment.
+        :param message: The message passed to the agent.
+        :return: The response (or answer) to the message.
+        """
+        if message == "get_values":
+            return self.values
+        else:
+            raise Exception("TDAgent.agent_message(): Message not understood!")
 
     def argmax(self, q_values):
         """ argmax with random tie-breaking 
