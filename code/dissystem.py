@@ -7,19 +7,24 @@ class DistributionSystem:
 
         self.sd = system
         self.conn = self.sd.get_conn()
-        self.start_tie_obs = self.sd.get_tie()
+        self.start_tie_obs = []
         # Variables declaration
-        self.nodes_obs = self.sd.get_nodes()
-        self.nodes_adj_matrix = self.get_adj_matrix()
-        self.switches_obs = self.sd.get_switches()
+        self.nodes_obs = []
+        self.nodes_adj_matrix = None
+        self.switches_obs = []
         self.closed_switches = []
         self.opened_switches = []
         # Method initialization
         self.sys_start()
 
     def sys_start(self):
+        self.start_tie_obs = self.sd.get_tie()
+        self.nodes_obs = self.sd.get_nodes()
+        self.nodes_adj_matrix = self.get_adj_matrix()
+        self.switches_obs = self.sd.get_switches()
         self.update_switches()
         self.update_node_obs()
+        return self.opened_switches
 
     # --------------------------------
     # NODE's METHODS
@@ -112,7 +117,8 @@ class DistributionSystem:
         self.opened_switches = get_cond_list(0, self.switches_obs)
 
     def sort_opened_switches(self):
-        return self.opened_switches.sort()
+        open_sorted = tuple(sorted(self.opened_switches))
+        return open_sorted
     
     # --------------------------------
     # FAILURE's METHODS

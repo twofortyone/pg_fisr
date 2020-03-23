@@ -6,7 +6,10 @@ import numpy as np
 
 
 class FisrEnvironment(BaseEnvironment):
-    """Implements the environment  
+    """Implements the environment
+    Note:
+        env_init, env_start, env_step, env_cleanup, and env_message are required
+        methods.
     """
     
     def __init__(self):
@@ -17,46 +20,85 @@ class FisrEnvironment(BaseEnvironment):
         tie = ['T4', 'T5']  # Tie switch list
         self.system_data = ToPython(nodes, switches, tie, conn)  # Convert system data to python system
         self.system = DistributionSystem(self.system_data)  # Create a distribution system model
-
         self.states = self.get_states()  # States depending on number of total and tie switches
         reward = None
         observation = None
         termination = None
+        self.time_step = 0
+        self.current_state = None
         self.reward_obs_term = [reward, observation, termination]
-        # Until here
-        self.current_state = [None, None, None, None]
 
     def env_init(self, env_info={}):
         self.reward_obs_term = [0.0, None, False]
-        return NotImplementedError
 
     def env_start(self):
-        raise NotImplementedError
+        """The first method called when the experiment starts, called before the
+        agent starts
+        :return: the first observation from the environment
+        """
+        self.current_state = self.get_observation()
+        self.reward_obs_term[1] = self.current_state
+        return self.reward_obs_term[1]
 
     def get_states(self):
+        """States list depending on tie and total switches
+        :return states: total switches combing tie switches list
+        """
         ns = len(self.system.switches_obs)
         nt = len(self.system.start_tie_obs)
-        switches = np.arange(1, ns+1)
-        states = tuple(combinations((switches, nt)))
+        switches = np.arange(ns)
+        states = tuple(combinations(switches, nt))
         return states
 
     def get_observation(self):
+        """ Get state index
+        :return pos: index of current_state in states list
+        """
         current_state = self.system.sort_opened_switches()
         pos = self.states.index(current_state)
         return pos
 
     def env_step(self, action):
-        return NotImplementedError
+        """A step taken by the environment
+        :param action: the action taken by the agent (action, switch)
+        :return: a tuple of the reward, state observation and boolean if it's terminal
+        """
+
+        self.time_step += 1
+        reward = -1
+        is_terminal = False
+        switch2open = action[0]
+        switch2close = action[1]
+
+        self.system.open_switch(switch2open)
+        self.system.close_switch(switch2close)
+
+        self.current_state = self.get_observation()  # update current state
+
+        if self.system.num_nodes_offline() != 0:  # reward if there is any node offline
+            reward -= 10
+
+        if self.time_step == 1000:  # terminate if 1000 time steps are reached
+            is_terminal = True
+
+        self.reward_obs_term = [reward, self.current_state, is_terminal]
+
+        return self.reward_obs_term
 
     def env_cleanup(self):
-        return NotImplementedError
+        """Cleanup done after the environment ends"""
+        return self.system.sys_start()
 
     def env_message(self, message):
+        """ A message asking the environment for information
+        :param message: the message passed to the environment
+        :return: the response to the message
+        """
         if message == "what is the current reward?":
             return "{}".format(self.reward_obs_term[0])
 
-        # else
-        return "I don't know how to respond to your message"
+        else:
+            return "I don't know how to respond to your message"
 
 
 
