@@ -17,10 +17,39 @@ class QLearningAgent(BaseAgent):
         self.q = np.zeros((self.num_states, self.num_actions))
 
     def agent_start(self, state):
-        raise NotImplementedError        
+        
+        # choose action using epsilon greedy
+        curren_q = self.q[state,:]  # array with all q values for a given state
+        if self.rand_generator.rand() < self.epsilon: 
+            action = self.rand_generator.randint(self.num_actions)
+        else: 
+            action = self.argmax(curren_q)    
+        self.prev_state = state
+        self.prev_action = action
+        return action  
 
     def agent_step(self, reward, state):
-        raise NotImplementedError
+        """A step taken by the agent 
+        :param reward(float): the reward received for the last action taken 
+            state(int): the state from the environment's step based on where
+            the agent ended up after the last step 
+        :return action(int): the last action the agent is taking 
+        """
+        
+        current_q = self.q[state]
+        if self.rand_generator.rand() < self.epsilon: 
+            action = self.rand_generator.randint(self.num_actions)
+        else: 
+            action = self.argmax(current_q)
+
+        # Perform an update 
+        qsa = self.q[self.prev_state, self.prev_action]
+        aux = reward + self.discount * np.amax(current_q) - qsa
+        self.q[self.prev_state, self.prev_action] = qsa + self.step_size * aux
+
+        self.prev_state = state
+        self.prev_action = action
+        return action 
 
     def agent_end(self, reward):
         raise NotImplementedError
