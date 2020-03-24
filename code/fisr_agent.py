@@ -12,6 +12,8 @@ class QLearningAgent(BaseAgent):
         self.step_size = agent_init_info['step_size']
         self.discount = agent_init_info['discount']
         self.rand_generator = np.random.RandomState(agent_init_info['seed'])
+        self.prev_action = None
+        self.prev_state = None
 
         # Create an array for action-value estimates and initialize to zero
         self.q = np.zeros((self.num_states, self.num_actions))
@@ -19,21 +21,22 @@ class QLearningAgent(BaseAgent):
     def agent_start(self, state):
         
         # choose action using epsilon greedy
-        curren_q = self.q[state,:]  # array with all q values for a given state
+        current_q = self.q[state, :]  # array with all q values for a given state
         if self.rand_generator.rand() < self.epsilon: 
             action = self.rand_generator.randint(self.num_actions)
         else: 
-            action = self.argmax(curren_q)    
+            action = self.argmax(current_q)
         self.prev_state = state
         self.prev_action = action
         return action  
 
     def agent_step(self, reward, state):
         """A step taken by the agent 
-        :param reward(float): the reward received for the last action taken 
-            state(int): the state from the environment's step based on where
+
+        :param reward: (float) the reward received for the last action taken
+        :param state: (int) the state from the environment's step based on where
             the agent ended up after the last step 
-        :return action(int): the last action the agent is taking 
+        :return action(int): the last action the agent is taking
         """
         
         current_q = self.q[state]
@@ -53,8 +56,8 @@ class QLearningAgent(BaseAgent):
         return action 
 
     def agent_end(self, reward):
-        """Run when the agent teminates 
-        :param reward(float): the reward the agent received for 
+        """Run when the agent terminates
+        :param reward: (float) the reward the agent received for
         entering the terminal state         
         """
         # perform the last update in the episode 
@@ -72,14 +75,14 @@ class QLearningAgent(BaseAgent):
         :return: The response (or answer) to the message.
         """
         if message == "get_values":
-            return self.values
+            return self.q
         else:
             raise Exception("TDAgent.agent_message(): Message not understood!")
 
     def argmax(self, q_values):
         """ argmax with random tie-breaking 
-        :param q_values (numpy arrary): the array of action-values
-        :return action (int): an action with the highest value 
+        :param q_values: (numpy array) the array of action-values
+        :return action (int): an action with the highest value
         """
 
         top = float('-inf')

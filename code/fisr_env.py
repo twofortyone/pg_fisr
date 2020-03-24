@@ -27,6 +27,7 @@ class FisrEnvironment(BaseEnvironment):
         self.time_step = 0
         self.current_state = None
         self.reward_obs_term = [reward, observation, termination]
+        self.actions = None
 
     def env_init(self, env_info={}):
         self.reward_obs_term = [0.0, None, False]
@@ -56,6 +57,9 @@ class FisrEnvironment(BaseEnvironment):
         """
         current_state = self.system.sort_opened_switches()
         pos = self.states.index(current_state)
+
+        # update possible actions
+        self.actions = self.get_actions()
         return pos
 
     def env_step(self, action):
@@ -67,8 +71,10 @@ class FisrEnvironment(BaseEnvironment):
         self.time_step += 1
         reward = -1
         is_terminal = False
-        switch2open = action[0]
-        switch2close = action[1]
+        # determine switches to execute
+        switches = self.actions[action]
+        switch2open = switches[0]
+        switch2close = switches[1]
 
         self.system.open_switch(switch2open)
         self.system.close_switch(switch2close)
@@ -87,7 +93,10 @@ class FisrEnvironment(BaseEnvironment):
 
     def env_cleanup(self):
         """Cleanup done after the environment ends"""
-        return self.system.sys_start()
+        r = self.system.sys_start()
+        self.reward_obs_term = [0.0, None, False]
+        self.env_start()
+        return r
 
     def env_message(self, message):
         """ A message asking the environment for information
@@ -99,6 +108,20 @@ class FisrEnvironment(BaseEnvironment):
 
         else:
             return "I don't know how to respond to your message"
+
+    def get_actions(self):
+        closed = np.sort(np.asarray(self.system.closed_switches))
+        opened = np.sort(np.asarray(self.system.opened_switches))
+        num_actions = len(closed) * len(opened)
+        actions = np.zeros((num_actions, 2))
+        i = 0
+        for x in closed:
+            for z in opened:
+                actions[i] = np.array([x, z])
+                i += 1
+        actions = actions.astype(int)
+        return actions
+
 
 
 
