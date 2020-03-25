@@ -4,7 +4,7 @@ import numpy as np
 
 class QLearningAgent(BaseAgent):
 
-    def __init__(self, agent_init_info={}):
+    def agent_init(self, agent_init_info= {}):
 
         self.num_actions = agent_init_info['num_actions']
         self.num_states = agent_init_info['num_states']
@@ -88,11 +88,11 @@ class QLearningAgent(BaseAgent):
         top = float('-inf')
         ties = []
         for i in range(len(q_values)):
-            if q_values[i] < top: 
+            if q_values[i] > top:
                 top = q_values[i]
                 ties = []
 
-            if q_values == top:
+            if q_values[i] == top:
                 ties.append(i)
 
         return self.rand_generator.choice(ties)

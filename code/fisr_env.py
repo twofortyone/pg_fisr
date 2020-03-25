@@ -35,7 +35,7 @@ class FisrEnvironment(BaseEnvironment):
     def env_start(self):
         """The first method called when the experiment starts, called before the
         agent starts
-        :return: the first observation from the environment
+        :return: (list) the first observation from the environment
         """
         self.current_state = self.get_observation()
         self.reward_obs_term[1] = self.current_state
@@ -43,7 +43,7 @@ class FisrEnvironment(BaseEnvironment):
 
     def get_states(self):
         """States list depending on tie and total switches
-        :return states: total switches combing tie switches list
+        :return states: (tuple) total switches combing tie switches list
         """
         ns = len(self.system.switches_obs)
         nt = len(self.system.start_tie_obs)
@@ -53,7 +53,7 @@ class FisrEnvironment(BaseEnvironment):
 
     def get_observation(self):
         """ Get state index
-        :return pos: index of current_state in states list
+        :return pos: (int) index of current_state in states list
         """
         current_state = self.system.sort_opened_switches()
         pos = self.states.index(current_state)
@@ -64,8 +64,8 @@ class FisrEnvironment(BaseEnvironment):
 
     def env_step(self, action):
         """A step taken by the environment
-        :param action: the action taken by the agent (action, switch)
-        :return: a tuple of the reward, state observation and boolean if it's terminal
+        :param action: (int) the action taken by the agent (action, switch)
+        :return: (list) a list of the reward, state observation and boolean if it's terminal
         """
 
         self.time_step += 1
@@ -84,8 +84,9 @@ class FisrEnvironment(BaseEnvironment):
         if self.system.num_nodes_offline() != 0:  # reward if there is any node offline
             reward -= 10
 
-        if self.time_step == 1000:  # terminate if 1000 time steps are reached
+        if self.time_step == 10000:  # terminate if 1000 time steps are reached
             is_terminal = True
+            self.time_step = 0
 
         self.reward_obs_term = [reward, self.current_state, is_terminal]
 
@@ -110,6 +111,9 @@ class FisrEnvironment(BaseEnvironment):
             return "I don't know how to respond to your message"
 
     def get_actions(self):
+        """Actions list depending on current state
+        :returns actions: (np.array) action list to take        
+        """
         closed = np.sort(np.asarray(self.system.closed_switches))
         opened = np.sort(np.asarray(self.system.opened_switches))
         num_actions = len(closed) * len(opened)
