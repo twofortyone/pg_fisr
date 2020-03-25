@@ -78,25 +78,9 @@ env = FisrEnvironment()
 env.env_start()
 obs = env.get_observation()
 print(obs)
-print(env.env_step((0, 5)))
+print(env.env_step(5))
 # print(env.env_cleanup())
 
 a = env.get_actions()
 print(a)
-# def possible_close_actions(self, current_):
-#     switches = self.switches_obs
-#     actions = []
-#     for i in range(len(switches)):
-#         if i != current_ and switches[i] == 0:
-#             actions.append(i)
-#     return actions
-#
-# def possible_open_actions(self, current_switches):
-#     cs = current_switches
-#     to_open = self.closed_switches.copy()
-#     for i in cs:
-#         if i in to_open:
-#             to_open.remove(i)
-#     return to_open
-
 

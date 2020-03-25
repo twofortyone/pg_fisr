@@ -45,9 +45,8 @@ class FisrEnvironment(BaseEnvironment):
         """States list depending on tie and total switches
         :return states: (tuple) total switches combing tie switches list
         """
-        ns = len(self.system.switches_obs)
         nt = len(self.system.start_tie_obs)
-        switches = np.arange(ns)
+        switches = np.arange(self.system.num_switches)
         states = tuple(combinations(switches, nt))
         return states
 
@@ -55,7 +54,7 @@ class FisrEnvironment(BaseEnvironment):
         """ Get state index
         :return pos: (int) index of current_state in states list
         """
-        current_state = self.system.sort_opened_switches()
+        current_state = tuple(np.sort(self.system.opened_switches))
         pos = self.states.index(current_state)
 
         # update possible actions
@@ -114,8 +113,8 @@ class FisrEnvironment(BaseEnvironment):
         """Actions list depending on current state
         :returns actions: (np.array) action list to take        
         """
-        closed = np.sort(np.asarray(self.system.closed_switches))
-        opened = np.sort(np.asarray(self.system.opened_switches))
+        closed = np.sort(self.system.closed_switches)
+        opened = np.sort(self.system.opened_switches)
         num_actions = len(closed) * len(opened)
         actions = np.zeros((num_actions, 2))
         i = 0
@@ -125,7 +124,3 @@ class FisrEnvironment(BaseEnvironment):
                 i += 1
         actions = actions.astype(int)
         return actions
-
-
-
-

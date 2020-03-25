@@ -2,6 +2,7 @@ from fisr_env import FisrEnvironment
 from scipy.special import comb
 from fisr_agent import QLearningAgent
 import numpy as np
+import time
 
 from scipy.stats import sem
 import matplotlib.pyplot as plt  # used 
@@ -9,6 +10,7 @@ from rl_glue import RLGlue  # used
 from tqdm import tqdm  # used 
 import pickle
 
+start_time = time.time()
 env = FisrEnvironment()
 agent = QLearningAgent()
 # all_reward_sums= {}
@@ -43,7 +45,7 @@ for run in tqdm(range(num_runs)):
 
     reward_sums = []
     state_visits = np.zeros(num_states)
-    for episode in tqdm(range(num_episodes)):
+    for episode in range(num_episodes):
         if episode < num_episodes - 10:
             rl_glue.rl_episode(0)
         else:
@@ -59,6 +61,8 @@ for run in tqdm(range(num_runs)):
     all_reward_sums.append(reward_sums)
     all_state_visits.append(state_visits)
 
+end_time = time.time()
+
 plt.plot(np.mean(all_reward_sums, axis=0), label='algorithm')
 plt.xlabel("Episodes")
 plt.ylabel("Sum of\n rewards\n during\n episode", rotation=0, labelpad=40)
@@ -71,3 +75,4 @@ plt.show()
 
 
 print('Started successfully!')
+print('proccesing_time = ', end_time-start_time)

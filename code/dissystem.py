@@ -7,21 +7,32 @@ class DistributionSystem:
 
         self.sd = system
         self.conn = self.sd.get_conn()
-        self.start_tie_obs = []
+        self.start_tie_obs = None
+
         # Variables declaration
-        self.nodes_obs = []
+        self.nodes_obs = None
         self.nodes_adj_matrix = None
-        self.switches_obs = []
-        self.closed_switches = []
-        self.opened_switches = []
+        self.switches_obs = None
+        self.closed_switches = None
+        self.opened_switches = None
+        self.num_nodes = 0
+        self.num_switches = 0
         # Method initialization
         self.sys_start()
 
     def sys_start(self):
+        """Update system with topython values
+        :return: opened_switches (state)
+        """
+        # Data
         self.start_tie_obs = self.sd.get_tie()
         self.nodes_obs = self.sd.get_nodes()
+        self.num_nodes = len(self.nodes_obs)
         self.nodes_adj_matrix = self.get_adj_matrix()
         self.switches_obs = self.sd.get_switches()
+        self.num_switches = len(self.switches_obs)
+
+        # Functions
         self.update_switches()
         self.update_node_obs()
         return self.opened_switches
@@ -30,6 +41,9 @@ class DistributionSystem:
     # NODE's METHODS
     # --------------------------------
     def isolate_nodes(self, switch):
+        """Update adjacency matrix when switch connection is modified
+        :param switch: (int pos) switch to isolate
+        """
         nodes = self.conn[switch]
         pos1 = nodes[0]
         pos2 = nodes[1]
@@ -39,6 +53,9 @@ class DistributionSystem:
         self.update_node_obs()
 
     def connect_nodes(self, switch):
+        """Update adjacency matrix when switch connection is modified
+        :param switch: (int pos) switch to connect
+        """
         nodes = self.conn[switch]
         pos1 = nodes[0]
         pos2 = nodes[1]
@@ -48,17 +65,26 @@ class DistributionSystem:
         self.update_node_obs()
 
     def is_node_offline(self, node):
+        """Determine if a node is offline
+        :param node: (int pos) node to check
+        :return: (boolean) True if node is offline
+        """
         check = True
         if self.nodes_obs[node] == 1:
             check = False
         return check
 
     def num_nodes_offline(self):
-        return self.nodes_obs.count(0)
+        """Count number of nodes offline
+        :return: number of nodes offline
+        """
+        return np.count_nonzero(self.nodes_obs == 0)
 
     def get_adj_matrix(self):
-        nm = len(self.nodes_obs)
-        adj = np.zeros((nm, nm))
+        """ Get the node adjacency matrix (only use at start)
+        :return adj: (np array) node adjacency matrix
+        """
+        adj = np.zeros((self.num_nodes, self.num_nodes))
         for x in self.conn:
             pos1 = x[0]
             pos2 = x[1]
@@ -74,13 +100,9 @@ class DistributionSystem:
         return adj
 
     def update_node_obs(self):
-        for x in range(len(self.nodes_obs)):
-            self.nodes_obs[x] = 0
-        for i in range(len(self.nodes_obs)):
-            for j in range(len(self.nodes_obs)):
-                if self.nodes_adj_matrix[i, j] == 1:
-                    self.nodes_obs[i] = 1
-                    break
+        """Update node_obs after check node adjacency matrix"""
+        scn = np.count_nonzero(self.nodes_adj_matrix, axis=0)
+        self.nodes_obs = np.where(scn != 0, 1, scn)
 
     # --------------------------------
     # SWITCH's METHODS
@@ -90,36 +112,32 @@ class DistributionSystem:
         """Close a switch
         :param switch: index of the switch in switches_name
         """
-        obs = self.switches_obs
-        if 0 <= switch < len(obs) and obs[switch] == 0:
-            obs[switch] = 1
+        if self.num_switches > switch >= 0 == self.switches_obs[switch]:
+            self.switches_obs[switch] = 1
             # update opened and closed switch list
-            self.closed_switches.append(switch)
-            self.opened_switches.remove(switch)
+            self.closed_switches = np.append(self.closed_switches, switch)
+            self.opened_switches = np.delete(self.opened_switches, np.where(self.opened_switches == switch))
             # update nodes connection
             self.connect_nodes(switch)
 
     def open_switch(self, switch):
-        """Open a switch
+        """Open a switch and update closed and opened switches and node adjacency matrix
         :param switch: index of the switch in switches_name
         """
-        obs = self.switches_obs
-        if 0 <= switch < len(obs) and obs[switch] == 1:
-            obs[switch] = 0
-            # update opened and closed switch list
-            self.closed_switches.remove(switch)
-            self.opened_switches.append(switch)
+        if 0 <= switch < self.num_switches and self.switches_obs[switch] == 1:
+            self.switches_obs[switch] = 0
+            # update opened and closed switch array
+            self.closed_switches = np.delete(self.closed_switches, np.where(self.closed_switches == switch))
+            self.opened_switches = np.append(self.opened_switches, switch)
+
             # update node connections
             self.isolate_nodes(switch)
 
     def update_switches(self):
-        self.closed_switches = get_cond_list(1, self.switches_obs)
-        self.opened_switches = get_cond_list(0, self.switches_obs)
+        """ Get closed and opened switches from switches obs (only use at start)"""
+        self.closed_switches = np.where(self.switches_obs == 1)[0]
+        self.opened_switches = np.where(self.switches_obs == 0)[0]
 
-    def sort_opened_switches(self):
-        open_sorted = tuple(sorted(self.opened_switches))
-        return open_sorted
-    
     # --------------------------------
     # FAILURE's METHODS
     # --------------------------------
@@ -136,6 +154,9 @@ class ToPython:
         self.conn = conn
 
     def get_conn(self):
+        """ Connection list 
+        :returns conn: (list) node tuple connection list  
+        """
         conn = []
         for x in self.conn:
             pos = []
@@ -149,19 +170,25 @@ class ToPython:
         for x in self.tie:
             pos = find_pos(self.switches, x)
             tie.append(pos)
-        return tie
+        return np.asarray(tie)
 
     def get_switches(self):
-        switches = [1 for x in range(len(self.switches))]
+        """Switches list 
+        :returns switches: (numpy array int) 0 for open and 1 for close switch
+        """
+        switches = np.ones(len(self.switches))
         tie = self.get_tie()
         for x in tie:
             switches[x] = 0
-        return switches
+        return switches.astype(int)
 
     def get_nodes(self):
+        """ Node list 
+        :returns nodes: (numpy array int) zeros array
+        """
         # TODO: update nodes values certainly
-        nodes = [0 for x in range(len(self.nodes))]
-        return nodes
+        nodes = np.zeros(len(self.nodes))
+        return nodes.astype(int)
 
     def get_switch_pos(self, name):
         return find_pos(self.switches, name)
@@ -195,20 +222,3 @@ def find_pos(elements, element): return elements.index(element)
 
 
 def fin_element(elements, pos): return elements[pos]
-
-
-def get_cond_list(cond, arg):
-    """ Create a list with the names of the elements
-    that satisfy a condition
-    :param cond: conditional to add element to the list
-    :param arg: list to evaluate
-    :return: a list with the names of the switches
-    satisfy the condition
-    """
-    new_list = []
-    index = 0
-    for i in arg:
-        if i == cond:
-            new_list.append(index)
-        index += 1
-    return new_list
