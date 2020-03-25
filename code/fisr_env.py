@@ -82,9 +82,9 @@ class FisrEnvironment(BaseEnvironment):
         self.current_state = self.get_observation()  # update current state
 
         if self.system.num_nodes_offline() != 0:  # reward if there is any node offline
-            reward -= 10
+            reward -= 100
 
-        if self.time_step == 10000:  # terminate if 1000 time steps are reached
+        if self.time_step == 100:  # terminate if 1000 time steps are reached
             is_terminal = True
             self.time_step = 0
 

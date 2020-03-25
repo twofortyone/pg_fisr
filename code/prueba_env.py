@@ -29,10 +29,10 @@ num_states = int(comb(num_switches, num_tie))
 
 
 agent_info = {'num_actions': num_actions, 'num_states':num_states,
-'epsilon': 0.1, 'discount':1.0, 'step_size': 0.5}
+'epsilon': 0.1, 'discount':1.0, 'step_size': 0.8}
 env_info = {}
 num_runs = 10
-num_episodes = 500
+num_episodes = 50
 all_reward_sums = []
 all_state_visits = []
 
@@ -43,7 +43,7 @@ for run in tqdm(range(num_runs)):
 
     reward_sums = []
     state_visits = np.zeros(num_states)
-    for episode in range(num_episodes):
+    for episode in tqdm(range(num_episodes)):
         if episode < num_episodes - 10:
             rl_glue.rl_episode(0)
         else:
