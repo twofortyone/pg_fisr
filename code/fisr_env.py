@@ -124,3 +124,9 @@ class FisrEnvironment(BaseEnvironment):
                 i += 1
         actions = actions.astype(int)
         return actions
+
+    def get_failure_actions(self, failure):
+        actions = self.get_actions()
+        aux = actions[:, 0]
+        pos = np.where(aux == failure)
+        return pos[0]

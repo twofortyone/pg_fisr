@@ -22,6 +22,10 @@ num_closed = len(closed)
 num_opened = len(opened)
 num_actions = num_closed * num_opened
 
+# Failure is stated and actions are obtained
+failure = 0
+failure_actions = env.get_failure_actions(failure)
+
 # number of states
 start_tie = env.system.start_tie_obs
 switches_obs = env.system.switches_obs
@@ -30,8 +34,8 @@ num_switches = len(switches_obs)
 num_states = int(comb(num_switches, num_tie))
 
 
-agent_info = {'num_actions': num_actions, 'num_states':num_states,
-'epsilon': 0.1, 'discount':1.0, 'step_size': 0.8}
+agent_info = {'num_actions': num_actions, 'num_states': num_states, 'epsilon': 0.1,
+              'discount': 1.0, 'step_size': 0.8, 'failure_actions': failure_actions}
 env_info = {}
 num_runs = 10
 num_episodes = 50

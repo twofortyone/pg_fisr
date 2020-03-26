@@ -15,17 +15,18 @@ class QLearningAgent(BaseAgent):
         self.prev_action = None
         self.prev_state = None
 
+        self.failure_actions = agent_init_info['failure_actions']
+
         # Create an array for action-value estimates and initialize to zero
         self.q = np.zeros((self.num_states, self.num_actions))
 
     def agent_start(self, state):
         
         # choose action using epsilon greedy
-        current_q = self.q[state, :]  # array with all q values for a given state
-        if self.rand_generator.rand() < self.epsilon: 
-            action = self.rand_generator.randint(self.num_actions)
-        else: 
-            action = self.argmax(current_q)
+        current_q = self.q[state, self.failure_actions]  # array with all q values for a given state
+
+        action = self.argmax(current_q)
+
         self.prev_state = state
         self.prev_action = action
         return action  
