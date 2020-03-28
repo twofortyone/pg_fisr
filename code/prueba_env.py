@@ -13,8 +13,7 @@ import pickle
 start_time = time.time()
 env = FisrEnvironment()
 agent = QLearningAgent()
-# all_reward_sums= {}
-step_sizes = np.linspace(0.1,1.0,10)
+step_sizes = np.linspace(0.1, 1.0, 10)
 # number of actions 
 closed = env.system.closed_switches
 opened = env.system.opened_switches
@@ -23,7 +22,7 @@ num_opened = len(opened)
 num_actions = num_closed * num_opened
 
 # Failure is stated and actions are obtained
-failure = 0
+failure = 1
 failure_actions = env.get_failure_actions(failure)
 
 # number of states

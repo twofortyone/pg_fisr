@@ -24,12 +24,11 @@ class QLearningAgent(BaseAgent):
         
         # choose action using epsilon greedy
         current_q = self.q[state, self.failure_actions]  # array with all q values for a given state
-
         action = self.argmax(current_q)
 
         self.prev_state = state
         self.prev_action = action
-        return action  
+        return self.failure_actions[action]
 
     def agent_step(self, reward, state):
         """A step taken by the agent 
