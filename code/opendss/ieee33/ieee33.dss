@@ -1,0 +1,51 @@
+Clear 
+Set DefaultBaseFrecuency = 60 
+
+
+! Lines 
+New Line.L1     Phases=3  Bus1=N0.1.2.3  Bus2=N1.1.2.3 
+New Line.L2     Phases=3  Bus1=N1.1.2.3  Bus2=N2.1.2.3 
+New Line.L3     Phases=3  Bus1=N2.1.2.3  Bus2=N3.1.2.3 
+New Line.L4     Phases=3  Bus1=N3.1.2.3  Bus2=N4.1.2.3 
+New Line.L5     Phases=3  Bus1=N4.1.2.3  Bus2=N5.1.2.3 
+New Line.L6     Phases=3  Bus1=N5.1.2.3  Bus2=N6.1.2.3 
+New Line.L7     Phases=3  Bus1=N6.1.2.3  Bus2=N7.1.2.3 
+New Line.L8     Phases=3  Bus1=N7.1.2.3  Bus2=N8.1.2.3 
+New Line.L9     Phases=3  Bus1=N8.1.2.3  Bus2=N9.1.2.3 
+New Line.L10   Phases=3  Bus1=N9.1.2.3  Bus2=N10.1.2.3 
+New Line.L11   Phases=3  Bus1=N10.1.2.3  Bus2=N11.1.2.3 
+New Line.L12   Phases=3  Bus1=N11.1.2.3  Bus2=N12.1.2.3 
+New Line.L13   Phases=3  Bus1=N12.1.2.3  Bus2=N13.1.2.3 
+New Line.L14   Phases=3  Bus1=N13.1.2.3  Bus2=N14.1.2.3 
+New Line.L15   Phases=3  Bus1=N14.1.2.3  Bus2=N15.1.2.3 
+New Line.L16   Phases=3  Bus1=N15.1.2.3  Bus2=N16.1.2.3 
+New Line.L17   Phases=3  Bus1=N16.1.2.3  Bus2=N17.1.2.3 
+
+New Line.L18   Phases=3  Bus1=N1.1.2.3  Bus2=N18.1.2.3 
+New Line.L19   Phases=3  Bus1=N18.1.2.3  Bus2=N19.1.2.3 
+New Line.L20   Phases=3  Bus1=N19.1.2.3  Bus2=N20.1.2.3 
+New Line.L21   Phases=3  Bus1=N20.1.2.3  Bus2=N21.1.2.3 
+
+New Line.L22   Phases=3  Bus1=N1.1.2.3  Bus2=N22.1.2.3 
+New Line.L23   Phases=3  Bus1=N22.1.2.3  Bus2=N23.1.2.3 
+New Line.L24   Phases=3  Bus1=N23.1.2.3  Bus2=N24.1.2.3 
+
+New Line.L25   Phases=3  Bus1=N5.1.2.3  Bus2=N25.1.2.3 
+New Line.L26   Phases=3  Bus1=N25.1.2.3  Bus2=N26.1.2.3 
+New Line.L27   Phases=3  Bus1=N26.1.2.3  Bus2=N27.1.2.3 
+New Line.L28   Phases=3  Bus1=N27.1.2.3  Bus2=N28.1.2.3 
+New Line.L29   Phases=3  Bus1=N28.1.2.3  Bus2=N29.1.2.3 
+New Line.L30   Phases=3  Bus1=N29.1.2.3  Bus2=N30.1.2.3 
+New Line.L31   Phases=3  Bus1=N30.1.2.3  Bus2=N31.1.2.3 
+New Line.L32   Phases=3  Bus1=N31.1.2.3  Bus2=N32.1.2.3 
+
+New Line.S33   Phases=3  Bus1=N20.1.2.3  Bus2=N7.1.2.3 
+New Line.S34   Phases=3  Bus1=N8.1.2.3  Bus2=N14.1.2.3 
+New Line.S35   Phases=3  Bus1=N21.1.2.3  Bus2=N11.1.2.3
+New Line.S36   Phases=3  Bus1=N32.1.2.3  Bus2=N17.1.2.3
+New Line.S37   Phases=3  Bus1=N24.1.2.3  Bus2=N28.1.2.3  
+
+
+
+
+
