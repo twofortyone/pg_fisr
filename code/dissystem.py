@@ -9,9 +9,9 @@ class DistributionSystem:
 
     def __init__(self):
 
-        self.system = ToPython()
-        self.conn = self.system.get_conn()
-        self.start_tie_obs = None
+        self.system_data = ToPython()
+        self.conn = self.system_data.get_conn()  # list
+        self.start_tie_obs = []  # list
 
         # Variables declaration
         self.nodes_obs = None
@@ -29,11 +29,11 @@ class DistributionSystem:
         :return: opened_switches (state)
         """
         # Data
-        self.start_tie_obs = self.system.get_tie()
-        self.nodes_obs = self.system.get_nodes()
+        self.start_tie_obs = self.system_data.get_tie()
+        self.nodes_obs = self.system_data.get_nodes()
         self.num_nodes = len(self.nodes_obs)
         self.nodes_adj_matrix = self.get_adj_matrix()
-        self.switches_obs = self.system.get_switches()
+        self.switches_obs = self.system_data.get_switches()
         self.num_switches = len(self.switches_obs)
 
         # Functions
@@ -95,7 +95,7 @@ class DistributionSystem:
             adj[pos1, pos2] = 1
             adj[pos2, pos1] = 1
 
-        for x in np.nditer(self.start_tie_obs):
+        for x in self.start_tie_obs:
             z = self.conn[x]
             pos1 = z[0]
             pos2 = z[1]
@@ -111,7 +111,6 @@ class DistributionSystem:
     # --------------------------------
     # SWITCH's METHODS
     # --------------------------------
-    # Action methods
     def close_switch(self, switch):
         """Close a switch
         :param switch: index of the switch in switches_name
@@ -142,21 +141,43 @@ class DistributionSystem:
         self.closed_switches = np.where(self.switches_obs == 1)[0]
         self.opened_switches = np.where(self.switches_obs == 0)[0]
 
-    # --------------------------------
-    # FAILURE's METHODS
-    # --------------------------------
-    def do_failure(self, line):
-        self.open_switch(line)
-
 
 class ToPython:
 
     def __init__(self):
         open_dss = OpenDssCircuit()
-        self.nodes = open_dss.nodes
-        self.switches = open_dss.lines
-        self.tie = open_dss.ties
+        self.nodes = open_dss.get_nodes()
+        self.switches = open_dss.get_lines()
+        self.tie = open_dss.get_ties()
         self.conn = open_dss.get_conn()
+
+    def get_switches(self):
+        """Switches list
+        :returns switches: (numpy array int) 0 for open and 1 for close switch
+        """
+        switches = np.ones(len(self.switches))
+        tie = self.get_tie()
+        for x in tie:
+            switches[x] = 0
+        return switches.astype(int)
+
+    def get_nodes(self):
+        """ Node list
+        :returns nodes: (numpy array int) zeros array
+        """
+        # TODO: update nodes values certainly
+        nodes = np.zeros(len(self.nodes))
+        return nodes.astype(int)
+
+    def get_tie(self):
+        """Get tie switches
+        :return tie: (list) positions for tie in switches
+        """
+        tie = []
+        for x in self.tie:
+            pos = find_pos(self.switches, x)
+            tie.append(pos)
+        return tie
 
     def get_conn(self):
         """ Connection list 
@@ -170,37 +191,26 @@ class ToPython:
             conn.append(tuple(pos))
         return conn
 
-    def get_tie(self):
-        tie = []
-        for x in self.tie:
-            pos = find_pos(self.switches, x)
-            tie.append(pos)
-        return np.asarray(tie)
-
-    def get_switches(self):
-        """Switches list 
-        :returns switches: (numpy array int) 0 for open and 1 for close switch
-        """
-        switches = np.ones(len(self.switches))
-        tie = self.get_tie()
-        for x in tie:
-            switches[x] = 0
-        return switches.astype(int)
-
-    def get_nodes(self):
-        """ Node list 
-        :returns nodes: (numpy array int) zeros array
-        """
-        # TODO: update nodes values certainly
-        nodes = np.zeros(len(self.nodes))
-        return nodes.astype(int)
-
+    # ---------------------------------------
+    # Get position methods
+    # ---------------------------------------
     def get_switch_pos(self, name):
+        """Get switch position from switch name
+        :param name: switch name
+        :return: (int) switch position
+        """
         return find_pos(self.switches, name)
 
     def get_node_pos(self, node):
+        """Get node position from node name
+        :param node: node name
+        :return: (int) node position
+        """
         return find_pos(self.nodes, node)
 
+    # ---------------------------------------
+    # Get name methods
+    # ---------------------------------------
     def get_switches_names(self, positions):
         """Find the switch names
         :param positions: list with switch positions
@@ -214,7 +224,7 @@ class ToPython:
     def get_nodes_names(self, positions):
         """Find the node names
         :param positions: list with node positions
-        :return names: list with node names
+        :return names: (list) list with node names
         """
         names = []
         for i in positions:
@@ -231,11 +241,30 @@ class OpenDssCircuit:
 
         self.lines = self.com.get_lines()
         self.nodes = self.com.get_buses()
-        self.ties = self.lines[10:30]
+        self.ties = self.lines[10:12]
+
+    def get_lines(self):
+        """Get lines name list
+        :return: (tuple) lines name list
+        """
+        return self.lines
+
+    def get_nodes(self):
+        """Get nodes name list
+        :return: (tuple) nodes name list
+        """
+        return self.nodes
+
+    def get_ties(self):
+        """Get ties switches name list
+        :return: (tuple) ties switches name list
+        """
+        return self.ties
 
     def get_conn(self):
+        # TODO Verify tuple structure
         """Get line connection scheme between nodes
-        :return conn: (np array) line connections
+        :return conn: (tuple) line connections
         """
         conn = []
         for x in self.lines:
@@ -245,7 +274,7 @@ class OpenDssCircuit:
             for y in nodes:
                 aux.append(y.split('.')[0])
             conn.append(aux)
-        return conn
+        return tuple(conn)
 
     def set_active_line(self, line):
         """Set line param as active element
