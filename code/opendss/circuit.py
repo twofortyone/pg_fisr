@@ -1,12 +1,14 @@
-import cominterface as com
+from opendss.cominterface import OpenDss
 import numpy as np
 
 
 class Circuit:
 
     def __init__(self, path):
-        self.com = com.Opendss(path)
+        # COM object initialization
+        self.com = OpenDss(path)
         self.com.solve()
+
         self.voltages_pu = np.asarray(self.com.get_bus_vmagpu())
         self.lines = np.asarray(self.com.get_lines())
         self.buses = np.asarray(self.com.get_buses())
@@ -41,6 +43,7 @@ class Circuit:
         load = 'Load.' + load
         self.com.set_active_element(load)
 
+    # used OpenDssCircuit class
     def set_active_line(self, line):
         line = 'Line.' + line
         self.com.set_active_element(line)
@@ -75,6 +78,7 @@ class Circuit:
     def get_ae_name(self):
         return self.com.get_active_element()
 
+    #rename get_conn_element
     def get_ae_buses(self):
         return self.com.get_ae_busnames()
 

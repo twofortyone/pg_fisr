@@ -1,12 +1,16 @@
+# Shared packages
 import numpy as np
+
+# OpenDssCircuit Packages
+from opendss.cominterface import OpenDss
 
 
 class DistributionSystem:
 
-    def __init__(self, system):
+    def __init__(self):
 
-        self.sd = system
-        self.conn = self.sd.get_conn()
+        self.system = ToPython()
+        self.conn = self.system.get_conn()
         self.start_tie_obs = None
 
         # Variables declaration
@@ -21,15 +25,15 @@ class DistributionSystem:
         self.sys_start()
 
     def sys_start(self):
-        """Update system with topython values
+        """Update self.system with topython values
         :return: opened_switches (state)
         """
         # Data
-        self.start_tie_obs = self.sd.get_tie()
-        self.nodes_obs = self.sd.get_nodes()
+        self.start_tie_obs = self.system.get_tie()
+        self.nodes_obs = self.system.get_nodes()
         self.num_nodes = len(self.nodes_obs)
         self.nodes_adj_matrix = self.get_adj_matrix()
-        self.switches_obs = self.sd.get_switches()
+        self.switches_obs = self.system.get_switches()
         self.num_switches = len(self.switches_obs)
 
         # Functions
@@ -91,7 +95,7 @@ class DistributionSystem:
             adj[pos1, pos2] = 1
             adj[pos2, pos1] = 1
 
-        for x in self.start_tie_obs:
+        for x in np.nditer(self.start_tie_obs):
             z = self.conn[x]
             pos1 = z[0]
             pos2 = z[1]
@@ -147,11 +151,12 @@ class DistributionSystem:
 
 class ToPython:
 
-    def __init__(self, nodes, switches, tie, conn):
-        self.nodes = nodes
-        self.switches = switches
-        self.tie = tie
-        self.conn = conn
+    def __init__(self):
+        open_dss = OpenDssCircuit()
+        self.nodes = open_dss.nodes
+        self.switches = open_dss.lines
+        self.tie = open_dss.ties
+        self.conn = open_dss.get_conn()
 
     def get_conn(self):
         """ Connection list 
@@ -215,6 +220,45 @@ class ToPython:
         for i in positions:
             names.append(self.nodes[i])
         return names
+
+
+class OpenDssCircuit:
+
+    def __init__(self):
+        path = 'D:\Bus_37\ieee37.dss'
+        self.com = OpenDss(path)
+        self.com.solve()
+
+        self.lines = self.com.get_lines()
+        self.nodes = self.com.get_buses()
+        self.ties = self.lines[10:30]
+
+    def get_conn(self):
+        """Get line connection scheme between nodes
+        :return conn: (np array) line connections
+        """
+        conn = []
+        for x in self.lines:
+            self.set_active_line(x)
+            nodes = self.get_conn_element()
+            aux = []
+            for y in nodes:
+                aux.append(y.split('.')[0])
+            conn.append(aux)
+        return conn
+
+    def set_active_line(self, line):
+        """Set line param as active element
+        :param line: (str) line name
+        """
+        line = 'Line.' + line
+        self.com.set_active_element(line)
+
+    def get_conn_element(self):
+        """Get node connection by active element
+        :return: (tuple) element connection
+        """
+        return self.com.get_ae_busnames()
 
 
 # Methods to used across

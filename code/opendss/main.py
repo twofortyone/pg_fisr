@@ -1,10 +1,11 @@
-import circuit
+from opendss.circuit import Circuit
+import numpy as np
 
 path = 'D:\Bus_37\ieee37.dss'
 # print(com.get_path(), com.get_version())
 # com.send_command('show Voltages LN Nodes')
 
-circuit = circuit.Circuit(path)
+circuit = Circuit(path)
 lines = circuit.get_lines()
 index = 0
 
@@ -35,8 +36,10 @@ print(circuit.get_ae_data())
 
 print(circuit.num_load_offline())
 
-circuit.com.send_command('show voltages LN Nodes')
-circuit.com.send_command('show currents elements')
+print(circuit.get_buses())
+
+# circuit.com.send_command('show voltages LN Nodes')
+# circuit.com.send_command('show currents elements')
 
 # circuit.open_switch('l1', 2)
 # print(circuit.get_voltages_pu())
@@ -50,3 +53,22 @@ circuit.com.send_command('show currents elements')
 # bus_voltages_pu = circuit.get_voltages_pu()
 # bus_voltages_pu = np.reshape(bus_voltages_pu, (39, 3))
 
+# Algoritmo para obtner conn
+lines = circuit.get_lines()
+conn = np.array([])
+for x in np.nditer(lines):
+    circuit.set_active_line(str(x))
+    nodes = circuit.get_ae_buses()
+    for y in nodes:
+        conn = np.append(conn, (y.split('.'))[0])
+
+conn = np.reshape(conn, (-1, 2))
+
+conn2 = []
+for x in lines:
+    circuit.set_active_line(x)
+    nodes2 = circuit.get_ae_buses()
+    aux = []
+    for y in nodes2:
+        aux.append(y.split('.')[0])
+    conn2.append(aux)

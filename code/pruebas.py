@@ -35,7 +35,7 @@ class Prueba:
     tie = ['T4', 'T5']
 
     system_data = ToPython(nodes, switches, tie, conn)
-    bus33 = DistributionSystem(system_data)
+    bus33 = DistributionSystem()
 
 
     f = bus33.switches_obs

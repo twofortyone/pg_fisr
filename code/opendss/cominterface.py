@@ -3,7 +3,7 @@ from win32com.client import makepy
 import sys
 
 
-class Opendss:
+class OpenDss:
 
     def __init__(self, path):
         self.path = path
@@ -49,6 +49,7 @@ class Opendss:
         return self.DSSCircuit.AllBusVmag
 
     def get_lines(self):
+        """Get lines list """
         return self.DSSLines.AllNames
 
     def get_loads(self):
@@ -74,6 +75,7 @@ class Opendss:
         self.DSSText.Command = command
 
     def solve(self):
+        """Solve the OpenDSS model """
         self.DSSSolution.Solve()
 
     def set_active_element(self, element):

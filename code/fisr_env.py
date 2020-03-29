@@ -14,12 +14,7 @@ class FisrEnvironment(BaseEnvironment):
     
     def __init__(self):
 
-        nodes = ['N0', 'N1', 'N2', 'N3', 'N4', 'N5']  # Node list
-        conn = [('N0', 'N1'), ('N1', 'N2'), ('N1', 'N3'), ('N4', 'N5'), ('N2', 'N4'), ('N3', 'N4')]
-        switches = ['S1', 'S2', 'S3', 'S6', 'T4', 'T5']  # Switch list
-        tie = ['T4', 'T5']  # Tie switch list
-        self.system_data = ToPython(nodes, switches, tie, conn)  # Convert system data to python system
-        self.system = DistributionSystem(self.system_data)  # Create a distribution system model
+        self.system = DistributionSystem()  # Create a distribution system model
         self.states = self.get_states()  # States depending on number of total and tie switches
         reward = None
         observation = None
