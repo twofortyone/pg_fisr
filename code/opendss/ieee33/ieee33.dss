@@ -3,47 +3,52 @@ Set DefaultBaseFrecuency = 60
 
 
 ! Lines 
-New Line.L1     Phases=3  Bus1=N0.1.2.3  Bus2=N1.1.2.3 
-New Line.L2     Phases=3  Bus1=N1.1.2.3  Bus2=N2.1.2.3 
-New Line.L3     Phases=3  Bus1=N2.1.2.3  Bus2=N3.1.2.3 
-New Line.L4     Phases=3  Bus1=N3.1.2.3  Bus2=N4.1.2.3 
-New Line.L5     Phases=3  Bus1=N4.1.2.3  Bus2=N5.1.2.3 
-New Line.L6     Phases=3  Bus1=N5.1.2.3  Bus2=N6.1.2.3 
-New Line.L7     Phases=3  Bus1=N6.1.2.3  Bus2=N7.1.2.3 
-New Line.L8     Phases=3  Bus1=N7.1.2.3  Bus2=N8.1.2.3 
-New Line.L9     Phases=3  Bus1=N8.1.2.3  Bus2=N9.1.2.3 
-New Line.L10   Phases=3  Bus1=N9.1.2.3  Bus2=N10.1.2.3 
-New Line.L11   Phases=3  Bus1=N10.1.2.3  Bus2=N11.1.2.3 
-New Line.L12   Phases=3  Bus1=N11.1.2.3  Bus2=N12.1.2.3 
-New Line.L13   Phases=3  Bus1=N12.1.2.3  Bus2=N13.1.2.3 
-New Line.L14   Phases=3  Bus1=N13.1.2.3  Bus2=N14.1.2.3 
-New Line.L15   Phases=3  Bus1=N14.1.2.3  Bus2=N15.1.2.3 
-New Line.L16   Phases=3  Bus1=N15.1.2.3  Bus2=N16.1.2.3 
-New Line.L17   Phases=3  Bus1=N16.1.2.3  Bus2=N17.1.2.3 
+New Line.L1     Phases=3  Bus1=N0.1.2.3    Bus2=N1.1.2.3     R1=0.0922  X1=0.0470 
+New Line.L2     Phases=3  Bus1=N1.1.2.3    Bus2=N2.1.2.3     R1=0.4930  X1=0.2511
+New Line.L3     Phases=3  Bus1=N2.1.2.3    Bus2=N3.1.2.3     R1=0.3660  X1=0.1864
+New Line.L4     Phases=3  Bus1=N3.1.2.3    Bus2=N4.1.2.3     R1=0.3811  X1=0.1941
+New Line.L5     Phases=3  Bus1=N4.1.2.3    Bus2=N5.1.2.3     R1=0.8190  X1=0.7070
+New Line.L6     Phases=3  Bus1=N5.1.2.3    Bus2=N6.1.2.3     R1=0.1872  X1=0.6188
+New Line.L7     Phases=3  Bus1=N6.1.2.3    Bus2=N7.1.2.3     R1=1.7114  X1=1.2351
+New Line.L8     Phases=3  Bus1=N7.1.2.3    Bus2=N8.1.2.3     R1=1.0300  X1=0.7400
+New Line.L9     Phases=3  Bus1=N8.1.2.3    Bus2=N9.1.2.3     R1=1.0440  X1=0.7400
+New Line.L10   Phases=3  Bus1=N9.1.2.3    Bus2=N10.1.2.3    R1=0.1966  X1=0.0650
+New Line.L11   Phases=3  Bus1=N10.1.2.3  Bus2=N11.1.2.3    R1=0.3744  X1=0.1238
+New Line.L12   Phases=3  Bus1=N11.1.2.3  Bus2=N12.1.2.3    R1=1.4680  X1=1.1550
+New Line.L13   Phases=3  Bus1=N12.1.2.3  Bus2=N13.1.2.3    R1=0.5416  X1=0.7129
+New Line.L14   Phases=3  Bus1=N13.1.2.3  Bus2=N14.1.2.3    R1=0.5910  X1=0.5260
+New Line.L15   Phases=3  Bus1=N14.1.2.3  Bus2=N15.1.2.3    R1=0.7463  X1=0.5450
+New Line.L16   Phases=3  Bus1=N15.1.2.3  Bus2=N16.1.2.3    R1=1.2890  X1=1.7210
+New Line.L17   Phases=3  Bus1=N16.1.2.3  Bus2=N17.1.2.3    R1=0.7320  X1=0.5750
 
-New Line.L18   Phases=3  Bus1=N1.1.2.3  Bus2=N18.1.2.3 
-New Line.L19   Phases=3  Bus1=N18.1.2.3  Bus2=N19.1.2.3 
-New Line.L20   Phases=3  Bus1=N19.1.2.3  Bus2=N20.1.2.3 
-New Line.L21   Phases=3  Bus1=N20.1.2.3  Bus2=N21.1.2.3 
+New Line.L18   Phases=3  Bus1=N1.1.2.3    Bus2=N18.1.2.3    R1=0.1640  X1=0.1565
+New Line.L19   Phases=3  Bus1=N18.1.2.3  Bus2=N19.1.2.3    R1=1.5042  X1=1.3554
+New Line.L20   Phases=3  Bus1=N19.1.2.3  Bus2=N20.1.2.3    R1=0.4095  X1=0.4784
+New Line.L21   Phases=3  Bus1=N20.1.2.3  Bus2=N21.1.2.3    R1=0.7089  X1=0.9373
 
-New Line.L22   Phases=3  Bus1=N1.1.2.3  Bus2=N22.1.2.3 
-New Line.L23   Phases=3  Bus1=N22.1.2.3  Bus2=N23.1.2.3 
-New Line.L24   Phases=3  Bus1=N23.1.2.3  Bus2=N24.1.2.3 
+New Line.L22   Phases=3  Bus1=N2.1.2.3    Bus2=N22.1.2.3    R1=0.4512  X1=0.3083
+New Line.L23   Phases=3  Bus1=N22.1.2.3  Bus2=N23.1.2.3    R1=0.8980  X1=0.7091
+New Line.L24   Phases=3  Bus1=N23.1.2.3  Bus2=N24.1.2.3    R1=0.8960  X1=0.7011
 
-New Line.L25   Phases=3  Bus1=N5.1.2.3  Bus2=N25.1.2.3 
-New Line.L26   Phases=3  Bus1=N25.1.2.3  Bus2=N26.1.2.3 
-New Line.L27   Phases=3  Bus1=N26.1.2.3  Bus2=N27.1.2.3 
-New Line.L28   Phases=3  Bus1=N27.1.2.3  Bus2=N28.1.2.3 
-New Line.L29   Phases=3  Bus1=N28.1.2.3  Bus2=N29.1.2.3 
-New Line.L30   Phases=3  Bus1=N29.1.2.3  Bus2=N30.1.2.3 
-New Line.L31   Phases=3  Bus1=N30.1.2.3  Bus2=N31.1.2.3 
-New Line.L32   Phases=3  Bus1=N31.1.2.3  Bus2=N32.1.2.3 
+New Line.L25   Phases=3  Bus1=N5.1.2.3    Bus2=N25.1.2.3    R1=0.2030  X1=0.1034
+New Line.L26   Phases=3  Bus1=N25.1.2.3  Bus2=N26.1.2.3    R1=0.2842  X1=0.1447
+New Line.L27   Phases=3  Bus1=N26.1.2.3  Bus2=N27.1.2.3    R1=1.0590  X1=0.9337
+New Line.L28   Phases=3  Bus1=N27.1.2.3  Bus2=N28.1.2.3    R1=0.8042  X1=0.7006
+New Line.L29   Phases=3  Bus1=N28.1.2.3  Bus2=N29.1.2.3    R1=0.5075  X1=0.2585
+New Line.L30   Phases=3  Bus1=N29.1.2.3  Bus2=N30.1.2.3    R1=0.9744  X1=0.9630
+New Line.L31   Phases=3  Bus1=N30.1.2.3  Bus2=N31.1.2.3    R1=0.3105  X1=0.3619
+New Line.L32   Phases=3  Bus1=N31.1.2.3  Bus2=N32.1.2.3    R1=0.3410  X1=0.5302
 
-New Line.S33   Phases=3  Bus1=N20.1.2.3  Bus2=N7.1.2.3 
-New Line.S34   Phases=3  Bus1=N8.1.2.3  Bus2=N14.1.2.3 
-New Line.S35   Phases=3  Bus1=N21.1.2.3  Bus2=N11.1.2.3
-New Line.S36   Phases=3  Bus1=N32.1.2.3  Bus2=N17.1.2.3
-New Line.S37   Phases=3  Bus1=N24.1.2.3  Bus2=N28.1.2.3  
+!values for r1 and x1 for S33 - S37 are waiting confirmation
+New Line.S33   Phases=3  Bus1=N20.1.2.3  Bus2=N7.1.2.3     R1=2  X1=2
+New Line.S34   Phases=3  Bus1=N8.1.2.3    Bus2=N14.1.2.3   R1=2  X1=2
+New Line.S35   Phases=3  Bus1=N21.1.2.3  Bus2=N11.1.2.3   R1=2 X1=2
+New Line.S36   Phases=3  Bus1=N32.1.2.3  Bus2=N17.1.2.3   R1=0.5  X1=0.5
+New Line.S37   Phases=3  Bus1=N24.1.2.3  Bus2=N28.1.2.3   R1=0.5  X1=0.5
+
+
+!Loads 
+New Load.C1      Bus1=N1 Phases=1 Conn=Delta Model=1 kV=  4.800 kW= 140.0 kVAR=  70.0
 
 
 
