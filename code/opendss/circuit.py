@@ -27,15 +27,17 @@ class Circuit:
                 break
         return check, i
 
-    def open_switch(self, line, term):
+    def open_switch(self, line):
         self.set_active_line(line)
-        self.com.open_element(term)
+        self.com.open_element(1)
+        self.com.open_element(2)
         self.com.solve()
         self.update()
 
-    def close_switch(self, line, term):
+    def close_switch(self, line):
         self.set_active_line(line)
-        self.com.close_element(term)
+        self.com.close_element(1)
+        self.com.close_element(2)
         self.com.solve()
         self.update()
 
@@ -78,7 +80,7 @@ class Circuit:
     def get_ae_name(self):
         return self.com.get_active_element()
 
-    #rename get_conn_element
+    # rename get_conn_element
     def get_ae_buses(self):
         return self.com.get_ae_busnames()
 

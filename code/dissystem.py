@@ -122,6 +122,9 @@ class DistributionSystem:
             self.opened_switches = np.delete(self.opened_switches, np.where(self.opened_switches == switch))
             # update nodes connection
             self.connect_nodes(switch)
+            # TODO: open com switch
+            switch_name = self.system_data.switches[switch]
+            self.system_data.open_dss.close_switch(switch_name)
 
     def open_switch(self, switch):
         """Open a switch and update closed and opened switches and node adjacency matrix
@@ -135,6 +138,9 @@ class DistributionSystem:
 
             # update node connections
             self.isolate_nodes(switch)
+            # TODO: open com switch
+            switch_name = self.system_data.switches[switch]
+            self.system_data.open_dss.open_switch(switch_name)
 
     def update_switches(self):
         """ Get closed and opened switches from switches obs (only use at start)"""
@@ -145,11 +151,11 @@ class DistributionSystem:
 class ToPython:
 
     def __init__(self):
-        open_dss = OpenDssCircuit()
-        self.nodes = open_dss.get_nodes()
-        self.switches = open_dss.get_lines()
-        self.tie = open_dss.get_ties()
-        self.conn = open_dss.get_conn()
+        self.open_dss = OpenDssCircuit()
+        self.nodes = self.open_dss.get_nodes()
+        self.switches = self.open_dss.get_lines()
+        self.tie = self.open_dss.get_ties()
+        self.conn = self.open_dss.get_conn()
 
     def get_switches(self):
         """Switches list
@@ -235,7 +241,7 @@ class ToPython:
 class OpenDssCircuit:
 
     def __init__(self):
-        path = 'D:\Bus_37\ieee37.dss'
+        path = 'D:\ieee33bus.dss'
         self.com = OpenDss(path)
         self.com.solve()
 
@@ -243,6 +249,9 @@ class OpenDssCircuit:
         self.nodes = self.com.get_buses()
         self.ties = self.lines[10:12]
 
+    # ----------------------------------------
+    # Getters
+    # -----------------------------------------
     def get_lines(self):
         """Get lines name list
         :return: (tuple) lines name list
@@ -276,6 +285,15 @@ class OpenDssCircuit:
             conn.append(aux)
         return tuple(conn)
 
+    def get_conn_element(self):
+        """Get node connection by active element
+        :return: (tuple) element connection
+        """
+        return self.com.get_ae_busnames()
+
+    # ----------------------------------------
+    # Actions
+    # -----------------------------------------
     def set_active_line(self, line):
         """Set line param as active element
         :param line: (str) line name
@@ -283,11 +301,25 @@ class OpenDssCircuit:
         line = 'Line.' + line
         self.com.set_active_element(line)
 
-    def get_conn_element(self):
-        """Get node connection by active element
-        :return: (tuple) element connection
+    def open_switch(self, line):
+        """Open switch in both terminals
+        :param line: (name str)
         """
-        return self.com.get_ae_busnames()
+        self.set_active_line(line)
+        self.com.open_element(1)
+        self.com.open_element(2)
+        self.com.solve()
+        # TODO: update voltage values
+
+    def close_switch(self, line):
+        """Close switch in both terminals
+        :param line: (name str)
+        """
+        self.set_active_line(line)
+        self.com.close_element(1)
+        self.com.close_element(2)
+        self.com.solve()
+        # TODO: update voltage values
 
 
 # Methods to used across

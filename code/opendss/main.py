@@ -72,3 +72,5 @@ for x in lines:
     for y in nodes2:
         aux.append(y.split('.')[0])
     conn2.append(aux)
+
+
