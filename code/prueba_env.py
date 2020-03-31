@@ -22,7 +22,7 @@ num_opened = len(opened)
 num_actions = num_closed * num_opened
 
 # Failure is stated and actions are obtained
-failure = 1
+failure = 13
 failure_actions = env.get_failure_actions(failure)
 
 # number of states
@@ -36,8 +36,8 @@ num_states = int(comb(num_switches, num_tie))
 agent_info = {'num_actions': num_actions, 'num_states': num_states, 'epsilon': 0.1,
               'discount': 1.0, 'step_size': 0.8, 'failure_actions': failure_actions}
 env_info = {}
-num_runs = 10
-num_episodes = 50
+num_runs = 1
+num_episodes = 2
 all_reward_sums = []
 all_state_visits = []
 
@@ -48,8 +48,9 @@ for run in tqdm(range(num_runs)):
 
     reward_sums = []
     state_visits = np.zeros(num_states)
-    for episode in range(num_episodes):
-        if episode < num_episodes - 10:
+    for episode in tqdm(range(num_episodes)):
+        #print('Episode: ', episode)
+        if episode < num_episodes - 2:
             rl_glue.rl_episode(0)
         else:
             state, action = rl_glue.rl_start()

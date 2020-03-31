@@ -50,6 +50,7 @@ class FisrEnvironment(BaseEnvironment):
         :return pos: (int) index of current_state in states list
         """
         current_state = tuple(np.sort(self.system.opened_switches))
+        #print(current_state)
         pos = self.states.index(current_state)
 
         # update possible actions
@@ -69,6 +70,8 @@ class FisrEnvironment(BaseEnvironment):
         switches = self.actions[action]
         switch2open = switches[0]
         switch2close = switches[1]
+        #print('action:', action)
+        #print('switches: ', switches)
 
         self.system.open_switch(switch2open)
         self.system.close_switch(switch2close)

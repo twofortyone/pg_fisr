@@ -17,7 +17,6 @@ class OpenDSSCircuit:
 
         for x in self.ties:
             self.open_switch(x)
-            self.com.solve()
 
     # ----------------------------------------
     # Getters
@@ -85,7 +84,7 @@ class OpenDSSCircuit:
         self.set_active_line(line)
         self.com.open_element(1)
         self.com.open_element(2)
-        # self.com.solve()
+        self.com.solve()
         # TODO: update voltage values
 
     def close_switch(self, line):
@@ -185,3 +184,11 @@ class OpenDSSCOM:
         :param term: (int) terminal (1 or 2)
         """
         self.DSSCktElement.Close(term, 0)
+
+    def show_voltages(self):
+        """Show voltages as txt """
+        self.send_command('show voltages LN nodes')
+
+    def show_currents(self):
+        """Show currents as txt"""
+        self.send_command('show currents elements')
