@@ -13,7 +13,11 @@ class OpenDSSCircuit:
 
         self.lines = self.com.get_lines()
         self.nodes = self.com.get_buses()
-        self.ties = self.lines[10:12]
+        self.ties = self.lines[32:37]
+
+        for x in self.ties:
+            self.open_switch(x)
+            self.com.solve()
 
     # ----------------------------------------
     # Getters
@@ -37,9 +41,8 @@ class OpenDSSCircuit:
         return self.ties
 
     def get_conn(self):
-        # TODO Verify tuple structure
         """Get line connection scheme between nodes
-        :return conn: (tuple) line connections
+        :return conn: (tuple 2d) line connections
         """
         conn = []
         for x in self.lines:
@@ -48,7 +51,7 @@ class OpenDSSCircuit:
             aux = []
             for y in nodes:
                 aux.append(y.split('.')[0])
-            conn.append(aux)
+            conn.append(tuple(aux))
         return tuple(conn)
 
     def get_conn_element(self):
@@ -56,6 +59,14 @@ class OpenDSSCircuit:
         :return: (tuple) element connection
         """
         return self.com.get_ae_conn()
+
+    def get_voltage(self):
+        """Get node voltages magnitude in pu
+        :return:  (np array) node voltages
+        """
+        v = self.com.get_voltage_magpu()
+        vn = np.asarray(v).reshape((-1, 3))
+        return vn
 
     # ----------------------------------------
     # Setters
@@ -74,7 +85,7 @@ class OpenDSSCircuit:
         self.set_active_line(line)
         self.com.open_element(1)
         self.com.open_element(2)
-        self.com.solve()
+        # self.com.solve()
         # TODO: update voltage values
 
     def close_switch(self, line):
@@ -132,9 +143,27 @@ class OpenDSSCOM:
         """
         return self.DSSCktElement.BusNames
 
+    def get_ae_current(self):
+        """Get active element current
+        :return: (tuple)
+        """
+        return self.DSSCktElement.CurrentsMagAng
+
+    def get_voltage_magpu(self):
+        """Get voltage mag for all nodes in pu
+        :return: (tuple) voltage mag pu
+        """
+        return self.DSSCircuit.AllBusVmagPu
+
     # -----------------------------------------
     # Setters
     # -----------------------------------------
+    def send_command(self, command):
+        """Send command to OpenDss
+        :param command: (str)
+        """
+        self.DSSText.Command = command
+
     def solve(self):
         """Solve the OpenDSS model """
         self.DSSSolution.Solve()
@@ -156,5 +185,3 @@ class OpenDSSCOM:
         :param term: (int) terminal (1 or 2)
         """
         self.DSSCktElement.Close(term, 0)
-
-

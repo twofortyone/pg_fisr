@@ -45,7 +45,10 @@ class OpenDss:
     def get_active_element(self):
         return self.DSSCktElement.Name
 
-    def get_bus_vmagpu(self):
+    def get_voltage_magpu(self):
+        """Get voltage mag for all nodes in pu
+        :return: (tuple) voltage mag pu
+        """
         return self.DSSCircuit.AllBusVmagPu
 
     def get_bus_vmag(self):
@@ -71,7 +74,10 @@ class OpenDss:
         enabled = self.DSSCktElement.Enabled
         return currents, voltages, enabled
 
-    def get_ae_currents(self):
+    def get_ae_current(self):
+        """Get active element current
+        :return: (tuple)
+        """
         return self.DSSCktElement.CurrentsMagAng
 
     # Verify if the active element is open given the terminal
@@ -79,6 +85,9 @@ class OpenDss:
         return self.DSSCktElement.IsOpen(term, 1)
 
     def send_command(self, command):
+        """Send command to OpenDss
+        :param command: (str)
+        """
         self.DSSText.Command = command
 
     def solve(self):
@@ -102,9 +111,3 @@ class OpenDss:
         :param term: (int) terminal (1 or 2)
         """
         self.DSSCktElement.Close(term, 0)
-
-
-
-
-
-

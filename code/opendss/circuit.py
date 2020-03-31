@@ -9,13 +9,13 @@ class Circuit:
         self.com = OpenDss(path)
         self.com.solve()
 
-        self.voltages_pu = np.asarray(self.com.get_bus_vmagpu())
+        self.voltages_pu = np.asarray(self.com.get_voltage_magpu())
         self.lines = np.asarray(self.com.get_lines())
         self.buses = np.asarray(self.com.get_buses())
         self.loads = np.asarray(self.com.get_loads())
 
     def update(self):
-        self.voltages_pu = np.asarray(self.com.get_bus_vmagpu())
+        self.voltages_pu = np.asarray(self.com.get_voltage_magpu())
         self.lines = np.asarray(self.com.get_lines())
         self.buses = np.asarray(self.com.get_buses())
 
@@ -60,7 +60,7 @@ class Circuit:
         count = 0
         for i in self.loads:
             self.set_active_load(i)
-            current = self.get_ae_currents()[0]
+            current = self.get_ae_current()[0]
             if current <= 0.5:
                 count += 1
         return count
@@ -84,8 +84,8 @@ class Circuit:
     def get_ae_buses(self):
         return self.com.get_ae_conn()
 
-    def get_ae_currents(self):
-        return self.com.get_ae_currents()
+    def get_ae_current(self):
+        return self.com.get_ae_current()
 
     def get_ae_data(self):
         return self.com.get_ae_data()
