@@ -37,6 +37,9 @@ class OpenDss:
         return self.DSSBus.VMagAngle
 
     def get_buses(self):
+        """Get buses list
+        :return: (tuple)
+        """
         return self.DSSCircuit.AllBusNames
 
     def get_active_element(self):
@@ -49,13 +52,17 @@ class OpenDss:
         return self.DSSCircuit.AllBusVmag
 
     def get_lines(self):
-        """Get lines list """
+        """Get lines list
+        :return: (tuple) """
         return self.DSSLines.AllNames
 
     def get_loads(self):
         return self.DSSLoads.AllNames
 
-    def get_ae_busnames(self):
+    def get_ae_conn(self):
+        """Active element nodes connection
+        :return: (tuple)
+        """
         return self.DSSCktElement.BusNames
 
     def get_ae_data(self):
@@ -79,12 +86,21 @@ class OpenDss:
         self.DSSSolution.Solve()
 
     def set_active_element(self, element):
+        """Set element as active
+        :param element: (str) name
+        """
         self.DSSCircuit.SetActiveElement(element)
 
     def open_element(self, term):
+        """Open active element
+        :param term: (int) terminal (1 or 2)
+        """
         self.DSSCktElement.Open(term, 0)
 
     def close_element(self, term):
+        """Close active element
+        :param term: (int) terminal (1 or 2)
+        """
         self.DSSCktElement.Close(term, 0)
 
 

@@ -4,7 +4,7 @@ from scipy.special import comb
 from itertools import combinations
 from dissystem import DistributionSystem
 from fisr_env import FisrEnvironment
-from dissystem import ToPython
+from dissystem import OpenDSS2Python
 
 
 class Prueba:
@@ -34,7 +34,7 @@ class Prueba:
     switches = ['S1', 'S2', 'S3', 'S6', 'T4', 'T5']
     tie = ['T4', 'T5']
 
-    system_data = ToPython(nodes, switches, tie, conn)
+    system_data = OpenDSS2Python(nodes, switches, tie, conn)
     bus33 = DistributionSystem()
 
 

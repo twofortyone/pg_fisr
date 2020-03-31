@@ -82,7 +82,7 @@ class Circuit:
 
     # rename get_conn_element
     def get_ae_buses(self):
-        return self.com.get_ae_busnames()
+        return self.com.get_ae_conn()
 
     def get_ae_currents(self):
         return self.com.get_ae_currents()

@@ -1,6 +1,6 @@
 from environment import BaseEnvironment
 from dissystem import DistributionSystem
-from dissystem import ToPython
+from dissystem import OpenDSS2Python
 from itertools import combinations
 import numpy as np
 
