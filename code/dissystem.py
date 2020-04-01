@@ -123,7 +123,7 @@ class DistributionSystem:
             # update nodes connection
             self.connect_nodes(switch)
             # open com switch
-            self.system_data.close_switch(switch)
+            #self.system_data.close_switch(switch)
 
     def open_switch(self, switch):
         """Open a switch and update closed and opened switches and node adjacency matrix
@@ -138,7 +138,7 @@ class DistributionSystem:
             # update node connections
             self.isolate_nodes(switch)
             # close com switch
-            self.system_data.close_switch(switch)
+            #self.system_data.close_switch(switch)
 
     def update_switches(self):
         """ Get closed and opened switches from switches obs (only use at start)"""
