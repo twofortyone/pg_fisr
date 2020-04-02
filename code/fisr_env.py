@@ -29,6 +29,16 @@ class FisrEnvironment(BaseEnvironment):
     # Getters
     # -----------------------------------------------------------------------------------
 
+    def get_voltage_limits(self):
+        """Number of nodes out of limits
+        :return: number of nodes out of limits
+        """
+        voltages = self.system.system_data.open_dss.get_voltage()
+        v_aux = voltages[:, 0]
+        v_aux = v_aux[np.where(v_aux < 0.9)]
+        v_aux = v_aux[np.where(v_aux > 1.05)]
+        return np.count_nonzero(v_aux)
+
     def get_states(self):
         """States list depending on tie and total switches
         :return states: (np array) total switches combing tie switches list
@@ -72,7 +82,7 @@ class FisrEnvironment(BaseEnvironment):
         #print('--------------------------')
         t1 = time.time()
         current_state = tuple(np.sort(self.system.opened_switches))
-        #print(current_state)
+        print(current_state)
         t2 = time.time()
         # pos = self.states.index(current_state)
         # ------------------------------------------------- Prueba inicio
@@ -129,8 +139,8 @@ class FisrEnvironment(BaseEnvironment):
         switches = self.actions[action]
         switch2open = switches[0]
         switch2close = switches[1]
-        #print('action:', action)
-        #print('switches: ', switches)
+        print('action:', action)
+        print('switches: ', switches)
 
         t1 = time.time()
         self.system.open_switch(switch2open)
@@ -141,15 +151,24 @@ class FisrEnvironment(BaseEnvironment):
 
         if self.system.num_nodes_offline() != 0:  # reward if there is any node offline
             reward -= 100
+
+        if self.get_voltage_limits() != 0:
+            reward -= 100
         t4 = time.time()
         #print('openclose:', t2-t1)
         #print('observation:', t3-t2)
         #print('node offline', t4-t3)
         #print('total: ', t4-t1)
-        if self.time_step == 1000:  # terminate if 1000 time steps are reached
+        nodes = self.system.num_nodes_offline()
+
+        #if (nodes == 0) and self.get_voltage_limits() == 0:
+        #    is_terminal = True
+        #    self.system.sys_start()
+
+        if self.time_step == 10000:  # terminate if 1000 time steps are reached
             is_terminal = True
             self.time_step = 0
-
+            self.system.sys_start()
         self.reward_obs_term = [reward, self.current_state, is_terminal]
 
         return self.reward_obs_term

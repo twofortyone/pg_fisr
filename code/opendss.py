@@ -1,3 +1,5 @@
+
+import numpy as np
 # OpenDSSCOM packages
 from win32com.client import makepy
 import win32com.client
@@ -13,7 +15,7 @@ class OpenDSSCircuit:
 
         self.lines = self.com.get_lines()
         self.nodes = self.com.get_buses()
-        self.ties = self.lines[32:37]
+        self.ties = self.lines[32:34]
 
         for x in self.ties:
             self.open_switch(x)
