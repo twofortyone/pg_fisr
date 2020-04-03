@@ -7,7 +7,8 @@ import time
 from scipy.stats import sem
 import matplotlib.pyplot as plt  # used 
 from rl_glue import RLGlue  # used 
-from tqdm import tqdm  # used 
+from tqdm import tqdm  # used
+#from tqdm.notebook import tqdm
 import pickle
 
 start_time = time.time()
@@ -22,7 +23,7 @@ num_opened = len(opened)
 num_actions = num_closed * num_opened
 
 # Failure is stated and actions are obtained
-failure = 3
+failure = 10
 failure_actions = env.get_failure_actions(failure)
 
 # number of states
@@ -37,11 +38,11 @@ agent_info = {'num_actions': num_actions, 'num_states': num_states, 'epsilon': 0
               'discount': 1.0, 'step_size': 0.8, 'failure_actions': failure_actions}
 env_info = {}
 num_runs = 1
-num_episodes = 1
+num_episodes = 500
 all_reward_sums = []
 all_state_visits = []
 
-for run in tqdm(range(num_runs)):
+for run in range(num_runs):
     agent_info['seed'] = run
     rl_glue = RLGlue(env, agent)
     rl_glue.rl_init(agent_info, env_info)
@@ -49,8 +50,10 @@ for run in tqdm(range(num_runs)):
     reward_sums = []
     state_visits = np.zeros(num_states)
     for episode in tqdm(range(num_episodes)):
-        print('------------------------------')
-        print('Episode: ', episode)
+        env.system.system_data.open_dss.open_init()
+        #print(env.system.system_data.open_dss.get_voltage()[32])
+        #print('------------------------------')
+        #print('Episode: ', episode)
         if episode < num_episodes - 10:
             rl_glue.rl_episode(0)
         else:

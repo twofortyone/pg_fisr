@@ -7,8 +7,8 @@ import numpy as np
 # vn = np.asarray(v).reshape((-1, 3))
 
 from dissystem import DistributionSystem
-sys = DistributionSystem()
-sys.sys_start()
+system = DistributionSystem()
+system.sys_start()
 
 
 

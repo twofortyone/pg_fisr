@@ -20,6 +20,11 @@ class OpenDSSCircuit:
         for x in self.ties:
             self.open_switch(x)
 
+    def open_init(self):
+        self.com.com_init()
+        for x in self.ties:
+            self.open_switch(x)
+
     # ----------------------------------------
     # Getters
     # -----------------------------------------
@@ -121,7 +126,11 @@ class OpenDSSCOM:
             print("OpenDSS Engine started successfully")
         else:
             print("Unable to start the OpenDSS Engine")
+        self.DSSText.Command = 'compile ' + self.path
 
+    def com_init(self):
+        self.send_command('ClearAll')
+        path = 'E:\ieee33bus.dss'
         self.DSSText.Command = 'compile ' + self.path
 
     # -----------------------------------------
@@ -165,6 +174,7 @@ class OpenDSSCOM:
     # -----------------------------------------
     # Setters
     # -----------------------------------------
+
     def send_command(self, command):
         """Send command to OpenDss
         :param command: (str)

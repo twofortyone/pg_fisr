@@ -5,6 +5,8 @@ from itertools import combinations
 import numpy as np
 import time
 
+from opendss import OpenDSSCircuit, OpenDSSCOM
+
 
 class FisrEnvironment(BaseEnvironment):
     """Implements the environment
@@ -33,7 +35,7 @@ class FisrEnvironment(BaseEnvironment):
         """Number of nodes out of limits
         :return: number of nodes out of limits
         """
-        voltages = self.system.system_data.open_dss.get_voltage()
+        voltages = np.copy(self.system.system_data.open_dss.get_voltage())
         v_aux = voltages[:, 0]
         v_aux1 = v_aux[np.where(v_aux < 0.9)]
         v_aux2 = v_aux[np.where(v_aux > 1.05)]
@@ -82,7 +84,7 @@ class FisrEnvironment(BaseEnvironment):
         #print('--------------------------')
         t1 = time.time()
         current_state = tuple(np.sort(self.system.opened_switches))
-        print(current_state)
+        #print(current_state)
         t2 = time.time()
         # pos = self.states.index(current_state)
         # ------------------------------------------------- Prueba inicio
@@ -139,12 +141,14 @@ class FisrEnvironment(BaseEnvironment):
         switches = self.actions[action]
         switch2open = switches[0]
         switch2close = switches[1]
-        print('action:', action)
-        print('switches: ', switches)
+
+        #print('action:', action)
+        #print('switches: ', switches)
 
         t1 = time.time()
         self.system.open_switch(switch2open)
         self.system.close_switch(switch2close)
+        #print(self.system.system_data.open_dss.get_voltage()[32])
         t2 = time.time()
         self.current_state = self.get_observation()  # update current state
         t3 = time.time()
@@ -161,14 +165,17 @@ class FisrEnvironment(BaseEnvironment):
         #print('total: ', t4-t1)
         nodes = self.system.num_nodes_offline()
 
-        if (nodes == 0) and self.get_voltage_limits() == 0:
-            is_terminal = True
-            self.system.sys_start()
-
-        #if self.time_step == 10000:  # terminate if 1000 time steps are reached
+        #if (nodes == 0) and self.get_voltage_limits() == 0:
         #    is_terminal = True
-        #    self.time_step = 0
         #    self.system.sys_start()
+        #    self.system.system_data.open_dss.open_init()
+
+        if self.time_step == 1000:  # terminate if 1000 time steps are reached
+            is_terminal = True
+            self.time_step = 0
+            self.system.sys_start()
+            self.system.system_data.open_dss.open_init()
+
         self.reward_obs_term = [reward, self.current_state, is_terminal]
 
         return self.reward_obs_term
