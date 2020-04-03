@@ -4,7 +4,20 @@ import numpy as np
 
 class QLearningAgent(BaseAgent):
 
-    def agent_init(self, agent_init_info= {}):
+    def __init__(self):
+        self.num_actions = None
+        self.num_states = None
+        self.epsilon = None
+        self.step_size = None
+        self.discount = None
+        self.rand_generator =None
+        self.prev_action = None
+        self.prev_state = None
+        self.failure_actions = None
+        # Create an array for action-value estimates and initialize to zero
+        self.q = None
+
+    def agent_init(self, agent_init_info={}):
 
         self.num_actions = agent_init_info['num_actions']
         self.num_states = agent_init_info['num_states']
@@ -15,10 +28,22 @@ class QLearningAgent(BaseAgent):
         self.prev_action = None
         self.prev_state = None
 
-        self.failure_actions = agent_init_info['failure_actions']
-
         # Create an array for action-value estimates and initialize to zero
         self.q = np.zeros((self.num_states, self.num_actions))
+
+    def agent_init_pro(self, agent_init_info={}):
+
+        self.num_actions = agent_init_info['num_actions']
+        self.num_states = agent_init_info['num_states']
+        self.epsilon = agent_init_info['epsilon']
+        self.step_size = agent_init_info['step_size']
+        self.discount = agent_init_info['discount']
+        self.rand_generator = np.random.RandomState(agent_init_info['seed'])
+        self.prev_action = None
+        self.prev_state = None
+
+        # Create an array for action-value estimates and initialize to zero
+        self.q = agent_init_info['q_values']
 
     def agent_start(self, state):
         
@@ -31,6 +56,14 @@ class QLearningAgent(BaseAgent):
         self.prev_state = state
         self.prev_action = action
         return action
+
+    def agent_start_pro(self, state):
+        current_q = self.q[state, self.failure_actions]  # array with all q values for a given state
+        action = self.argmax(current_q)
+
+        self.prev_state = state
+        self.prev_action = self.failure_actions[action]
+        return self.failure_actions[action]
 
     def agent_step(self, reward, state):
         """A step taken by the agent 

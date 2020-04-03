@@ -170,9 +170,55 @@ class FisrEnvironment(BaseEnvironment):
         #    self.system.sys_start()
         #    self.system.system_data.open_dss.open_init()
 
-        if self.time_step == 1000:  # terminate if 1000 time steps are reached
+        if self.time_step == 2000:  # terminate if 1000 time steps are reached
             is_terminal = True
             self.time_step = 0
+            self.system.sys_start()
+            self.system.system_data.open_dss.open_init()
+
+        self.reward_obs_term = [reward, self.current_state, is_terminal]
+
+        return self.reward_obs_term
+
+    def env_step_pro(self, action):
+        """A step taken by the environment
+        :param action: (int) the action taken by the agent (action, switch)
+        :return: (list) a list of the reward, state observation and boolean if it's terminal
+        """
+
+        self.time_step += 1
+        reward = -1
+        is_terminal = False
+        # determine switches to execute
+        switches = self.actions[action]
+        switch2open = switches[0]
+        switch2close = switches[1]
+
+        print('action:', action)
+        print('switches: ', switches)
+
+        t1 = time.time()
+        self.system.open_switch(switch2open)
+        self.system.close_switch(switch2close)
+        print(self.system.system_data.open_dss.get_voltage()[32])
+        t2 = time.time()
+        self.current_state = self.get_observation()  # update current state
+        t3 = time.time()
+
+        if self.system.num_nodes_offline() != 0:  # reward if there is any node offline
+            reward -= 100
+
+        if self.get_voltage_limits() != 0:
+            reward -= 100
+        t4 = time.time()
+        #print('openclose:', t2-t1)
+        #print('observation:', t3-t2)
+        #print('node offline', t4-t3)
+        #print('total: ', t4-t1)
+        nodes = self.system.num_nodes_offline()
+
+        if (nodes == 0) and self.get_voltage_limits() == 0:
+            is_terminal = True
             self.system.sys_start()
             self.system.system_data.open_dss.open_init()
 

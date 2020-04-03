@@ -8,8 +8,6 @@ from scipy.stats import sem
 import matplotlib.pyplot as plt  # used 
 from rl_glue import RLGlue  # used 
 from tqdm import tqdm  # used
-#from tqdm.notebook import tqdm
-import pickle
 
 start_time = time.time()
 env = FisrEnvironment()
@@ -38,9 +36,11 @@ agent_info = {'num_actions': num_actions, 'num_states': num_states, 'epsilon': 0
               'discount': 1.0, 'step_size': 0.8, 'failure_actions': failure_actions}
 env_info = {}
 num_runs = 1
-num_episodes = 500
+num_episodes = 200
 all_reward_sums = []
 all_state_visits = []
+
+q_values = []
 
 for run in range(num_runs):
     agent_info['seed'] = run
@@ -79,8 +79,6 @@ plt.ylabel("Sum of\n rewards\n during\n episode", rotation=0, labelpad=40)
 plt.legend()
 plt.grid
 plt.show()
-
-
 
 print('Started successfully!')
 print('proccesing_time = ', end_time-start_time)
