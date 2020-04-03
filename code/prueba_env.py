@@ -22,7 +22,7 @@ num_opened = len(opened)
 num_actions = num_closed * num_opened
 
 # Failure is stated and actions are obtained
-failure = 7
+failure = 3
 failure_actions = env.get_failure_actions(failure)
 
 # number of states
@@ -37,7 +37,7 @@ agent_info = {'num_actions': num_actions, 'num_states': num_states, 'epsilon': 0
               'discount': 1.0, 'step_size': 0.8, 'failure_actions': failure_actions}
 env_info = {}
 num_runs = 1
-num_episodes = 10
+num_episodes = 1
 all_reward_sums = []
 all_state_visits = []
 

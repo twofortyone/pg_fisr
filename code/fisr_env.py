@@ -35,9 +35,9 @@ class FisrEnvironment(BaseEnvironment):
         """
         voltages = self.system.system_data.open_dss.get_voltage()
         v_aux = voltages[:, 0]
-        v_aux = v_aux[np.where(v_aux < 0.9)]
-        v_aux = v_aux[np.where(v_aux > 1.05)]
-        return np.count_nonzero(v_aux)
+        v_aux1 = v_aux[np.where(v_aux < 0.9)]
+        v_aux2 = v_aux[np.where(v_aux > 1.05)]
+        return len(v_aux1) + len(v_aux2)
 
     def get_states(self):
         """States list depending on tie and total switches
@@ -161,14 +161,14 @@ class FisrEnvironment(BaseEnvironment):
         #print('total: ', t4-t1)
         nodes = self.system.num_nodes_offline()
 
-        #if (nodes == 0) and self.get_voltage_limits() == 0:
-        #    is_terminal = True
-        #    self.system.sys_start()
-
-        if self.time_step == 10000:  # terminate if 1000 time steps are reached
+        if (nodes == 0) and self.get_voltage_limits() == 0:
             is_terminal = True
-            self.time_step = 0
             self.system.sys_start()
+
+        #if self.time_step == 10000:  # terminate if 1000 time steps are reached
+        #    is_terminal = True
+        #    self.time_step = 0
+        #    self.system.sys_start()
         self.reward_obs_term = [reward, self.current_state, is_terminal]
 
         return self.reward_obs_term

@@ -84,8 +84,8 @@ class OpenDSSCircuit:
         :param line: (name str)
         """
         self.set_active_line(line)
-        self.com.open_element(1)
-        self.com.open_element(2)
+        self.com.open_element()
+        #self.com.open_element()
         self.com.solve()
         # TODO: update voltage values
 
@@ -94,8 +94,8 @@ class OpenDSSCircuit:
         :param line: (name str)
         """
         self.set_active_line(line)
-        self.com.close_element(1)
-        self.com.close_element(2)
+        self.com.close_element()
+        #self.com.close_element(2)
         self.com.solve()
         # TODO: update voltage values
 
@@ -156,6 +156,12 @@ class OpenDSSCOM:
         """
         return self.DSSCircuit.AllBusVmagPu
 
+    def get_active_element(self):
+        """Get active element name
+        :return: name
+        """
+        return self.DSSCktElement.Name
+
     # -----------------------------------------
     # Setters
     # -----------------------------------------
@@ -175,17 +181,17 @@ class OpenDSSCOM:
         """
         self.DSSCircuit.SetActiveElement(element)
 
-    def open_element(self, term):
+    def open_element(self):
         """Open active element
         :param term: (int) terminal (1 or 2)
         """
-        self.DSSCktElement.Open(term, 0)
+        self.DSSCktElement.Open(0, 0)
 
-    def close_element(self, term):
+    def close_element(self):
         """Close active element
         :param term: (int) terminal (1 or 2)
         """
-        self.DSSCktElement.Close(term, 0)
+        self.DSSCktElement.Close(0, 0)
 
     def show_voltages(self):
         """Show voltages as txt """
@@ -194,3 +200,10 @@ class OpenDSSCOM:
     def show_currents(self):
         """Show currents as txt"""
         self.send_command('show currents elements')
+
+    def ae_is_open(self):
+        """Verify is active element is opened
+        :return: [boolean, boolean]"""
+        term1 = self.DSSCktElement.IsOpen(1, 0)
+        term2 = self.DSSCktElement.IsOpen(2, 0)
+        return [term1, term2]

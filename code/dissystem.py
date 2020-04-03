@@ -138,7 +138,7 @@ class DistributionSystem:
             # update node connections
             self.isolate_nodes(switch)
             # close com switch
-            self.system_data.close_switch(switch)
+            self.system_data.open_switch(switch)
 
     def update_switches(self):
         """ Get closed and opened switches from switches obs (only use at start)"""
@@ -250,7 +250,7 @@ class OpenDSS2Python:
         :param switch: (pos int)
         """
         name = self.switches[switch]
-        self.open_dss.open_switch(name)
+        self.open_dss.close_switch(name)
 
 
 # Methods to used across

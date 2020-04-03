@@ -53,7 +53,7 @@ class Circuit:
     def is_line_open(self, line, term):
         self.set_active_line(line)
         line = self.get_ae_name()
-        status = self.com.ae_is_open(term)
+        status = self.com.ae_is_open()
         return line, status
 
     def num_load_offline(self):

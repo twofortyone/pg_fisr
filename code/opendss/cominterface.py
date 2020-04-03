@@ -43,6 +43,9 @@ class OpenDss:
         return self.DSSCircuit.AllBusNames
 
     def get_active_element(self):
+        """Get active element name
+        :return: name
+        """
         return self.DSSCktElement.Name
 
     def get_voltage_magpu(self):
@@ -81,8 +84,12 @@ class OpenDss:
         return self.DSSCktElement.CurrentsMagAng
 
     # Verify if the active element is open given the terminal
-    def ae_is_open(self, term):
-        return self.DSSCktElement.IsOpen(term, 1)
+    def ae_is_open(self):
+        """Verify is active element is opened
+        :return: [boolean, boolean]"""
+        term1 = self.DSSCktElement.IsOpen(1, 1)
+        term2 = self.DSSCktElement.IsOpen(2, 1)
+        return [term1, term2]
 
     def send_command(self, command):
         """Send command to OpenDss
