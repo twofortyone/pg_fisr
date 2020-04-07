@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt  # used
 from rl_glue import RLGlue  # used
 from tqdm import tqdm  # used
 from rl_glue_pro import Pro
-
+from report.report import make_figure
 
 class Training:
 
@@ -65,6 +65,8 @@ class Training:
             plt.legend()
             plt.grid
             plt.show()
+            make_figure(None, np.mean(self.all_reward_sums, axis=0), 'training.html')
+
 
 
 class Production:
@@ -138,3 +140,5 @@ class Production:
             plt.legend()
             plt.grid
             plt.show()
+
+            make_figure(None, np.mean(self.all_reward_sums, axis=0), "production.html")

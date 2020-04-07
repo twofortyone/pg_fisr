@@ -43,27 +43,28 @@ def pandas2html(data_frame):
 
 def make_figure(x, y, file_name):
 
-    xy_data = go.Scatter(x=x, y=y, mode='markers')
+    xy_data = go.Scatter(x=x, y=y, mode='lines+markers')
     fig = go.Figure(xy_data)
     fig.show()
     fig.update_layout(margin=dict(l=20, r=20, t=20, b=20),
                       paper_bgcolor="white")
-    first_plot_url = plot(fig, filename=file_name)
-    return first_plot_url
+    fig.write_html(file_name)
+    #first_plot_url = plot(fig, filename=file_name)
+    #return first_plot_url
 
 
 fn = 'plot.html'
 u = np.arange(4)
-k = np.ones(4)
-
-a = np.arange(10)
-a = a.reshape(-1, 2)
-ds = pd.DataFrame(data=a, columns=['hola', 'como'])
-
-ds.insert(2, 'estás', ['uno', 'dos', 'tres', 'cuatro', 'cinco'])
-df = pd.DataFrame(columns=['Nodo fallado', 'Acciones', 'Cantidad acciones'])
-
-reporte = Report(make_figure(u, k, fn), ds)
-reporte.make_report()
+# k = np.ones(4)
+#
+# a = np.arange(10)
+# a = a.reshape(-1, 2)
+# ds = pd.DataFrame(data=a, columns=['hola', 'como'])
+#
+# ds.insert(2, 'estás', ['uno', 'dos', 'tres', 'cuatro', 'cinco'])
+# df = pd.DataFrame(columns=['Nodo fallado', 'Acciones', 'Cantidad acciones'])
+#
+# reporte = Report(make_figure(u, k, fn), ds)
+# reporte.make_report()
 
 
