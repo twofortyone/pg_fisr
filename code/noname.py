@@ -4,7 +4,11 @@ import matplotlib.pyplot as plt  # used
 from rl_glue import RLGlue  # used
 from tqdm import tqdm  # used
 from rl_glue_pro import Pro
-from report.report import make_figure
+from report import make_figure
+from pathlib import Path, PureWindowsPath
+
+report_folder = "E:/MININT/SMSOSD/OSDLOGS/github/pg_fisr/code/report/"
+
 
 class Training:
 
@@ -59,14 +63,13 @@ class Training:
             self.all_reward_sums.append(reward_sums)
             self.all_state_visits.append(state_visits)
 
-            plt.plot(np.mean(self.all_reward_sums, axis=0), label='algorithm')
-            plt.xlabel("Episodes")
-            plt.ylabel("Sum of\n rewards\n during\n episode", rotation=0, labelpad=40)
-            plt.legend()
-            plt.grid
-            plt.show()
-            make_figure(None, np.mean(self.all_reward_sums, axis=0), 'training.html')
-
+            #plt.plot(np.mean(self.all_reward_sums, axis=0), label='algorithm')
+            #plt.xlabel("Episodes")
+            #plt.ylabel("Sum of\n rewards\n during\n episode", rotation=0, labelpad=40)
+            #plt.legend()
+            #plt.grid
+            #plt.show()
+        return make_figure(None, np.mean(self.all_reward_sums, axis=0), report_folder + 'training.html')
 
 
 class Production:
@@ -105,6 +108,7 @@ class Production:
 
         num_runs = runs
         num_episodes = episodes
+        taken_actions = []
 
         for run in range(num_runs):
             self.agent_info['seed'] = run
@@ -122,10 +126,13 @@ class Production:
                     rl_glue.rl_episode(0)
                 else:
                     state, action = rl_glue.rl_start()
+                    #taken_actions.append(action)
                     state_visits[state] += 1
                     is_terminal = False
                     while not is_terminal:
-                        reward, state, action, is_terminal = rl_glue.rl_step()
+                        rl_step_data = rl_glue.rl_step()
+                        reward, state, action, is_terminal = rl_step_data[0]
+                        taken_actions.append(rl_step_data[1])
                         state_visits[state] += 1
 
                 reward_sums.append(rl_glue.rl_return())
@@ -133,12 +140,11 @@ class Production:
             self.all_reward_sums.append(reward_sums)
             self.all_state_visits.append(state_visits)
 
-            plt.figure(2)
-            plt.plot(np.mean(self.all_reward_sums, axis=0), label='algorithm')
-            plt.xlabel("Episodes")
-            plt.ylabel("Sum of\n rewards\n during\n episode", rotation=0, labelpad=40)
-            plt.legend()
-            plt.grid
-            plt.show()
-
-            make_figure(None, np.mean(self.all_reward_sums, axis=0), "production.html")
+            # plt.figure(2)
+            # plt.plot(np.mean(self.all_reward_sums, axis=0), label='algorithm')
+            # plt.xlabel("Episodes")
+            # plt.ylabel("Sum of\n rewards\n during\n episode", rotation=0, labelpad=40)
+            # plt.legend()
+            # plt.grid
+            # plt.show()
+        return [make_figure(None, np.mean(self.all_reward_sums, axis=0), report_folder + 'production.html'), taken_actions]

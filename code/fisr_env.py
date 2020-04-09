@@ -224,7 +224,7 @@ class FisrEnvironment(BaseEnvironment):
 
         self.reward_obs_term = [reward, self.current_state, is_terminal]
 
-        return self.reward_obs_term
+        return [self.reward_obs_term, switches.tolist()]
 
     def env_cleanup(self):
         """Cleanup done after the environment ends"""

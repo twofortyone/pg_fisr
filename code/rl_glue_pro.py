@@ -128,7 +128,8 @@ class Pro:
                 last action, boolean indicating termination
         """
         t1 = time.time()
-        (reward, last_state, term) = self.environment.env_step_pro(self.last_action)
+        data_step = self.environment.env_step_pro(self.last_action)
+        (reward, last_state, term) = data_step[0]
         t2 = time.time()
         #print('env step time:', t2 - t1)
         self.total_reward += reward
@@ -145,7 +146,7 @@ class Pro:
             #print('agent step time: ', t4 - t3)
             roat = (reward, last_state, self.last_action, term)
 
-        return roat
+        return [roat, data_step[1]]
 
     def rl_cleanup(self):
         """Cleanup done at end of experiment."""
@@ -192,7 +193,7 @@ class Pro:
 
         while (not is_terminal) and ((max_steps_this_episode == 0) or
                                      (self.num_steps < max_steps_this_episode)):
-            rl_step_result = self.rl_step()
+            rl_step_result = self.rl_step()[0]
             is_terminal = rl_step_result[3]
 
         return is_terminal
