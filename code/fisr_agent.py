@@ -10,7 +10,7 @@ class QLearningAgent(BaseAgent):
         self.epsilon = None
         self.step_size = None
         self.discount = None
-        self.rand_generator =None
+        self.rand_generator = None
         self.prev_action = None
         self.prev_state = None
         self.failure_actions = None

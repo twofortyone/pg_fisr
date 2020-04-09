@@ -56,13 +56,7 @@ class FisrEnvironment(BaseEnvironment):
         """
         closed = np.sort(self.system.closed_switches)
         opened = np.sort(self.system.opened_switches)
-        #num_actions = len(closed) * len(opened)
-        #actions = np.zeros((num_actions, 2))
-        #i = 0
-        # for x in closed:
-        #     for z in opened:
-        #         actions[i] = np.array([x, z])
-        #         i += 1
+
         actions = np.zeros((len(closed) * len(opened), 2))
         for i in range(len(closed)):
             actions[i * len(opened):i * len(opened) + len(opened), 0] = closed[i]

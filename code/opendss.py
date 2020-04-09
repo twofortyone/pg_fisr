@@ -90,7 +90,6 @@ class OpenDSSCircuit:
         """
         self.set_active_line(line)
         self.com.open_element()
-        #self.com.open_element()
         self.com.solve()
         # TODO: update voltage values
 
@@ -100,7 +99,6 @@ class OpenDSSCircuit:
         """
         self.set_active_line(line)
         self.com.close_element()
-        #self.com.close_element(2)
         self.com.solve()
         # TODO: update voltage values
 
@@ -130,7 +128,6 @@ class OpenDSSCOM:
 
     def com_init(self):
         self.send_command('ClearAll')
-        path = 'E:\ieee33bus.dss'
         self.DSSText.Command = 'compile ' + self.path
 
     # -----------------------------------------
@@ -193,13 +190,11 @@ class OpenDSSCOM:
 
     def open_element(self):
         """Open active element
-        :param term: (int) terminal (1 or 2)
         """
         self.DSSCktElement.Open(0, 0)
 
     def close_element(self):
         """Close active element
-        :param term: (int) terminal (1 or 2)
         """
         self.DSSCktElement.Close(0, 0)
 
