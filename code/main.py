@@ -13,7 +13,7 @@ agent = QLearningAgent()
 # Training
 # ------------------------------------------
 training = Training(env, agent)
-train_path = training.run_training(1, 50)
+train_path = training.run_training(1, 20)
 
 q_values = training.agent.q
 

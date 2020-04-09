@@ -17,7 +17,7 @@ class Report:
         html_string = '''
         <html>
             <head>
-                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
                 <style>body{ margin:0 100; background:white; }</style>
             </head>
             <body>
@@ -46,8 +46,10 @@ class Report:
                 <h3>Actions taken given a failure</h3>
                 ''' + self.table + '''
                 
+                
                 <h3>Statistics</h3>
                 ''' + self.table2 + '''
+            
                 
                 
             </body>
@@ -59,7 +61,8 @@ class Report:
 
 
 def pandas2html(data_frame):
-    return data_frame.to_html().replace('<table border="1" class="dataframe">', '<table class="table table-bordered">')
+    first = data_frame.to_html().replace('<table border="1" class="dataframe">', '<table class="table table-responsive w-auto">')
+    return first.replace('<tr style="text-align: right;">', '<tr style="text-align: left;">')
 
 
 def make_figure(x, y, file_name):
