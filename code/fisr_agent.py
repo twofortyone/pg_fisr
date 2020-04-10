@@ -1,4 +1,4 @@
-from agent import BaseAgent
+from bases.agent import BaseAgent
 import numpy as np
 
 

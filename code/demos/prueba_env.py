@@ -4,9 +4,8 @@ from fisr_agent import QLearningAgent
 import numpy as np
 import time
 
-from scipy.stats import sem
-import matplotlib.pyplot as plt  # used 
-from rl_glue import RLGlue  # used 
+import matplotlib.pyplot as plt  # used
+from bases.rl_glue import RLGlue  # used
 from tqdm import tqdm  # used
 
 start_time = time.time()
