@@ -7,11 +7,13 @@ from plotly.io import write_html
 
 class Report:
 
-    def __init__(self, url1, url2, data_frame, df2):
+    def __init__(self, url1, url2, actions, stats, system, train):
         self.plot_url1 = url1
         self.plot_url2 = url2
-        self.table1 = pandas2html(data_frame)
-        self.table2 = pandas2html(df2)
+        self.tb_actions = pandas2html(actions)
+        self.tb_stats = pandas2html(stats)
+        self.tb_system = pandas2html(system)
+        self.tb_training = pandas2html(train)
 
     def make_report(self):
 
@@ -55,8 +57,15 @@ class Report:
                           corresponds to its mean stock price for 2014 on the x axis.</p>
                       </div>
                       <div class="col-sm">
-                        <div class="my-3">
-                          <h4>System Data</h4>
+                        <div class=row>
+                            <div class="col-sm"><div class="my-3">
+                                <h5>System Data</h5></div>
+                                ''' + self.tb_system + '''
+                            </div>
+                            <div class="col-sm">
+                                <div class="my-3"><h5>Training Data</h5></div>
+                                ''' + self.tb_training + '''
+                            </div>
                         </div>
                         <p>GE had the most predictable stock price in 2014. IBM had the highest mean stock price. \
                         The red lines are kernel density estimations of each stock price - the peak of each red lines\
@@ -78,10 +87,10 @@ class Report:
                     <div class="col-10">
                       <div class="tab-content">
                         <div class="tab-pane fade show active" id="actions-pill" >
-                            ''' + self.table1 + '''
+                            ''' + self.tb_actions + '''
                         </div>
                         <div class="tab-pane fade" id="statistics-pill">
-                            ''' + self.table2 + '''
+                            ''' + self.tb_stats + '''
                         </div>
                       </div>
                     </div>

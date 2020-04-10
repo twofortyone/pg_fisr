@@ -188,13 +188,13 @@ class FisrEnvironment(BaseEnvironment):
         switch2open = switches[0]
         switch2close = switches[1]
 
-        print('action:', action)
-        print('switches: ', switches)
+        #print('action:', action)
+        #print('switches: ', switches)
 
         t1 = time.time()
         self.system.open_switch(switch2open)
         self.system.close_switch(switch2close)
-        print(self.system.system_data.open_dss.get_voltage()[32])
+        #print(self.system.system_data.open_dss.get_voltage()[32])
         t2 = time.time()
         self.current_state = self.get_observation()  # update current state
         t3 = time.time()
