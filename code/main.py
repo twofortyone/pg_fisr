@@ -11,7 +11,7 @@ import time
 name = 'IEEE 33 BUS Test Case'
 env = FisrEnvironment()
 agent = QLearningAgent()
-t_epi = 20
+t_epi = 50
 t_runs = 1
 # ------------------------------------------
 # Training
@@ -79,3 +79,7 @@ t_df = pd.DataFrame(data_training, dt_label, ['Values'])
 # Report generation
 report = Report(train_path, train_path, actions_df, statistics, s_df, t_df)
 report.make_report()
+
+# Save q_values
+df_q = pd.DataFrame(data=agent.q, columns=actions)
+df_q.to_feather('E:\q_2tie_1r_50e_2000ts.ftr')

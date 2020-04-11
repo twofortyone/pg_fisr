@@ -145,6 +145,9 @@ class DistributionSystem:
         self.closed_switches = np.where(self.switches_obs == 1)[0]
         self.opened_switches = np.where(self.switches_obs == 0)[0]
 
+    def system_solver(self):
+        self.system_data.open_dss.com.solve()
+
 
 class OpenDSS2Python:
 

@@ -1,11 +1,8 @@
-from environment import BaseEnvironment
+from bases.environment import BaseEnvironment
 from dissystem import DistributionSystem
-from dissystem import OpenDSS2Python
 from itertools import combinations
 import numpy as np
 import time
-
-from opendss import OpenDSSCircuit, OpenDSSCOM
 
 
 class FisrEnvironment(BaseEnvironment):
@@ -75,36 +72,23 @@ class FisrEnvironment(BaseEnvironment):
         """ Get state index
         :return pos: (int) index of current_state in states list
         """
-        #print('--------------------------')
-        t1 = time.time()
         current_state = tuple(np.sort(self.system.opened_switches))
-        #print(current_state)
-        t2 = time.time()
-        # pos = self.states.index(current_state)
-        # ------------------------------------------------- Prueba inicio
-        # cs = np.array([2, 4])
+        #print(current_state)       
+        # fin position 
         a = self.states
         lista = []
-        # forward
-        for i in range(self.states.shape[1]):
+        for i in range(self.states.shape[1]): # forward
             aux = a[:, i]
             pos_vec = np.where(aux == current_state[i])
             a = a[pos_vec, :][0]
             lista.append(pos_vec[0])
 
-        # backward
         pos = 0
-        for i in range(self.states.shape[1]):
-            pos = lista[self.states.shape[1] - 1 - i][pos]
-        # --------------------------------------------------- Prueba fin
-        t3 = time.time()
+        for i in range(self.states.shape[1]): # backward
+            pos = lista[self.states.shape[1] - 1 - i][pos]    
+        
         # update possible actions
         self.actions = self.get_actions()
-        t4 = time.time()
-        #print('1- ', t2-t1)
-        #print('2- ', t3-t2)
-        #print('3- ', t4-t3)
-        #print('-------------------------------')
         return pos
 
     # -----------------------------------------------------------------------------------
@@ -139,30 +123,18 @@ class FisrEnvironment(BaseEnvironment):
         #print('action:', action)
         #print('switches: ', switches)
 
-        t1 = time.time()
         self.system.open_switch(switch2open)
         self.system.close_switch(switch2close)
+        self.system.system_solver()
         #print(self.system.system_data.open_dss.get_voltage()[32])
-        t2 = time.time()
+        
         self.current_state = self.get_observation()  # update current state
-        t3 = time.time()
 
         if self.system.num_nodes_offline() != 0:  # reward if there is any node offline
             reward -= 100
 
         if self.get_voltage_limits() != 0:
             reward -= 100
-        t4 = time.time()
-        #print('openclose:', t2-t1)
-        #print('observation:', t3-t2)
-        #print('node offline', t4-t3)
-        #print('total: ', t4-t1)
-        nodes = self.system.num_nodes_offline()
-
-        #if (nodes == 0) and self.get_voltage_limits() == 0:
-        #    is_terminal = True
-        #    self.system.sys_start()
-        #    self.system.system_data.open_dss.open_init()
 
         if self.time_step == 2000:  # terminate if 1000 time steps are reached
             is_terminal = True
@@ -191,24 +163,19 @@ class FisrEnvironment(BaseEnvironment):
         #print('action:', action)
         #print('switches: ', switches)
 
-        t1 = time.time()
         self.system.open_switch(switch2open)
         self.system.close_switch(switch2close)
+        self.system.system_solver()
         #print(self.system.system_data.open_dss.get_voltage()[32])
-        t2 = time.time()
+    
         self.current_state = self.get_observation()  # update current state
-        t3 = time.time()
-
+        
         if self.system.num_nodes_offline() != 0:  # reward if there is any node offline
             reward -= 100
 
         if self.get_voltage_limits() != 0:
             reward -= 100
-        t4 = time.time()
-        #print('openclose:', t2-t1)
-        #print('observation:', t3-t2)
-        #print('node offline', t4-t3)
-        #print('total: ', t4-t1)
+
         nodes = self.system.num_nodes_offline()
 
         if (nodes == 0) and self.get_voltage_limits() == 0:

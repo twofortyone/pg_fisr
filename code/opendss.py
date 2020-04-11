@@ -90,7 +90,7 @@ class OpenDSSCircuit:
         """
         self.set_active_line(line)
         self.com.open_element()
-        self.com.solve()
+        #self.com.solve()
         # TODO: update voltage values
 
     def close_switch(self, line):
@@ -99,7 +99,7 @@ class OpenDSSCircuit:
         """
         self.set_active_line(line)
         self.com.close_element()
-        self.com.solve()
+        #self.com.solve()
         # TODO: update voltage values
 
 
