@@ -11,7 +11,7 @@ import time
 name = 'IEEE 33 BUS Test Case'
 env = FisrEnvironment()
 agent = QLearningAgent()
-t_epi = 50
+t_epi = 200
 t_runs = 1
 # ------------------------------------------
 # Training
@@ -48,7 +48,7 @@ num_actions = []
 action_times =[]
 switches = env.system.system_data.switches
 
-for i in tqdm(range(len(switches)-2)):  # for closed switches
+for i in tqdm(range(2, num_switches-num_tie)):  # for closed switches
     production = Production(env, agent, q_values, i)
     t2 = time.time()
     pro = production.run_production(1, 1)
@@ -62,7 +62,7 @@ for i in tqdm(range(len(switches)-2)):  # for closed switches
 
 # Actions data frame
 list_of_acts = [str(x) for x in all_actions]
-actions_df = pd.DataFrame(data=switches[0:32], columns=['Failure'])
+actions_df = pd.DataFrame(data=switches[2:num_switches-num_tie], columns=['Failure'])
 actions_df.insert(1, 'Actions', list_of_acts, True)
 actions_df.insert(2, 'Number of actions', num_actions, True)
 actions_df.insert(3, 'Time elapsed', action_times, True)
@@ -82,4 +82,4 @@ report.make_report()
 
 # Save q_values
 df_q = pd.DataFrame(data=agent.q, columns=actions)
-df_q.to_feather('E:\q_2tie_1r_50e_2000ts.ftr')
+df_q.to_feather('E:\q_3tie_1r_50e_2000ts.ftr')

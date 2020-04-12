@@ -69,6 +69,7 @@ class Production:
 
         self.env = environment
         self.agent = agent
+        self.failure = failure
         # number of actions
         closed = self.env.system.closed_switches
         opened = self.env.system.opened_switches
@@ -77,7 +78,8 @@ class Production:
         num_actions = num_closed * num_opened
 
         # Failure is stated and actions are obtained
-        failure_actions = self.env.get_failure_actions(failure)
+        failure_actions = self.env.get_failure_actions(self.failure)
+        post_facts = self.env.get_post_facts(self.failure)
 
         # number of states
         start_tie = self.env.system.start_tie_obs
@@ -90,6 +92,7 @@ class Production:
                            'discount': 1.0, 'step_size': 0.8, 'q_values': q_values}
 
         self.agent.failure_actions = failure_actions
+        self.agent.post_facts = post_facts
 
         self.env_info = {}
         self.all_reward_sums = []
@@ -109,17 +112,14 @@ class Production:
             reward_sums = []
             state_visits = np.zeros(self.num_states)
             for episode in range(num_episodes):
-                if episode < num_episodes - 10:
-                    rl_glue.rl_episode(0)
-                else:
-                    state, action = rl_glue.rl_start()
+                state, action = rl_glue.rl_start()
+                state_visits[state] += 1
+                is_terminal = False
+                while not is_terminal:
+                    rl_step_data = rl_glue.rl_step(self.failure)
+                    reward, state, action, is_terminal = rl_step_data[0]
+                    taken_actions.append(rl_step_data[1])
                     state_visits[state] += 1
-                    is_terminal = False
-                    while not is_terminal:
-                        rl_step_data = rl_glue.rl_step()
-                        reward, state, action, is_terminal = rl_step_data[0]
-                        taken_actions.append(rl_step_data[1])
-                        state_visits[state] += 1
 
                 reward_sums.append(rl_glue.rl_return())
 

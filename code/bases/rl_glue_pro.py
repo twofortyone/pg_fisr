@@ -73,7 +73,7 @@ class Pro:
         Returns:
             The action taken by the agent.
         """
-        return self.agent.agent_step(reward, observation)
+        return self.agent.agent_step_pro(reward, observation)
 
     def rl_agent_end(self, reward):
         """Run when the agent terminates
@@ -107,7 +107,7 @@ class Pro:
             (float, state, Boolean): reward, state observation, boolean
                 indicating termination.
         """
-        ro = self.environment.env_step(action)
+        ro = self.environment.env_step_pro(action)
         (this_reward, _, terminal) = ro
 
         self.total_reward += this_reward
@@ -119,7 +119,7 @@ class Pro:
 
         return ro
 
-    def rl_step(self):
+    def rl_step(self, failure):
         """Step taken by RLGlue, takes environment step and either step or
             end by agent.
 
@@ -127,11 +127,9 @@ class Pro:
             (float, state, action, Boolean): reward, last state observation,
                 last action, boolean indicating termination
         """
-        t1 = time.time()
         data_step = self.environment.env_step_pro(self.last_action)
         (reward, last_state, term) = data_step[0]
-        t2 = time.time()
-        #print('env step time:', t2 - t1)
+
         self.total_reward += reward
 
         if term:
@@ -140,10 +138,8 @@ class Pro:
             roat = (reward, last_state, None, term)
         else:
             self.num_steps += 1
-            t3 = time.time()
-            self.last_action = self.agent.agent_step(reward, last_state)
-            t4 = time.time()
-            #print('agent step time: ', t4 - t3)
+            post_facts = self.environment.get_post_facts(failure)
+            self.last_action = self.agent.agent_step_pro(reward, last_state, post_facts)
             roat = (reward, last_state, self.last_action, term)
 
         return [roat, data_step[1]]
@@ -177,26 +173,6 @@ class Pro:
 
         """
         return self.environment.env_message(message)
-
-    def rl_episode(self, max_steps_this_episode):
-        """Runs an RLGlue episode
-
-        Args:
-            max_steps_this_episode (Int): the maximum steps for the experiment to run in an episode
-
-        Returns:
-            Boolean: if the episode should terminate
-        """
-        is_terminal = False
-
-        self.rl_start()
-
-        while (not is_terminal) and ((max_steps_this_episode == 0) or
-                                     (self.num_steps < max_steps_this_episode)):
-            rl_step_result = self.rl_step()[0]
-            is_terminal = rl_step_result[3]
-
-        return is_terminal
 
     def rl_return(self):
         """The total reward

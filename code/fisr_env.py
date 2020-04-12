@@ -1,3 +1,4 @@
+
 from bases.environment import BaseEnvironment
 from dissystem import DistributionSystem
 from itertools import combinations
@@ -66,6 +67,12 @@ class FisrEnvironment(BaseEnvironment):
         actions = self.get_actions()
         aux = actions[:, 0]
         pos = np.where(aux == failure)
+        return pos[0]
+    
+    def get_post_facts(self, failure):
+        actions = self.get_actions()
+        aux = actions[:, 1]
+        pos = np.where(aux != failure)
         return pos[0]
 
     def get_observation(self):
@@ -136,7 +143,7 @@ class FisrEnvironment(BaseEnvironment):
         if self.get_voltage_limits() != 0:
             reward -= 100
 
-        if self.time_step == 2000:  # terminate if 1000 time steps are reached
+        if self.time_step == 10000:  # terminate if 1000 time steps are reached
             is_terminal = True
             self.time_step = 0
             self.system.sys_start()
@@ -182,6 +189,12 @@ class FisrEnvironment(BaseEnvironment):
             is_terminal = True
             self.system.sys_start()
             self.system.system_data.open_dss.open_init()
+        elif self.time_step == 100:
+            is_terminal = True
+            self.time_step = 0
+            self.system.sys_start()
+            self.system.system_data.open_dss.open_init()
+            print('')
 
         self.reward_obs_term = [reward, self.current_state, is_terminal]
 

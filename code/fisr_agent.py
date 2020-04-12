@@ -73,7 +73,6 @@ class QLearningAgent(BaseAgent):
             the agent ended up after the last step 
         :return action(int): the last action the agent is taking
         """
-        
         current_q = self.q[state]
         if self.rand_generator.rand() < self.epsilon: 
             action = self.rand_generator.randint(self.num_actions)
@@ -89,6 +88,30 @@ class QLearningAgent(BaseAgent):
         self.prev_state = state
         self.prev_action = action
         return action 
+    
+    def agent_step_pro(self, reward, state, post_facts):
+        """A step taken by the agent 
+
+        :param reward: (float) the reward received for the last action taken
+        :param state: (int) the state from the environment's step based on where
+            the agent ended up after the last step 
+        :return action(int): the last action the agent is taking
+        """
+        current_q = self.q[state, post_facts]
+        if self.rand_generator.rand() < self.epsilon: 
+            action = self.rand_generator.randint(len(current_q))
+        else: 
+            action = self.argmax(current_q)
+
+        # Perform an update 
+        ps = self.prev_state
+        pa = self.prev_action
+        aux = reward + self.discount * np.amax(current_q) - self.q[ps, pa]
+        self.q[ps, pa] = self.q[ps, pa] + self.step_size * aux
+
+        self.prev_state = state
+        self.prev_action = post_facts[action]
+        return post_facts[action]
 
     def agent_end(self, reward):
         """Run when the agent terminates
