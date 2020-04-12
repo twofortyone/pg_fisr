@@ -7,9 +7,8 @@ from plotly.io import write_html
 
 class Report:
 
-    def __init__(self, url1, url2, actions, stats, system, train):
+    def __init__(self, url1, actions, stats, system, train):
         self.plot_url1 = url1
-        self.plot_url2 = url2
         self.tb_actions = pandas2html(actions)
         self.tb_stats = pandas2html(stats)
         self.tb_system = pandas2html(system)
