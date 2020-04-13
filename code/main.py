@@ -82,4 +82,4 @@ report.make_report()
 
 # Save q_values
 df_q = pd.DataFrame(data=agent.q, columns=actions)
-df_q.to_feather('E:\q_3tie_1r_50e_2000ts.ftr')
+df_q.to_feather('E:\q_5tie_1r_50e_2000ts.ftr')

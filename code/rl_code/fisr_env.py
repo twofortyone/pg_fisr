@@ -3,7 +3,7 @@ from bases.environment import BaseEnvironment
 from rl_code.dissystem import DistributionSystem
 from itertools import combinations
 import numpy as np
-
+import time
 
 class FisrEnvironment(BaseEnvironment):
     """Implements the environment
@@ -32,8 +32,8 @@ class FisrEnvironment(BaseEnvironment):
         """Number of nodes out of limits
         :return: number of nodes out of limits
         """
-        voltages = np.copy(self.system.get_voltage(self.current_state))
-        v_aux = voltages[:, 0]
+        #voltages = np.copy(self.system.get_voltage(self.current_state))
+        v_aux = self.system.get_voltage(self.current_state)
         v_aux1 = v_aux[np.where(v_aux < 0.9)]
         v_aux2 = v_aux[np.where(v_aux > 1.05)]
         return len(v_aux1) + len(v_aux2)
@@ -78,10 +78,13 @@ class FisrEnvironment(BaseEnvironment):
         """ Get state index
         :return pos: (int) index of current_state in states list
         """
+        #t0 = time.time()
         current_state = tuple(np.sort(self.system.opened_switches))
         # print(current_state)
         # Todo delete printing
-        a = self.states.copy()
+        #t1 = time.time()
+        a = self.states
+        #t2 = time.time()
         aux_list = []
         for i in range(self.states.shape[1]):  # forward
             aux = a[:, i]
@@ -91,9 +94,11 @@ class FisrEnvironment(BaseEnvironment):
         pos = 0
         for i in range(self.states.shape[1]):  # backward
             pos = aux_list[self.states.shape[1] - 1 - i][pos]
-        
+        #t3 = time.time()
         # update possible actions
         self.actions = self.get_actions()
+        #t4 = time.time()
+        #print('--',t4-t3,t3-t2,t2-t1,t1-t0,'--')
         return pos
 
     # -----------------------------------------------------------------------------------
@@ -142,7 +147,7 @@ class FisrEnvironment(BaseEnvironment):
         if self.get_voltage_limits() != 0:
             reward -= 100
 
-        if self.time_step == 10000:  # terminate if 1000 time steps are reached
+        if self.time_step == 1000000:  # terminate if 1000 time steps are reached
             is_terminal = True
             self.time_step = 0
             self.system.sys_start()
