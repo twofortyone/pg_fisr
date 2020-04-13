@@ -2,8 +2,7 @@ from fisr_env import FisrEnvironment
 from fisr_agent import QLearningAgent
 from train_pro import Training
 import pandas as pd
-from train_report import Report
-from tqdm import tqdm
+from report.train_report import Report
 import time
 
 
@@ -54,4 +53,4 @@ report.make_report()
 
 # Save q_values
 df_q = pd.DataFrame(data=agent.q, columns=actions)
-df_q.to_feather('E:\q_3tie_1r_200e_10000ts_nr.ftr')
+df_q.to_feather('E:\q_3tie_1r_200e_10000ts_nr_woopendss.ftr')

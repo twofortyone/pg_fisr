@@ -2,7 +2,7 @@ from fisr_env import FisrEnvironment
 from fisr_agent import QLearningAgent
 from train_pro import Production
 import pandas as pd
-from pro_report import Report
+from report.pro_report import Report
 from tqdm import tqdm
 import time
 

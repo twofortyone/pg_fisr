@@ -1,6 +1,9 @@
 # Shared packages
 import numpy as np
 
+# DistributionSystem packages
+import pandas as pd
+
 # OpenDSS2Python packages
 from opendss import OpenDSSCircuit
 
@@ -21,6 +24,8 @@ class DistributionSystem:
         self.opened_switches = None
         self.num_nodes = 0
         self.num_switches = 0
+        voltages = pd.read_feather('E:/pg_fisr_develop/code/data/system_data/3ties_voltages.ftr')
+        self.voltages = voltages.to_numpy()
         # Method initialization
         self.sys_start()
 
@@ -40,6 +45,10 @@ class DistributionSystem:
         self.update_switches()
         self.update_node_obs()
         return self.opened_switches
+
+    def get_voltage(self, state):
+        voltages = self.voltages[:, (state*3)+1:(state*3)+4]
+        return voltages
 
     # --------------------------------
     # NODE's METHODS
@@ -122,8 +131,6 @@ class DistributionSystem:
             self.opened_switches = np.delete(self.opened_switches, np.where(self.opened_switches == switch))
             # update nodes connection
             self.connect_nodes(switch)
-            # open com switch
-            self.system_data.close_switch(switch)
 
     def open_switch(self, switch):
         """Open a switch and update closed and opened switches and node adjacency matrix
@@ -134,19 +141,13 @@ class DistributionSystem:
             # update opened and closed switch array
             self.closed_switches = np.delete(self.closed_switches, np.where(self.closed_switches == switch))
             self.opened_switches = np.append(self.opened_switches, switch)
-
             # update node connections
             self.isolate_nodes(switch)
-            # close com switch
-            self.system_data.open_switch(switch)
 
     def update_switches(self):
         """ Get closed and opened switches from switches obs (only use at start)"""
         self.closed_switches = np.where(self.switches_obs == 1)[0]
         self.opened_switches = np.where(self.switches_obs == 0)[0]
-
-    def system_solver(self):
-        self.system_data.open_dss.com.solve()
 
 
 class OpenDSS2Python:
@@ -237,23 +238,6 @@ class OpenDSS2Python:
         for i in positions:
             names.append(self.nodes[i])
         return names
-
-    # ----------------------------------------
-    # Setters
-    # -----------------------------------------
-    def open_switch(self, switch):
-        """Open switch in both terminals
-        :param switch: (pos int)
-        """
-        name = self.switches[switch]
-        self.open_dss.open_switch(name)
-
-    def close_switch(self, switch):
-        """Open switch in both terminals
-        :param switch: (pos int)
-        """
-        name = self.switches[switch]
-        self.open_dss.close_switch(name)
 
 
 # Methods to used across

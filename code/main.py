@@ -3,7 +3,7 @@ from fisr_agent import QLearningAgent
 from train_pro import Training
 from train_pro import Production
 import pandas as pd
-from report import Report
+from report.report import Report
 from tqdm import tqdm
 import time
 

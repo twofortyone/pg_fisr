@@ -9,7 +9,7 @@ import sys
 class OpenDSSCircuit:
 
     def __init__(self):
-        path = 'E:\ieee33bus.dss'
+        path = 'E:\ieee33bus37.dss'
         self.com = OpenDSSCOM(path)
         self.com.solve()
         num_tie = 3

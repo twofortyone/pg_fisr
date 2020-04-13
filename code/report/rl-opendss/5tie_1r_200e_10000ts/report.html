@@ -1,0 +1,429 @@
+
+        <html> 
+            <head>
+              <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+                integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+              <style>
+                body {
+                  margin: 0 100;
+                  background: white;
+                }
+              </style>
+            </head>
+            
+            <body>
+              <div class="my-3 py-3">
+                <h1>Fault isolation and service restoration's report</h1>
+              </div>
+            
+              <ul class="nav nav-tabs">
+                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#train">Training</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#pro">Production</a></li>
+                </li>
+              </ul>
+            
+              <div class="tab-content">
+                <div class="tab-pane fade show active" id="train">
+                  <div class="container">
+            
+                    <div class="row">
+                      <div class="col-sm">
+                        <div class="my-3">
+                          <h4>Learning plot training</h4>
+                        </div>
+                         <iframe width="500" height="300" frameborder="0" seamless="seamless" scrolling="no"                                 src="E:/pg_fisr_develop/code/report/train_5tie_1r_200e_10000ts/training.html"></iframe>
+                        <p>GE had the most predictable stock price in 2014. IBM had the highest mean stock price.                          The red lines are kernel density estimations of each stock price - the peak of each red lines                           corresponds to its mean stock price for 2014 on the x axis.</p>
+                      </div>
+                      <div class="col-sm">
+                        <div class=row>
+                            <div class="col-sm"><div class="my-3">
+                                <h5>System Data</h5></div>
+                                <table class="table table-responsive w-auto">
+  <thead>
+    <tr style="text-align: left;">
+      <th></th>
+      <th>Values</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Name:</th>
+      <td>IEEE 33 BUS Test Case</td>
+    </tr>
+    <tr>
+      <th>Nodes:</th>
+      <td>33</td>
+    </tr>
+    <tr>
+      <th>Switches:</th>
+      <td>37</td>
+    </tr>
+    <tr>
+      <th>Tie:</th>
+      <td>5</td>
+    </tr>
+  </tbody>
+</table>
+                            </div>
+                            <div class="col-sm">
+                                <div class="my-3"><h5>Training Data</h5></div>
+                                <table class="table table-responsive w-auto">
+  <thead>
+    <tr style="text-align: left;">
+      <th></th>
+      <th>Values</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>States:</th>
+      <td>435897</td>
+    </tr>
+    <tr>
+      <th>Actions:</th>
+      <td>160</td>
+    </tr>
+    <tr>
+      <th>Episodes:</th>
+      <td>200</td>
+    </tr>
+    <tr>
+      <th>Runs:</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>Time elapsed:</th>
+      <td>5289.67 seconds</td>
+    </tr>
+  </tbody>
+</table>
+                            </div>
+                        </div>
+                        <p>GE had the most predictable stock price in 2014. IBM had the highest mean stock price.                         The red lines are kernel density estimations of each stock price - the peak of each red lines                         corresponds to its mean stock price for 2014 on the x axis.</p>
+                      </div>
+                    </div>
+                  </div>
+            
+            
+                </div>
+                <div class="tab-pane fade" id="pro">
+                  <div class="row my-3 pt-4">
+                    <div class="col-2">
+                      <div class="nav flex-column nav-pills"  role="tablist" aria-orientation="vertical">
+                        <a class="nav-link active" data-toggle="pill" href="#actions-pill" aria-selected="true">Actions</a>
+                        <a class="nav-link" data-toggle="pill" href="#statistics-pill" >Statistics</a>
+                      </div>
+                    </div>
+                    <div class="col-10">
+                      <div class="tab-content">
+                        <div class="tab-pane fade show active" id="actions-pill" >
+                            <table class="table table-responsive w-auto">
+  <thead>
+    <tr style="text-align: left;">
+      <th></th>
+      <th>Failure</th>
+      <th>Actions</th>
+      <th>Number of actions</th>
+      <th>Time elapsed</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>l1</td>
+      <td>[[0, 34], [14, 35], [23, 14], [5, 36], [20, 23], [21, 5], [9, 0], [19, 21], [5, 9], [1, 33], [18, 32], [22, 18], [8, 5], [33, 20], [2, 33], [9, 19], [36, 8], [27, 22], [8, 36], [14, 9], [5, 8], [25, 14], [9, 2], [16, 9], [13, 16], [29, 1], [19, 5], [34, 19], [32, 27], [18, 29], [1, 18], [28, 34], [22, 28], [18, 1], [4, 25], [27, 32], [10, 27], [24, 10], [0, 4], [8, 13], [21, 22], [11, 0], [35, 21]]</td>
+      <td>43</td>
+      <td>0.369</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>l2</td>
+      <td>[[1, 36], [15, 32], [24, 1], [4, 24], [19, 33], [20, 35], [9, 15], [22, 4], [5, 9], [1, 34], [18, 22], [22, 19], [7, 22], [34, 18], [2, 34], [10, 20], [36, 2], [27, 36], [11, 1]]</td>
+      <td>19</td>
+      <td>0.363</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>l3</td>
+      <td>[[2, 32], [14, 36], [23, 35], [5, 14], [19, 34], [21, 5], [9, 21], [20, 33], [6, 9], [1, 23], [21, 2], [22, 1], [7, 20], [33, 21], [2, 6], [8, 19], [36, 22], [26, 2], [9, 7], [12, 36], [3, 12], [24, 8], [7, 9], [16, 7], [12, 24], [28, 33], [20, 3], [34, 16], [33, 12], [17, 20], [1, 26], [29, 17], [21, 34], [17, 21], [5, 29], [27, 33], [12, 5], [22, 12], [0, 1], [8, 22], [21, 27], [11, 8], [35, 21], [1, 0], [9, 35], [5, 17], [29, 5], [30, 9], [35, 30], [36, 35], [14, 1], [2, 14], [23, 11], [11, 28], [30, 29], [9, 30], [19, 2], [29, 9], [21, 11], [2, 36], [16, 2], [14, 21], [15, 14], [2, 29], [33, 2], [28, 19], [3, 16], [35, 28], [27, 35], [18, 33], [29, 23], [7, 15], [20, 3], [9, 20], [2, 9], [21, 27], [28, 7], [30, 21], [0, 29], [9, 18], [11, 30], [25, 11], [31, 2], [1, 25], [35, 28], [34, 31], [16, 34], [32, 1], [34, 35], [25, 9], [2, 34], [14, 25], [10, 32], [23, 10], [9, 2], [8, 9], [20, 8], [31, 16], [8, 20], [27, 31], [6, 8], [9, 0], [5, 27], [36, 5], [20, 23]]</td>
+      <td>105</td>
+      <td>0.539</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>l4</td>
+      <td>[[3, 36], [15, 32], [22, 35], [5, 15], [19, 22], [21, 19], [10, 5], [20, 3], [5, 20], [1, 34], [19, 1], [18, 21], [7, 5], [34, 33], [1, 34], [8, 10], [36, 18], [27, 1], [9, 7], [13, 8], [3, 36], [26, 3], [6, 19], [16, 13], [13, 16], [29, 27]]</td>
+      <td>26</td>
+      <td>0.371</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>l5</td>
+      <td>[[4, 36], [14, 34], [22, 33], [5, 14], [19, 35], [21, 19], [10, 4], [19, 32], [6, 5], [1, 22], [20, 6], [18, 21], [6, 20], [34, 18], [2, 34], [9, 6], [35, 19], [27, 2], [8, 1], [13, 35], [3, 13], [25, 27], [7, 25], [18, 7], [15, 9], [29, 15], [20, 10], [34, 8], [33, 3], [17, 18], [1, 29], [29, 1], [23, 33], [16, 17], [4, 29], [28, 20], [11, 4], [21, 34], [0, 11], [8, 23], [22, 21], [10, 28], [35, 22], [1, 0], [11, 35], [5, 16], [29, 11], [30, 5], [35, 10], [3, 35], [10, 3], [11, 29], [0, 10], [9, 8], [12, 0], [13, 1], [19, 13], [29, 9], [22, 19], [2, 30], [17, 22], [18, 12], [15, 17], [3, 29], [33, 15], [29, 3], [4, 11], [36, 4], [27, 36], [19, 29], [28, 33], [7, 18], [36, 7], [4, 28], [3, 4], [21, 27], [28, 3], [29, 19], [0, 29], [9, 0], [11, 2], [24, 21], [30, 24], [0, 28], [35, 9], [33, 35], [15, 30], [31, 0], [35, 31], [24, 33], [1, 36], [14, 24], [9, 35], [22, 14], [8, 9], [7, 22], [22, 1], [31, 15], [9, 8], [27, 11], [5, 9], [9, 5], [6, 22]]</td>
+      <td>103</td>
+      <td>0.526</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>l6</td>
+      <td>[[5, 32]]</td>
+      <td>1</td>
+      <td>0.312</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>l7</td>
+      <td>[[6, 32]]</td>
+      <td>1</td>
+      <td>0.229</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>l8</td>
+      <td>[[7, 34]]</td>
+      <td>1</td>
+      <td>0.301</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>l9</td>
+      <td>[[8, 33]]</td>
+      <td>1</td>
+      <td>0.232</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>l10</td>
+      <td>[[9, 33]]</td>
+      <td>1</td>
+      <td>0.304</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>l11</td>
+      <td>[[10, 33]]</td>
+      <td>1</td>
+      <td>0.294</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>l12</td>
+      <td>[[11, 33]]</td>
+      <td>1</td>
+      <td>0.230</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>l13</td>
+      <td>[[12, 33]]</td>
+      <td>1</td>
+      <td>0.310</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>l14</td>
+      <td>[[13, 33]]</td>
+      <td>1</td>
+      <td>0.246</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>l15</td>
+      <td>[[14, 35]]</td>
+      <td>1</td>
+      <td>0.313</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>l16</td>
+      <td>[[15, 35]]</td>
+      <td>1</td>
+      <td>0.231</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>l17</td>
+      <td>[[16, 35]]</td>
+      <td>1</td>
+      <td>0.312</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>l18</td>
+      <td>[[17, 36], [13, 35], [23, 13], [4, 34], [20, 4], [19, 17], [7, 33], [18, 32], [5, 7], [1, 23], [21, 20], [20, 21], [8, 1], [34, 8], [1, 34], [8, 20], [35, 19], [26, 35], [10, 8], [13, 18], [4, 13], [25, 10], [9, 4], [16, 25], [14, 9], [29, 5], [19, 16], [34, 19], [33, 14], [19, 1], [1, 26], [28, 29], [22, 34], [17, 33], [5, 22], [29, 17], [12, 5], [22, 12], [0, 1], [8, 19], [20, 28], [10, 29], [35, 20], [1, 0], [12, 1], [4, 22], [28, 10], [29, 28], [34, 29], [36, 12], [13, 35], [2, 8], [25, 4], [11, 13], [29, 25], [9, 36], [18, 34], [30, 2], [22, 11], [2, 29], [16, 22], [19, 2], [14, 18], [3, 9], [33, 3], [28, 14], [3, 19], [35, 16], [25, 30], [18, 25], [27, 33], [7, 28], [36, 27], [4, 35], [2, 4], [22, 18], [28, 36], [30, 28], [0, 30], [11, 0], [12, 22], [26, 12], [30, 3], [0, 11], [36, 2], [34, 30], [15, 34], [31, 36], [36, 15], [23, 31], [3, 0], [14, 26], [11, 3], [21, 7], [7, 14], [6, 36], [19, 7], [32, 6], [7, 23], [28, 21], [5, 7], [8, 11], [7, 5], [34, 32], [20, 19], [16, 7], [10, 20], [17, 8], [20, 28], [35, 34], [3, 35], [22, 3], [24, 16], [21, 22], [15, 24], [26, 10], [13, 15], [23, 17], [10, 21], [21, 20], [19, 23], [16, 19], [2, 21]]</td>
+      <td>123</td>
+      <td>0.562</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>l19</td>
+      <td>[[18, 36], [13, 34], [22, 33], [4, 18], [20, 4]]</td>
+      <td>5</td>
+      <td>0.317</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>l20</td>
+      <td>[[19, 34]]</td>
+      <td>1</td>
+      <td>0.231</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>l21</td>
+      <td>[[20, 34]]</td>
+      <td>1</td>
+      <td>0.306</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>l22</td>
+      <td>[[21, 36]]</td>
+      <td>1</td>
+      <td>0.227</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>l23</td>
+      <td>[[22, 36]]</td>
+      <td>1</td>
+      <td>0.315</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>l24</td>
+      <td>[[23, 36]]</td>
+      <td>1</td>
+      <td>0.230</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>l25</td>
+      <td>[[24, 36]]</td>
+      <td>1</td>
+      <td>0.297</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>l26</td>
+      <td>[[25, 36]]</td>
+      <td>1</td>
+      <td>0.228</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>l27</td>
+      <td>[[26, 36]]</td>
+      <td>1</td>
+      <td>0.313</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>l28</td>
+      <td>[[27, 36]]</td>
+      <td>1</td>
+      <td>0.227</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>l29</td>
+      <td>[[28, 36], [13, 35], [22, 32], [4, 22], [19, 34], [21, 19], [9, 21], [20, 33], [6, 9], [1, 28], [21, 4], [19, 21], [7, 20], [34, 19], [2, 34], [10, 7], [36, 1], [27, 6], [8, 2], [14, 8], [3, 27], [25, 36]]</td>
+      <td>22</td>
+      <td>0.371</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>l30</td>
+      <td>[[29, 36], [14, 29], [23, 14]]</td>
+      <td>3</td>
+      <td>0.234</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>l31</td>
+      <td>[[30, 36], [14, 30], [23, 32], [4, 23], [20, 4], [19, 20], [8, 19], [20, 8], [5, 14], [1, 35], [18, 5], [17, 34], [6, 33], [33, 20], [2, 33], [9, 17], [36, 6], [28, 1], [8, 2], [13, 8], [3, 18], [24, 13], [7, 9], [15, 7], [12, 24], [27, 12], [19, 28], [32, 36], [33, 19]]</td>
+      <td>29</td>
+      <td>0.386</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>l32</td>
+      <td>[[31, 35]]</td>
+      <td>1</td>
+      <td>0.231</td>
+    </tr>
+  </tbody>
+</table>
+                        </div>
+                        <div class="tab-pane fade" id="statistics-pill">
+                            <table class="table table-responsive w-auto">
+  <thead>
+    <tr style="text-align: left;">
+      <th></th>
+      <th>Number of actions</th>
+      <th>Time elapsed</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>32.000000</td>
+      <td>32.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>15.625000</td>
+      <td>0.311156</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>32.734267</td>
+      <td>0.091098</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>1.000000</td>
+      <td>0.227000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>1.000000</td>
+      <td>0.231000</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>1.000000</td>
+      <td>0.305000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>8.500000</td>
+      <td>0.328500</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>123.000000</td>
+      <td>0.562000</td>
+    </tr>
+  </tbody>
+</table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+                integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+                crossorigin="anonymous"></script>
+              <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+                integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                crossorigin="anonymous"></script>
+              <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+                integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                crossorigin="anonymous"></script>
+            </body>
+            
+            </html>

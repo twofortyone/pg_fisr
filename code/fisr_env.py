@@ -33,7 +33,7 @@ class FisrEnvironment(BaseEnvironment):
         """Number of nodes out of limits
         :return: number of nodes out of limits
         """
-        voltages = np.copy(self.system.system_data.open_dss.get_voltage())
+        voltages = np.copy(self.system.get_voltage(self.current_state))
         v_aux = voltages[:, 0]
         v_aux1 = v_aux[np.where(v_aux < 0.9)]
         v_aux2 = v_aux[np.where(v_aux > 1.05)]
@@ -128,14 +128,15 @@ class FisrEnvironment(BaseEnvironment):
 
         # print('action:', action)
         # print('switches: ', switches)
-
+        #t0 = time.time()
         self.system.open_switch(switch2open)
         self.system.close_switch(switch2close)
-        self.system.system_solver()
+        #t1 = time.time()
         # print(self.system.system_data.open_dss.get_voltage()[32])
         
         self.current_state = self.get_observation()  # update current state
-
+        #t2 = time.time()
+        #print(t2-t1, t1-t0)
         if self.system.num_nodes_offline() != 0:  # reward if there is any node offline
             reward -= 100
 
@@ -146,7 +147,6 @@ class FisrEnvironment(BaseEnvironment):
             is_terminal = True
             self.time_step = 0
             self.system.sys_start()
-            self.system.system_data.open_dss.open_init()
 
         self.reward_obs_term = [reward, self.current_state, is_terminal]
 
@@ -187,12 +187,10 @@ class FisrEnvironment(BaseEnvironment):
         if (nodes == 0) and self.get_voltage_limits() == 0:
             is_terminal = True
             self.system.sys_start()
-            self.system.system_data.open_dss.open_init()
         elif self.time_step == 100:
             is_terminal = True
             self.time_step = 0
             self.system.sys_start()
-            self.system.system_data.open_dss.open_init()
             print('')
 
         self.reward_obs_term = [reward, self.current_state, is_terminal]
