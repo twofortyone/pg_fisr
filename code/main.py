@@ -36,9 +36,9 @@ data_training = [num_states, num_actions, str(t_epi), str(t_runs), str(t_time) +
 dt_label = ['States:', 'Actions:', 'Episodes:', 'Runs:', 'Time elapsed:']
 
 # q values info
-q_values = training.agent.q
-states = [str(x) for x in training.env.states]
-actions = [str(x) for x in training.env.actions]
+q_values = agent.q
+states = [str(x) for x in env.states]
+actions = [str(x) for x in env.actions]
 
 # -------------------------------------------
 # Production

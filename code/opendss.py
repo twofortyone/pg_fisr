@@ -12,7 +12,7 @@ class OpenDSSCircuit:
         path = 'E:\ieee33bus.dss'
         self.com = OpenDSSCOM(path)
         self.com.solve()
-        num_tie = 5
+        num_tie = 3
         self.lines = self.com.get_lines()
         num_switches = len(self.lines)
         self.nodes = self.com.get_buses()
@@ -91,7 +91,6 @@ class OpenDSSCircuit:
         """
         self.set_active_line(line)
         self.com.open_element()
-        #self.com.solve()
         # TODO: update voltage values
 
     def close_switch(self, line):
@@ -100,7 +99,6 @@ class OpenDSSCircuit:
         """
         self.set_active_line(line)
         self.com.close_element()
-        #self.com.solve()
         # TODO: update voltage values
 
 

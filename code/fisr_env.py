@@ -80,18 +80,18 @@ class FisrEnvironment(BaseEnvironment):
         :return pos: (int) index of current_state in states list
         """
         current_state = tuple(np.sort(self.system.opened_switches))
-        #print(current_state)
-        a = self.states
-        lista = []
-        for i in range(self.states.shape[1]): # forward
+        # print(current_state)
+        # Todo delete printing
+        a = self.states.copy()
+        aux_list = []
+        for i in range(self.states.shape[1]):  # forward
             aux = a[:, i]
             pos_vec = np.where(aux == current_state[i])
             a = a[pos_vec, :][0]
-            lista.append(pos_vec[0])
-
+            aux_list.append(pos_vec[0])
         pos = 0
-        for i in range(self.states.shape[1]): # backward
-            pos = lista[self.states.shape[1] - 1 - i][pos]    
+        for i in range(self.states.shape[1]):  # backward
+            pos = aux_list[self.states.shape[1] - 1 - i][pos]
         
         # update possible actions
         self.actions = self.get_actions()
@@ -126,13 +126,13 @@ class FisrEnvironment(BaseEnvironment):
         switch2open = switches[0]
         switch2close = switches[1]
 
-        #print('action:', action)
-        #print('switches: ', switches)
+        # print('action:', action)
+        # print('switches: ', switches)
 
         self.system.open_switch(switch2open)
         self.system.close_switch(switch2close)
         self.system.system_solver()
-        #print(self.system.system_data.open_dss.get_voltage()[32])
+        # print(self.system.system_data.open_dss.get_voltage()[32])
         
         self.current_state = self.get_observation()  # update current state
 
@@ -166,13 +166,13 @@ class FisrEnvironment(BaseEnvironment):
         switch2open = switches[0]
         switch2close = switches[1]
 
-        #print('action:', action)
-        #print('switches: ', switches)
+        # print('action:', action)
+        # print('switches: ', switches)
 
         self.system.open_switch(switch2open)
         self.system.close_switch(switch2close)
         self.system.system_solver()
-        #print(self.system.system_data.open_dss.get_voltage()[32])
+        # print(self.system.system_data.open_dss.get_voltage()[32])
     
         self.current_state = self.get_observation()  # update current state
         
