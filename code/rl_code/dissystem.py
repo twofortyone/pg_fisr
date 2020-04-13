@@ -2,7 +2,7 @@
 import numpy as np
 
 # OpenDSS2Python packages
-from opendss import OpenDSSCircuit
+from rl_code.opendss import OpenDSSCircuit
 
 
 class DistributionSystem:

@@ -1,9 +1,8 @@
 
 from bases.environment import BaseEnvironment
-from dissystem import DistributionSystem
+from rl_code.dissystem import DistributionSystem
 from itertools import combinations
 import numpy as np
-import time
 
 
 class FisrEnvironment(BaseEnvironment):

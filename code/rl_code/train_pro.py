@@ -3,9 +3,9 @@ import numpy as np
 from bases.rl_glue import RLGlue
 from tqdm import tqdm
 from bases.rl_glue_pro import Pro
-from report import make_figure
+from report.report import make_figure
 
-report_folder = "E:/MININT/SMSOSD/OSDLOGS/github/pg_fisr/code/report/"
+report_folder = "E:/pg_fisr_develop/code/report/"
 
 
 class Training:

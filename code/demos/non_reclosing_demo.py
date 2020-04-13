@@ -1,12 +1,10 @@
 from scipy.special import comb
 import numpy as np
-from bases.rl_glue import RLGlue
-from tqdm import tqdm
 from bases.rl_glue_pro import Pro
-from report import make_figure
+from report.report import make_figure
 import pandas as pd
-from fisr_env import FisrEnvironment
-from fisr_agent import QLearningAgent
+from rl_code.fisr_env import FisrEnvironment
+from rl_code.fisr_agent import QLearningAgent
 
 report_folder = "E:/MININT/SMSOSD/OSDLOGS/github/pg_fisr/code/report/"
 

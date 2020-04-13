@@ -1,4 +1,4 @@
-from opendss.cominterface import OpenDss
+from rl_code.opendss import OpenDss
 import numpy as np
 
 

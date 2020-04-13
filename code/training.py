@@ -1,9 +1,8 @@
-from fisr_env import FisrEnvironment
-from fisr_agent import QLearningAgent
-from train_pro import Training
+from rl_code.fisr_env import FisrEnvironment
+from rl_code.fisr_agent import QLearningAgent
+from rl_code.train_pro import Training
 import pandas as pd
-from train_report import Report
-from tqdm import tqdm
+from report.train_report import Report
 import time
 
 

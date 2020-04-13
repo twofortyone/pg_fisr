@@ -1,8 +1,7 @@
-from fisr_env import FisrEnvironment
+from rl_code.fisr_env import FisrEnvironment
 import numpy as np
 import pandas as pd
-from tqdm import tqdm, trange
-
+from tqdm import tqdm
 
 env = FisrEnvironment()
 states = env.states  # numpy array
@@ -30,19 +29,22 @@ def oper_state(state):
     return state
 
 
-vol = np.arange(nodes)
-vol = vol.reshape(nodes, 1)
-df_voltages = pd.DataFrame(data=vol, columns=['index'])
+# vol = np.arange(nodes)
+# vol = vol.reshape(nodes, 1)
+# df_voltages = pd.DataFrame(data=vol, columns=['index'])
+# for i in tqdm(range(0, len(states))):
+#     prev_state = oper_state(i)
+#     voltages = env.system.system_data.open_dss.get_voltage()
+#     df_voltages.insert(loc=i+1, column=str(i), value=voltages[:, 0])
+
+lista = []
 for i in tqdm(range(0, len(states))):
     prev_state = oper_state(i)
     voltages = env.system.system_data.open_dss.get_voltage()
-    #vol = np.hstack((vol, voltages))
-    for j in range(1, 4):
-        index = j+(i*3)
-        df_voltages.insert(loc=index, column=str(index), value=voltages[:, j-1])
-    #vol = np.append(vol, voltages, axis=1)
+    lista.append(voltages)
 
-labels = [str(x) for x in range(len(states)*3)]
-
-#df_voltages = pd.DataFrame(vol[:, 1:], columns=labels)
-df_voltages.to_feather('E:/5ties_voltages.ftr')
+beta = np.asarray(lista)
+alfa = beta.transpose()
+labels = [str(x) for x in range(len(states))]
+df_voltages = pd.DataFrame(data=alfa[0], columns=labels)
+df_voltages.to_feather('E:/3ties_voltages.ftr')
