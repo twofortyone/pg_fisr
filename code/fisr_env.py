@@ -80,8 +80,7 @@ class FisrEnvironment(BaseEnvironment):
         :return pos: (int) index of current_state in states list
         """
         current_state = tuple(np.sort(self.system.opened_switches))
-        #print(current_state)       
-        # fin position 
+        #print(current_state)
         a = self.states
         lista = []
         for i in range(self.states.shape[1]): # forward
