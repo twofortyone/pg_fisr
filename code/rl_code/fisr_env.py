@@ -5,6 +5,7 @@ from itertools import combinations
 import numpy as np
 import time
 
+
 class FisrEnvironment(BaseEnvironment):
     """Implements the environment
     Note:
@@ -16,6 +17,7 @@ class FisrEnvironment(BaseEnvironment):
 
         self.system = DistributionSystem()  # Create a distribution system model
         self.states = self.get_states()  # States depending on number of total and tie switches
+        self.states_ls = [int(str(x).strip('[]').replace(',', '').replace(' ', '')) for x in self.states]
         reward = None
         observation = None
         termination = None
@@ -32,7 +34,6 @@ class FisrEnvironment(BaseEnvironment):
         """Number of nodes out of limits
         :return: number of nodes out of limits
         """
-        #voltages = np.copy(self.system.get_voltage(self.current_state))
         v_aux = self.system.get_voltage(self.current_state)
         v_aux1 = v_aux[np.where(v_aux < 0.9)]
         v_aux2 = v_aux[np.where(v_aux > 1.05)]
@@ -78,27 +79,11 @@ class FisrEnvironment(BaseEnvironment):
         """ Get state index
         :return pos: (int) index of current_state in states list
         """
-        #t0 = time.time()
-        current_state = tuple(np.sort(self.system.opened_switches))
-        # print(current_state)
-        # Todo delete printing
-        #t1 = time.time()
-        a = self.states
-        #t2 = time.time()
-        aux_list = []
-        for i in range(self.states.shape[1]):  # forward
-            aux = a[:, i]
-            pos_vec = np.where(aux == current_state[i])
-            a = a[pos_vec, :][0]
-            aux_list.append(pos_vec[0])
-        pos = 0
-        for i in range(self.states.shape[1]):  # backward
-            pos = aux_list[self.states.shape[1] - 1 - i][pos]
-        #t3 = time.time()
+        current_state = np.sort(self.system.opened_switches).tolist()
+        cs = int(str(current_state).strip('[]').replace(',', '').replace(' ', ''))
+        pos = binary_search(self.states_ls, cs)
         # update possible actions
         self.actions = self.get_actions()
-        #t4 = time.time()
-        #print('--',t4-t3,t3-t2,t2-t1,t1-t0,'--')
         return pos
 
     # -----------------------------------------------------------------------------------
@@ -121,7 +106,6 @@ class FisrEnvironment(BaseEnvironment):
         :param action: (int) the action taken by the agent (action, switch)
         :return: (list) a list of the reward, state observation and boolean if it's terminal
         """
-
         self.time_step += 1
         reward = -1
         is_terminal = False
@@ -129,31 +113,25 @@ class FisrEnvironment(BaseEnvironment):
         switches = self.actions[action]
         switch2open = switches[0]
         switch2close = switches[1]
-
-        # print('action:', action)
-        # print('switches: ', switches)
-        #t0 = time.time()
+        # open & close switches
         self.system.open_switch(switch2open)
         self.system.close_switch(switch2close)
-        #t1 = time.time()
-        # print(self.system.system_data.open_dss.get_voltage()[32])
-        
+        # get obs
         self.current_state = self.get_observation()  # update current state
-        #t2 = time.time()
-        #print(t2-t1, t1-t0)
+        # restrictions
         if self.system.num_nodes_offline() != 0:  # reward if there is any node offline
             reward -= 100
 
         if self.get_voltage_limits() != 0:
             reward -= 100
 
+        # end condition
         if self.time_step == 1000000:  # terminate if 1000 time steps are reached
             is_terminal = True
             self.time_step = 0
             self.system.sys_start()
 
         self.reward_obs_term = [reward, self.current_state, is_terminal]
-
         return self.reward_obs_term
 
     def env_step_pro(self, action):
@@ -175,7 +153,6 @@ class FisrEnvironment(BaseEnvironment):
 
         self.system.open_switch(switch2open)
         self.system.close_switch(switch2close)
-        self.system.system_solver()
         # print(self.system.system_data.open_dss.get_voltage()[32])
     
         self.current_state = self.get_observation()  # update current state
@@ -218,3 +195,19 @@ class FisrEnvironment(BaseEnvironment):
 
         else:
             return "I don't know how to respond to your message"
+
+
+def binary_search(item_list, item):
+    first = 0
+    last = len(item_list)-1
+    found = False
+    while first <= last and not found:
+        mid = (first + last)//2
+        if item_list[mid] == item:
+            found = True
+        else:
+            if item < item_list[mid]:
+                last = mid - 1
+            else:
+                first = mid + 1
+    return mid
