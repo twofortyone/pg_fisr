@@ -14,7 +14,7 @@ num_switches = len(env.system.switches_obs)
 num_tie = len(env.system.start_tie_obs)
 
 # q values info
-q = pd.read_feather('E:\q_3nuevo.ftr')
+q = pd.read_feather('E:/q_3tie_1r_100e_10000ts_nr_woopendss.ftr')
 q_values = q.to_numpy()
 
 # -------------------------------------------
@@ -22,7 +22,7 @@ q_values = q.to_numpy()
 # -------------------------------------------
 all_actions = []
 num_actions = []
-action_times =[]
+action_times = []
 switches = env.system.system_data.switches
 
 for i in tqdm(range(2, num_switches-num_tie)):  # for closed switches
@@ -44,7 +44,6 @@ actions_df = pd.DataFrame(data=switches[2:num_switches-num_tie], columns=['Failu
 actions_df.insert(1, 'Actions', list_of_acts, True)
 actions_df.insert(2, 'Number of actions', num_actions, True)
 actions_df.insert(3, 'Time elapsed', action_times, True)
-actions_df.insert()
 # Statistics data frame
 statistics = actions_df.describe()
 
@@ -54,4 +53,4 @@ report.make_report()
 
 # Save q_values
 df_q = pd.DataFrame(data=agent.q, columns=actions)
-df_q.to_feather('E:\q_3nuevo.ftr')
+df_q.to_feather('E:/q_3nuevo.ftr')

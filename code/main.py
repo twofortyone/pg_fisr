@@ -45,7 +45,7 @@ actions = [str(x) for x in env.actions]
 # -------------------------------------------
 all_actions = []
 num_actions = []
-action_times =[]
+action_times = []
 switches = env.system.system_data.switches
 
 for i in tqdm(range(2, num_switches-num_tie)):  # for closed switches
@@ -82,4 +82,4 @@ report.make_report()
 
 # Save q_values
 df_q = pd.DataFrame(data=agent.q, columns=actions)
-df_q.to_feather('E:\q_5tie_1r_50e_2000ts.ftr')
+df_q.to_feather('E:/q_5tie_1r_50e_2000ts.ftr')

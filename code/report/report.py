@@ -124,4 +124,4 @@ def make_figure(x, y, file_name):
     fig.show()
     fig.update_layout(margin=dict(l=20, r=20, t=20, b=20), paper_bgcolor="white")
     first_plot_url = plot(fig, filename=file_name, auto_open=False)
-    return first_plot_url
+    return file_name

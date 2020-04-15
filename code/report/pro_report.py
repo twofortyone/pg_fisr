@@ -34,7 +34,7 @@ class Report:
               </ul>
             
               <div class="tab-content">
-                <div class="tab-pane fade" id="pro">
+                <div class="tab-pane fade show active" id="pro">
                   <div class="row my-3 pt-4">
                     <div class="col-2">
                       <div class="nav flex-column nav-pills"  role="tablist" aria-orientation="vertical">
@@ -70,7 +70,7 @@ class Report:
             
             </html>'''
 
-        f = open('E:/MININT/SMSOSD/OSDLOGS/github/pg_fisr/code/report/pro_report.html', 'w')
+        f = open('E:/pg_fisr_develop/code/report/pro_report.html', 'w')
         f.write(html_string)
         f.close()
 
@@ -86,4 +86,4 @@ def make_figure(x, y, file_name):
     fig.show()
     fig.update_layout(margin=dict(l=20, r=20, t=20, b=20), paper_bgcolor="white")
     first_plot_url = plot(fig, filename=file_name, auto_open=False)
-    return first_plot_url
+    return file_name

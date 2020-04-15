@@ -126,7 +126,7 @@ class FisrEnvironment(BaseEnvironment):
             reward -= 100
 
         # end condition
-        if self.time_step == 1000000:  # terminate if 1000 time steps are reached
+        if self.time_step == 10000:  # terminate if 1000 time steps are reached
             is_terminal = True
             self.time_step = 0
             self.system.sys_start()

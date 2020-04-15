@@ -24,7 +24,7 @@ class DistributionSystem:
         self.opened_switches = None
         self.num_nodes = 0
         self.num_switches = 0
-        voltages = pd.read_feather('E:/data/5ties_voltages.ftr')
+        voltages = pd.read_feather('E:/data/3ties_voltages.ftr')
         self.voltages = voltages.to_numpy()
         # Method initialization
         self.sys_start()
