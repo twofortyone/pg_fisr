@@ -20,6 +20,7 @@ class OpenDSSCircuit:
 
         for x in self.ties:
             self.open_switch(x)
+            self.com.solve()
 
     def open_init(self):
         self.com.com_init()

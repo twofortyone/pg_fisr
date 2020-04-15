@@ -21,11 +21,12 @@ def oper_state(state):
     switches = states[prev_state]
     for x in switches:
         close_switch(x)
+        env.system.system_solver()
 
     switches = states[state]
     for x in switches:
         open_switch(x)
-    env.system.system_solver()
+        env.system.system_solver()
     return state
 
 

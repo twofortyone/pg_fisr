@@ -128,10 +128,10 @@ class FisrEnvironment(BaseEnvironment):
         # print('action:', action)
         # print('switches: ', switches)
 
+        print(self.system.system_data.open_dss.get_voltage()[32])
         self.system.open_switch(switch2open)
         self.system.close_switch(switch2close)
         self.system.system_solver()
-        # print(self.system.system_data.open_dss.get_voltage()[32])
         
         self.current_state = self.get_observation()  # update current state
 
@@ -141,7 +141,7 @@ class FisrEnvironment(BaseEnvironment):
         if self.get_voltage_limits() != 0:
             reward -= 100
 
-        if self.time_step == 10000:  # terminate if 1000 time steps are reached
+        if self.time_step == 10:  # terminate if 1000 time steps are reached
             is_terminal = True
             self.time_step = 0
             self.system.sys_start()
