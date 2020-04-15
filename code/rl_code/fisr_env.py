@@ -1,9 +1,7 @@
-
-from bases.environment import BaseEnvironment
+from rl_bases.environment import BaseEnvironment
 from rl_code.dissystem import DistributionSystem
 from itertools import combinations
 import numpy as np
-import time
 
 
 class FisrEnvironment(BaseEnvironment):
@@ -25,6 +23,11 @@ class FisrEnvironment(BaseEnvironment):
         self.current_state = None
         self.reward_obs_term = [reward, observation, termination]
         self.actions = None
+
+        # New
+        s_array = np.sort(np.asarray(self.states_ls))
+        self.sorted_states = s_array.tolist()
+        self.pos_states = get_position4sorted(self.states_ls, self.sorted_states)
 
     # -----------------------------------------------------------------------------------
     # Getters
@@ -81,7 +84,8 @@ class FisrEnvironment(BaseEnvironment):
         """
         current_state = np.sort(self.system.opened_switches).tolist()
         cs = int(str(current_state).strip('[]').replace(',', '').replace(' ', ''))
-        pos = binary_search(self.states_ls, cs)
+        pos_sorted = binary_search(self.sorted_states, cs)
+        pos = self.pos_states[pos_sorted]
         # update possible actions
         self.actions = self.get_actions()
         return pos
@@ -201,6 +205,7 @@ def binary_search(item_list, item):
     first = 0
     last = len(item_list)-1
     found = False
+    mid = 0
     while first <= last and not found:
         mid = (first + last)//2
         if item_list[mid] == item:
@@ -211,3 +216,11 @@ def binary_search(item_list, item):
             else:
                 first = mid + 1
     return mid
+
+
+def get_position4sorted(un_list, sorted_list):
+    pos_list = []
+    for x in sorted_list:
+        pos_list.append(un_list.index(x))
+    return pos_list
+

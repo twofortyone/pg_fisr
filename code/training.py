@@ -9,11 +9,11 @@ import time
 name = 'IEEE 33 BUS Test Case'
 env = FisrEnvironment()
 agent = QLearningAgent()
-t_epi = 200
+t_epi = 1
 t_runs = 1
 # ------------------------------------------
 # Training
-# ------------------------------------------
+# --------------------------env----------------
 t0 = time.time()
 training = Training(env, agent)
 train_path = training.run_training(t_runs, t_epi)
