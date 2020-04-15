@@ -8,11 +8,10 @@ import sys
 
 class OpenDSSCircuit:
 
-    def __init__(self):
-        path = 'E:\ieee33bus37.dss'
+    def __init__(self, path, ties):
         self.com = OpenDSSCOM(path)
         self.com.solve()
-        num_tie = 3
+        num_tie = ties
         self.lines = self.com.get_lines()
         num_switches = len(self.lines)
         self.nodes = self.com.get_buses()

@@ -10,9 +10,8 @@ from rl_code.opendss import OpenDSSCircuit
 
 class DistributionSystem:
 
-    def __init__(self):
-
-        self.system_data = OpenDSS2Python()
+    def __init__(self, opendss_path, ties, vol_ftr):
+        self.system_data = OpenDSS2Python(opendss_path, ties)
         self.conn = self.system_data.get_conn()  # list
         self.start_tie_obs = []  # list
 
@@ -24,7 +23,7 @@ class DistributionSystem:
         self.opened_switches = None
         self.num_nodes = 0
         self.num_switches = 0
-        voltages = pd.read_feather('E:/3ties_voltages.ftr')
+        voltages = pd.read_feather(vol_ftr)
         self.voltages = voltages.to_numpy()
         # Method initialization
         self.sys_start()
@@ -152,8 +151,8 @@ class DistributionSystem:
 
 class OpenDSS2Python:
 
-    def __init__(self):
-        self.open_dss = OpenDSSCircuit()
+    def __init__(self, opendss_path, ties):
+        self.open_dss = OpenDSSCircuit(opendss_path, ties)
         self.nodes = self.open_dss.get_nodes()
         self.switches = self.open_dss.get_lines()
         self.tie = self.open_dss.get_ties()

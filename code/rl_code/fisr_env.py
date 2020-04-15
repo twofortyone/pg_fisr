@@ -11,9 +11,8 @@ class FisrEnvironment(BaseEnvironment):
         methods.
     """
     
-    def __init__(self):
-
-        self.system = DistributionSystem()  # Create a distribution system model
+    def __init__(self, opendss_path, ties, vol_ftr, ts_cond):
+        self.system = DistributionSystem(opendss_path, ties, vol_ftr)  # Create a distribution system model
         self.states = self.get_states()  # States depending on number of total and tie switches
         self.states_ls = [int(str(x).strip('[]').replace(',', '').replace(' ', '')) for x in self.states]
         reward = None
@@ -28,6 +27,7 @@ class FisrEnvironment(BaseEnvironment):
         s_array = np.sort(np.asarray(self.states_ls))
         self.sorted_states = s_array.tolist()
         self.pos_states = get_position4sorted(self.states_ls, self.sorted_states)
+        self.ts_cond = ts_cond
 
     # -----------------------------------------------------------------------------------
     # Getters
@@ -130,7 +130,7 @@ class FisrEnvironment(BaseEnvironment):
             reward -= 100
 
         # end condition
-        if self.time_step == 10000:  # terminate if 1000 time steps are reached
+        if self.time_step == self.ts_cond:  # terminate if 1000 time steps are reached
             is_terminal = True
             self.time_step = 0
             self.system.sys_start()

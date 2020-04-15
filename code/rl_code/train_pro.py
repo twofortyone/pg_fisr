@@ -5,15 +5,14 @@ from tqdm import tqdm
 from rl_bases.rl_glue_pro import Pro
 from report.report import make_figure
 
-report_folder = "E:/pg_fisr_develop/code/report/"
-
 
 class Training:
 
-    def __init__(self, environment, agent):
+    def __init__(self, environment, agent, report_folder):
 
         self.env = environment
         self.agent = agent
+        self.rf = report_folder
         # number of actions
         closed = self.env.system.closed_switches
         opened = self.env.system.opened_switches
@@ -60,16 +59,17 @@ class Training:
 
             self.all_reward_sums.append(reward_sums)
             self.all_state_visits.append(state_visits)
-        return make_figure(None, np.mean(self.all_reward_sums, axis=0), report_folder + 'training.html')
+        return make_figure(None, np.mean(self.all_reward_sums, axis=0), self.rf + 'training.html')
 
 
 class Production:
 
-    def __init__(self, environment, agent, q_values, failure):
+    def __init__(self, environment, agent, q_values, failure, report_folder):
 
         self.env = environment
         self.agent = agent
         self.failure = failure
+        self.rf = report_folder
         # number of actions
         closed = self.env.system.closed_switches
         opened = self.env.system.opened_switches
@@ -126,5 +126,5 @@ class Production:
             self.all_reward_sums.append(reward_sums)
             self.all_state_visits.append(state_visits)
 
-        return [make_figure(None, np.mean(self.all_reward_sums, axis=0), report_folder + 'production.html'),
+        return [make_figure(None, np.mean(self.all_reward_sums, axis=0), 'production.html'),
                 taken_actions]

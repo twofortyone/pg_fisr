@@ -4,10 +4,11 @@ import plotly.graph_objects as go
 
 class Report:
 
-    def __init__(self, url1, system, train):
+    def __init__(self, url1, system, train, path):
         self.plot_url1 = url1
         self.tb_system = pandas2html(system)
         self.tb_training = pandas2html(train)
+        self.report_folder = path
 
     def make_report(self):
 
@@ -85,7 +86,7 @@ class Report:
             
             </html>'''
 
-        f = open('E:/pg_fisr_develop/code/report/report.html', 'w')
+        f = open(self.report_folder + 'train_report.html', 'w')
         f.write(html_string)
         f.close()
 

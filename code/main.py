@@ -9,15 +9,26 @@ import time
 
 
 name = 'IEEE 33 BUS Test Case'
-env = FisrEnvironment()
-agent = QLearningAgent()
+
+# ##########################################################
+# Update before use
+ties = 3
+time_steps = 10000
 t_epi = 200
 t_runs = 1
+# ----------------------------------------------------------
+path = 'E:\ieee33bus37.dss'
+report_folder = "E:/pg_fisr_develop/code/report/"
+voltages_ftr = 'E:/data/' + str(ties) + 'ties_voltages.ftr'
+# ##########################################################
+
+env = FisrEnvironment(path, ties, voltages_ftr, time_steps)
+agent = QLearningAgent()
 # ------------------------------------------
 # Training
 # ------------------------------------------
 t0 = time.time()
-training = Training(env, agent)
+training = Training(env, agent, report_folder)
 train_path = training.run_training(t_runs, t_epi)
 t1 = time.time()
 
@@ -37,8 +48,12 @@ dt_label = ['States:', 'Actions:', 'Episodes:', 'Runs:', 'Time elapsed:']
 
 # q values info
 q_values = agent.q
-states = [str(x) for x in env.states]
 actions = [str(x) for x in env.actions]
+
+# Save q_values
+df_q = pd.DataFrame(data=agent.q, columns=actions)
+df_q.to_feather('E:/q_' + str(ties) + 'ties_' + str(t_runs) + 'r_' +str(t_epi)
+                + 'e_' + str(time_steps) + 'ts_nr_woopendss.ftr')
 
 # -------------------------------------------
 # Production
@@ -49,7 +64,7 @@ action_times = []
 switches = env.system.system_data.switches
 
 for i in tqdm(range(2, num_switches-num_tie)):  # for closed switches
-    production = Production(env, agent, q_values, i)
+    production = Production(env, agent, q_values, i, report_folder)
     t2 = time.time()
     pro = production.run_production(1, 1)
     t3 = time.time()
@@ -77,9 +92,5 @@ s_df = pd.DataFrame(data_system, ds_label, ['Values'])
 t_df = pd.DataFrame(data_training, dt_label, ['Values'])
 
 # Report generation
-report = Report(train_path, actions_df, statistics, s_df, t_df)
+report = Report(report_folder, train_path, actions_df, statistics, s_df, t_df)
 report.make_report()
-
-# Save q_values
-df_q = pd.DataFrame(data=agent.q, columns=actions)
-df_q.to_feather('E:/q_5tie_1r_50e_2000ts.ftr')

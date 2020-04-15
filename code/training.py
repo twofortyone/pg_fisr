@@ -7,15 +7,26 @@ import time
 
 
 name = 'IEEE 33 BUS Test Case'
-env = FisrEnvironment()
-agent = QLearningAgent()
-t_epi = 1
+
+# ##########################################################
+# Update before use
+ties = 3
+time_steps = 10000
+t_epi = 200
 t_runs = 1
+# ----------------------------------------------------------
+path = 'E:\ieee33bus37.dss'
+report_folder = "E:/pg_fisr_develop/code/report/"
+voltages_ftr = 'E:/data/' + str(ties) + 'ties_voltages.ftr'
+# ##########################################################
+
+env = FisrEnvironment(path, ties, voltages_ftr, time_steps)
+agent = QLearningAgent()
 # ------------------------------------------
 # Training
-# --------------------------env----------------
+# ------------------------------------------
 t0 = time.time()
-training = Training(env, agent)
+training = Training(env, agent, report_folder)
 train_path = training.run_training(t_runs, t_epi)
 t1 = time.time()
 
@@ -48,9 +59,10 @@ s_df = pd.DataFrame(data_system, ds_label, ['Values'])
 t_df = pd.DataFrame(data_training, dt_label, ['Values'])
 
 # Report generation
-report = Report(train_path, s_df, t_df)
+report = Report(train_path, s_df, t_df, report_folder)
 report.make_report()
 
 # Save q_values
 df_q = pd.DataFrame(data=agent.q, columns=actions)
-df_q.to_feather('E:/q_3tie_1r_100e_10000ts_nr_woopendss.ftr')
+df_q.to_feather('E:/q_' + str(ties) + 'ties_' + str(t_runs) + 'r_' +str(t_epi)
+                + 'e_' + str(time_steps) + 'ts_nr_woopendss.ftr')
