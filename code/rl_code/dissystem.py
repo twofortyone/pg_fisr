@@ -18,6 +18,7 @@ class DistributionSystem:
         # Variables declaration
         self.nodes_obs = None
         self.nodes_adj_matrix = None
+        self.inc_matrix = None 
         self.switches_obs = None
         self.closed_switches = None
         self.opened_switches = None
@@ -37,6 +38,7 @@ class DistributionSystem:
         self.nodes_obs = self.system_data.get_nodes()
         self.num_nodes = len(self.nodes_obs)
         self.nodes_adj_matrix = self.get_adj_matrix()
+        self.inc_matrix = self.get_inc_matrix()
         self.switches_obs = self.system_data.get_switches()
         self.num_switches = len(self.switches_obs)
 
@@ -63,6 +65,10 @@ class DistributionSystem:
         self.nodes_adj_matrix[pos2, pos1] = 0
         # update node obs
         self.update_node_obs()
+        # update inc matrix 
+        self.inc_matrix[pos1, switch]= 0
+        self.inc_matrix[pos2, switch]= 0
+
 
     def connect_nodes(self, switch):
         """Update adjacency matrix when switch connection is modified
@@ -75,6 +81,9 @@ class DistributionSystem:
         self.nodes_adj_matrix[pos2, pos1] = 1
         # update node obs
         self.update_node_obs()
+        # update inc matrix 
+        self.inc_matrix[pos1, switch]= -1
+        self.inc_matrix[pos2, switch]= 1
 
     def is_node_offline(self, node):
         """Determine if a node is offline
@@ -110,6 +119,33 @@ class DistributionSystem:
             adj[pos1, pos2] = 0
             adj[pos2, pos1] = 0
         return adj
+    
+    def get_inc_matrix(self):
+        m = np.zeros((self.num_nodes, self.num_switches))
+
+        i = 0 
+        for x in self.conn: 
+            pos1 = x[0]
+            pos2 = x[1]
+            m[pos1, i] = -1
+            m[pos2, i] = 1 
+            i+=1
+
+        for x in self.start_tie_obs: 
+            z = self.conn[x]
+            pos1 = z[0]
+            pos2 = z[0]
+            m[pos1, x]= 0
+            m[pos2, x]= 0
+        return m 
+    
+    def is_loop(self):
+        loop = True 
+        rank = np.linalg.matrix_rank(self.inc_matrix)
+        nodes_online = self.num_nodes - self.num_nodes_offline
+        if rank == nodes_online:
+            loop = False 
+        return loop
 
     def update_node_obs(self):
         """Update node_obs after check node adjacency matrix"""

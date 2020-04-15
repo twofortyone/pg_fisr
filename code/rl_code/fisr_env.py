@@ -129,6 +129,9 @@ class FisrEnvironment(BaseEnvironment):
         if self.get_voltage_limits() != 0:
             reward -= 100
 
+        if self.system.is_loop == True:
+            reward -= 100 
+
         # end condition
         if self.time_step == self.ts_cond:  # terminate if 1000 time steps are reached
             is_terminal = True
