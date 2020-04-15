@@ -1,4 +1,4 @@
-from bases.agent import BaseAgent
+from rl_bases.agent import BaseAgent
 import numpy as np
 
 

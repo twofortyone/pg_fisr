@@ -29,15 +29,6 @@ def oper_state(state):
         env.system.system_solver()
     return state
 
-
-# vol = np.arange(nodes)
-# vol = vol.reshape(nodes, 1)
-# df_voltages = pd.DataFrame(data=vol, columns=['index'])
-# for i in tqdm(range(0, len(states))):
-#     prev_state = oper_state(i)
-#     voltages = env.system.system_data.open_dss.get_voltage()
-#     df_voltages.insert(loc=i+1, column=str(i), value=voltages[:, 0])
-
 lista = []
 for i in tqdm(range(0, len(states))):
     prev_state = oper_state(i)
@@ -48,4 +39,4 @@ beta = np.asarray(lista)
 alfa = beta.transpose()
 labels = [str(x) for x in range(len(states))]
 df_voltages = pd.DataFrame(data=alfa[0], columns=labels)
-df_voltages.to_feather('E:/3ties_voltages.ftr')
+df_voltages.to_feather('E:/5ties_voltages.ftr')

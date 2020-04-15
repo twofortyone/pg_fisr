@@ -12,7 +12,7 @@ class OpenDSSCircuit:
         path = 'E:\ieee33bus37.dss'
         self.com = OpenDSSCOM(path)
         self.com.solve()
-        num_tie = 3
+        num_tie = 5
         self.lines = self.com.get_lines()
         num_switches = len(self.lines)
         self.nodes = self.com.get_buses()
@@ -26,6 +26,7 @@ class OpenDSSCircuit:
         self.com.com_init()
         for x in self.ties:
             self.open_switch(x)
+            self.com.solve()
 
     # ----------------------------------------
     # Getters

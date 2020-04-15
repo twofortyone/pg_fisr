@@ -1,5 +1,5 @@
 
-from bases.environment import BaseEnvironment
+from rl_bases.environment import BaseEnvironment
 from rl_code.dissystem import DistributionSystem
 from itertools import combinations
 import numpy as np

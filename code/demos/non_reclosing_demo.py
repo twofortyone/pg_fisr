@@ -1,6 +1,6 @@
 from scipy.special import comb
 import numpy as np
-from bases.rl_glue_pro import Pro
+from rl_bases.rl_glue_pro import Pro
 from report.report import make_figure
 import pandas as pd
 from rl_code.fisr_env import FisrEnvironment

@@ -1,8 +1,8 @@
 from scipy.special import comb
 import numpy as np
-from bases.rl_glue import RLGlue
+from rl_bases.rl_glue import RLGlue
 from tqdm import tqdm
-from bases.rl_glue_pro import Pro
+from rl_bases.rl_glue_pro import Pro
 from report.report import make_figure
 
 report_folder = "E:/pg_fisr_develop/code/report/"
