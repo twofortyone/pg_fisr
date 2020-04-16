@@ -12,9 +12,9 @@ name = 'IEEE 33 BUS Test Case'
 
 # ##########################################################
 # Update before use
-ties = 3
-time_steps = 10000
-t_epi = 200
+ties = 5
+time_steps = 1000000
+t_epi = 100
 t_runs = 1
 # ----------------------------------------------------------
 path = 'E:\ieee33bus37.dss'

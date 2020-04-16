@@ -2,6 +2,7 @@ from rl_bases.environment import BaseEnvironment
 from rl_code.dissystem import DistributionSystem
 from itertools import combinations
 import numpy as np
+from tqdm import tqdm
 
 
 class FisrEnvironment(BaseEnvironment):
@@ -220,7 +221,7 @@ def binary_search(item_list, item):
 
 def get_position4sorted(un_list, sorted_list):
     pos_list = []
-    for x in sorted_list:
+    for x in tqdm(sorted_list):
         pos_list.append(un_list.index(x))
     return pos_list
 
