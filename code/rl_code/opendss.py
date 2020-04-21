@@ -13,9 +13,10 @@ class OpenDSSCircuit:
         self.com.solve()
         num_tie = ties
         self.lines = self.com.get_lines()
-        num_switches = len(self.lines)
+        self.num_switches = len(self.lines)
         self.nodes = self.com.get_buses()
-        self.ties = self.lines[num_switches-num_tie:num_switches]
+        self.num_nodes = len(self.nodes)
+        self.ties = self.lines[self.num_switches-num_tie:num_switches]
 
         for x in self.ties:
             self.open_switch(x)
