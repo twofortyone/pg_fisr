@@ -1,0 +1,331 @@
+
+        <html> 
+            <head>
+              <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+                integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+              <style>
+                body {
+                  margin: 0 100;
+                  background: white;
+                }
+              </style>
+            </head>
+            
+            <body>
+              <div class="my-3 py-3">
+                <h1>Fault isolation and service restoration's report</h1>
+              </div>
+            
+              <ul class="nav nav-tabs">
+                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#pro">Production</a></li>
+                </li>
+              </ul>
+            
+              <div class="tab-content">
+                <div class="tab-pane fade show active" id="pro">
+                  <div class="row my-3 pt-4">
+                    <div class="col-2">
+                      <div class="nav flex-column nav-pills"  role="tablist" aria-orientation="vertical">
+                        <a class="nav-link active" data-toggle="pill" href="#actions-pill" aria-selected="true">Actions</a>
+                        <a class="nav-link" data-toggle="pill" href="#statistics-pill" >Statistics</a>
+                      </div>
+                    </div>
+                    <div class="col-10">
+                      <div class="tab-content">
+                        <div class="tab-pane fade show active" id="actions-pill" >
+                            <table class="table table-responsive w-auto">
+  <thead>
+    <tr style="text-align: left;">
+      <th></th>
+      <th>Failure</th>
+      <th>Actions</th>
+      <th>Number of actions</th>
+      <th>Time elapsed</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>l3</td>
+      <td>[[2, 33], [26, 34], [24, 36], [30, 35], [13, 30], [14, 26]]</td>
+      <td>6</td>
+      <td>1.010</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>l4</td>
+      <td>[[3, 34], [10, 36]]</td>
+      <td>2</td>
+      <td>0.241</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>l5</td>
+      <td>[[4, 36], [27, 34]]</td>
+      <td>2</td>
+      <td>0.358</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>l6</td>
+      <td>[[5, 32]]</td>
+      <td>1</td>
+      <td>0.231</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>l7</td>
+      <td>[[6, 34]]</td>
+      <td>1</td>
+      <td>0.244</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>l8</td>
+      <td>[[7, 34]]</td>
+      <td>1</td>
+      <td>0.240</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>l9</td>
+      <td>[[8, 34]]</td>
+      <td>1</td>
+      <td>0.236</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>l10</td>
+      <td>[[9, 34]]</td>
+      <td>1</td>
+      <td>0.388</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>l11</td>
+      <td>[[10, 33]]</td>
+      <td>1</td>
+      <td>0.226</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>l12</td>
+      <td>[[11, 33]]</td>
+      <td>1</td>
+      <td>0.227</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>l13</td>
+      <td>[[12, 35]]</td>
+      <td>1</td>
+      <td>0.247</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>l14</td>
+      <td>[[13, 33]]</td>
+      <td>1</td>
+      <td>0.242</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>l15</td>
+      <td>[[14, 35]]</td>
+      <td>1</td>
+      <td>0.268</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>l16</td>
+      <td>[[15, 35]]</td>
+      <td>1</td>
+      <td>0.378</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>l17</td>
+      <td>[[16, 35]]</td>
+      <td>1</td>
+      <td>0.223</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>l18</td>
+      <td>[[17, 32], [2, 36], [23, 35], [5, 34], [24, 2], [27, 33], [3, 5], [6, 27], [21, 3], [12, 23], [30, 12], [33, 30], [28, 6], [14, 21], [34, 28]]</td>
+      <td>15</td>
+      <td>0.230</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>l19</td>
+      <td>[[18, 34], [21, 33], [25, 35], [16, 21], [11, 25], [34, 32]]</td>
+      <td>6</td>
+      <td>0.239</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>l20</td>
+      <td>[[19, 32]]</td>
+      <td>1</td>
+      <td>0.231</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>l21</td>
+      <td>[[20, 34]]</td>
+      <td>1</td>
+      <td>0.358</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>l22</td>
+      <td>[[21, 36]]</td>
+      <td>1</td>
+      <td>0.224</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>l23</td>
+      <td>[[22, 36]]</td>
+      <td>1</td>
+      <td>0.224</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>l24</td>
+      <td>[[23, 36]]</td>
+      <td>1</td>
+      <td>0.234</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>l25</td>
+      <td>[[24, 36]]</td>
+      <td>1</td>
+      <td>0.229</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>l26</td>
+      <td>[[25, 36]]</td>
+      <td>1</td>
+      <td>0.359</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>l27</td>
+      <td>[[26, 36]]</td>
+      <td>1</td>
+      <td>0.223</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>l28</td>
+      <td>[[27, 36]]</td>
+      <td>1</td>
+      <td>0.223</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>l29</td>
+      <td>[[28, 32], [10, 36], [23, 33], [27, 35], [13, 10], [33, 23], [17, 34], [11, 27], [34, 13], [7, 34], [2, 11], [0, 7], [32, 17], [9, 2], [14, 33], [5, 9], [20, 5], [30, 0], [1, 14], [23, 20], [9, 1], [33, 30]]</td>
+      <td>22</td>
+      <td>0.236</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>l30</td>
+      <td>[[29, 36], [18, 35], [22, 18], [9, 34]]</td>
+      <td>4</td>
+      <td>0.230</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>l31</td>
+      <td>[[30, 35], [8, 34]]</td>
+      <td>2</td>
+      <td>0.373</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>l32</td>
+      <td>[[31, 35]]</td>
+      <td>1</td>
+      <td>0.222</td>
+    </tr>
+  </tbody>
+</table>
+                        </div>
+                        <div class="tab-pane fade" id="statistics-pill">
+                            <table class="table table-responsive w-auto">
+  <thead>
+    <tr style="text-align: left;">
+      <th></th>
+      <th>Number of actions</th>
+      <th>Time elapsed</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>30.000000</td>
+      <td>30.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>2.700000</td>
+      <td>0.286467</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>4.594975</td>
+      <td>0.147654</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>1.000000</td>
+      <td>0.222000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>1.000000</td>
+      <td>0.227500</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>1.000000</td>
+      <td>0.236000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>1.750000</td>
+      <td>0.262750</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>22.000000</td>
+      <td>1.010000</td>
+    </tr>
+  </tbody>
+</table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+                integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+                crossorigin="anonymous"></script>
+              <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+                integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                crossorigin="anonymous"></script>
+              <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+                integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                crossorigin="anonymous"></script>
+            </body>
+            
+            </html>

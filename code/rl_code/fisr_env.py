@@ -3,6 +3,7 @@ from rl_code.dissystem import DistributionSystem
 from itertools import combinations
 import numpy as np
 from tqdm import tqdm
+import pandas as pd
 
 
 class FisrEnvironment(BaseEnvironment):
@@ -27,7 +28,11 @@ class FisrEnvironment(BaseEnvironment):
         # New
         s_array = np.sort(np.asarray(self.states_ls))
         self.sorted_states = s_array.tolist()
-        self.pos_states = get_position4sorted(self.states_ls, self.sorted_states)
+        #self.pos_states = get_position4sorted(self.states_ls, self.sorted_states)
+        aux = pd.read_feather('E:/pg_fisr_develop/code/data/sorted_pos.ftr')
+        self.pos_states = aux.to_numpy().tolist()
+        #self.pos_states = self.sorted_states
+
         self.ts_cond = ts_cond
 
     # -----------------------------------------------------------------------------------
