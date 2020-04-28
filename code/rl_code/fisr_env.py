@@ -101,6 +101,8 @@ class FisrEnvironment(BaseEnvironment):
         agent starts
         :return: (list) the first observation from the environment
         """
+        # Start system data (past in env_step::endcondition)
+        self.system.sys_start()
         self.current_state = self.get_observation()
         self.reward_obs_term[1] = self.current_state
         print(self.current_state,'-------------------')
@@ -133,7 +135,7 @@ class FisrEnvironment(BaseEnvironment):
         nods = self.system.system_data.get_switches_names(self.states[self.current_state].tolist())
         print(self.current_state, offline, loop, nods)
 
-        if offline != 0: reward -= 100
+        if offline > 1: reward -= 100
         if loop != 0: reward -= 100
         if self.get_voltage_limits() != 0: reward -= 100
 
@@ -142,7 +144,7 @@ class FisrEnvironment(BaseEnvironment):
         if self.time_step == self.ts_cond: 
             is_terminal = True
             self.time_step = 0
-            self.system.sys_start()
+            #self.system.sys_start()
 
         self.reward_obs_term = [reward, self.current_state, is_terminal]
         return self.reward_obs_term

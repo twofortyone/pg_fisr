@@ -3,6 +3,7 @@ import numpy as np
 
 # DistributionSystem packages
 import pandas as pd
+from scipy.sparse import csgraph
 
 # OpenDSS2Python packages
 from rl_code.opendss import OpenDSSCircuit
@@ -36,6 +37,7 @@ class DistributionSystem:
         self.start_tie_obs = self.system_data.get_tie()
         self.switches_obs = self.system_data.get_switches()
         self.inc_matrix = self.get_inc_matrix()
+        self.nodes_adj_matrix = self.get_adj_matrix()
         
         # Functions
         self.update_node_obs()
@@ -45,16 +47,35 @@ class DistributionSystem:
     # --------------------------------
     # GETTERS METHODS
     # --------------------------------
+    def get_adj_matrix(self):
+        """ Get the node adjacency matrix (only use at start)
+        :return adj: (np array) node adjacency matrix
+        """
+        adj = np.zeros((self.num_nodes, self.num_nodes))
+        for x in self.conn:
+            pos1 = x[0]
+            pos2 = x[1]
+            adj[pos1, pos2] = 1
+            adj[pos2, pos1] = 1
+
+        for x in self.start_tie_obs:
+            z = self.conn[x]
+            pos1 = z[0]
+            pos2 = z[1]
+            adj[pos1, pos2] = 0
+            adj[pos2, pos1] = 0
+        return adj
 
     def get_voltage(self, state):
         voltages = self.voltages[:, state]
         return voltages
 
     def nodes_isolated(self):
-
-        scn = np.count_nonzero(self.inc_matrix, axis=0)
-        nodes_obs = np.where(scn != 0, 1, scn)
-        return np.count_nonzero(nodes_obs==0)
+        l = csgraph.laplacian(self.nodes_adj_matrix, normed=False)
+        e = np.around(np.linalg.eigvals(l), 5)
+        #scn = np.count_nonzero(self.inc_matrix, axis=1)
+        #nodes_obs = np.where(scn != 0, 1, scn)
+        return np.count_nonzero(e==0)
 
     def nodes_loop(self):
         return np.count_nonzero(self.nodes_obs >1)
@@ -101,6 +122,9 @@ class DistributionSystem:
         # update inc matrix 
         self.inc_matrix[pos1, switch]= 0
         self.inc_matrix[pos2, switch]= 0
+        # update adj
+        self.nodes_adj_matrix[pos1, pos2] = 0
+        self.nodes_adj_matrix[pos2, pos1] = 0
         # update node obs
         self.update_node_obs()
 
@@ -115,6 +139,9 @@ class DistributionSystem:
         # update inc matrix 
         self.inc_matrix[pos1, switch]= -1
         self.inc_matrix[pos2, switch]= 1
+        # update adj
+        self.nodes_adj_matrix[pos1, pos2] = 1
+        self.nodes_adj_matrix[pos2, pos1] = 1
         # update node obs
         self.update_node_obs()
 

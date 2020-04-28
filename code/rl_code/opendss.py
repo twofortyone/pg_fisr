@@ -2,7 +2,7 @@
 import numpy as np
 # OpenDSSCOM packages
 import sys 
-assert ('wind32' in sys.platform), 'Opendss runs on Windows only.'
+#assert ('wind32' in sys.platform), 'Opendss runs on Windows only.'
 from win32com.client import makepy
 import win32com.client
 

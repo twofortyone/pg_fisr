@@ -15,7 +15,7 @@ t_runs = 1
 # ----------------------------------------------------------
 path = 'E:\ieee33bus37.dss'
 report_folder = "E:/pg_fisr_develop/code/report/"
-voltages_ftr = 'E:/data/' + str(ties) + 'ties_voltages.ftr'
+voltages_ftr = f'E:/data/{ties}ties_voltages.ftr'
 # ##########################################################
 
 env = FisrEnvironment(path, ties, voltages_ftr, time_steps)
@@ -25,8 +25,7 @@ num_switches = len(env.system.switches_obs)
 num_tie = len(env.system.start_tie_obs)
 
 # q values info
-#q = pd.read_feather('E:/q_' + str(ties) + 'ties_' + str(t_runs) + 'r_' +str(t_epi)
-#                + 'e_' + str(time_steps) + 'ts_nr_woopendss.ftr')
+#q = pd.read_feather('E:/q_{ties}ties_{t_runs}r_{t_epi}e_{time_steps}ts_nr_woopendss.ftr')
 
 q = pd.read_feather('E:/q_3nuevo.ftr')
 q_values = q.to_numpy()
