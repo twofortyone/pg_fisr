@@ -73,9 +73,7 @@ class DistributionSystem:
     def nodes_isolated(self):
         l = csgraph.laplacian(self.nodes_adj_matrix, normed=False)
         e = np.around(np.linalg.eigvals(l), 5)
-        #scn = np.count_nonzero(self.inc_matrix, axis=1)
-        #nodes_obs = np.where(scn != 0, 1, scn)
-        return np.count_nonzero(e==0)
+        return np.count_nonzero(e == 0)
 
     def nodes_loop(self):
         return np.count_nonzero(self.nodes_obs >1)
@@ -89,7 +87,7 @@ class DistributionSystem:
             pos2 = x[1]
             m[pos1, i] = -1
             m[pos2, i] = 1 
-            i+=1
+            i += 1
 
         for x in self.start_tie_obs: 
             z = self.conn[x]

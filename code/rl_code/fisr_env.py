@@ -105,10 +105,10 @@ class FisrEnvironment(BaseEnvironment):
         self.system.sys_start()
         self.current_state = self.get_observation()
         self.reward_obs_term[1] = self.current_state
-        print(self.current_state,'-------------------')
-        offline = self.system.nodes_isolated()
-        loop = self.system.nodes_loop()
-        print(self.current_state, offline, loop)
+        #print(self.current_state,'-------------------')
+        #offline = self.system.nodes_isolated()
+        #loop = self.system.nodes_loop()
+        #print(self.current_state, offline, loop)
         return self.reward_obs_term[1]
 
     def env_step(self, action):
@@ -121,7 +121,7 @@ class FisrEnvironment(BaseEnvironment):
         is_terminal = False
         # determine switches to execute
         switches = self.actions[action]
-        print(switches)
+        #print(switches)
         switch2open = switches[0]
         switch2close = switches[1]
         # open & close switches
@@ -132,8 +132,8 @@ class FisrEnvironment(BaseEnvironment):
         # restrictions
         offline = self.system.nodes_isolated()
         loop = self.system.nodes_loop()
-        nods = self.system.system_data.get_switches_names(self.states[self.current_state].tolist())
-        print(self.current_state, offline, loop, nods)
+        #nods = self.system.system_data.get_switches_names(self.states[self.current_state].tolist())
+        #print(self.current_state, offline, loop, nods)
 
         if offline > 1: reward -= 100
         if loop != 0: reward -= 100
