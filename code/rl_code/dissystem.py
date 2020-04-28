@@ -51,7 +51,10 @@ class DistributionSystem:
         return voltages
 
     def nodes_isolated(self):
-        return np.count_nonzero(self.nodes_obs==0)
+
+        scn = np.count_nonzero(self.inc_matrix, axis=0)
+        nodes_obs = np.where(scn != 0, 1, scn)
+        return np.count_nonzero(nodes_obs==0)
 
     def nodes_loop(self):
         return np.count_nonzero(self.nodes_obs >1)
