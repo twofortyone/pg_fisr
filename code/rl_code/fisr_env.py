@@ -107,8 +107,14 @@ class FisrEnvironment(BaseEnvironment):
         agent starts
         :return: (list) the first observation from the environment
         """
+        # Start system data (past in env_step::endcondition)
+        self.system.sys_start()
         self.current_state = self.get_observation()
         self.reward_obs_term[1] = self.current_state
+        #print(self.current_state,'-------------------')
+        #offline = self.system.nodes_isolated()
+        #loop = self.system.nodes_loop()
+        #print(self.current_state, offline, loop)
         return self.reward_obs_term[1]
 
     def env_step(self, action):
@@ -121,6 +127,7 @@ class FisrEnvironment(BaseEnvironment):
         is_terminal = False
         # determine switches to execute
         switches = self.actions[action]
+        #print(switches)
         switch2open = switches[0]
         switch2close = switches[1]
         # open & close switches
@@ -129,17 +136,21 @@ class FisrEnvironment(BaseEnvironment):
         # get obs
         self.current_state = self.get_observation()  # update current state
         # restrictions
-        if self.system.num_nodes_offline() != 0:  # reward if there is any node offline
-            reward -= 100
+        offline = self.system.nodes_isolated()
+        loop = self.system.nodes_loop()
+        #nods = self.system.system_data.get_switches_names(self.states[self.current_state].tolist())
+        #print(self.current_state, offline, loop, nods)
 
-        if self.get_voltage_limits() != 0:
-            reward -= 100
+        if offline > 1: reward -= 100
+        if loop != 0: reward -= 100
+        if self.get_voltage_limits() != 0: reward -= 100
+
 
         # end condition
-        if self.time_step == self.ts_cond:  # terminate if 1000 time steps are reached
+        if self.time_step == self.ts_cond: 
             is_terminal = True
             self.time_step = 0
-            self.system.sys_start()
+            #self.system.sys_start()
 
         self.reward_obs_term = [reward, self.current_state, is_terminal]
         return self.reward_obs_term
@@ -167,15 +178,14 @@ class FisrEnvironment(BaseEnvironment):
     
         self.current_state = self.get_observation()  # update current state
         
-        if self.system.num_nodes_offline() != 0:  # reward if there is any node offline
-            reward -= 100
+        offline = self.system.nodes_isolated()
+        loop = self.system.nodes_loop()
 
-        if self.get_voltage_limits() != 0:
-            reward -= 100
+        if offline != 0: reward -= 100
+        if loop != 0: reward -= 100
+        if self.get_voltage_limits() != 0: reward -= 100
 
-        nodes = self.system.num_nodes_offline()
-
-        if (nodes == 0) and self.get_voltage_limits() == 0:
+        if offline == 0 and loop == 0 and self.get_voltage_limits() == 0:
             is_terminal = True
             self.system.sys_start()
         elif self.time_step == 100:

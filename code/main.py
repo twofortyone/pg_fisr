@@ -19,7 +19,7 @@ t_runs = 1
 # ----------------------------------------------------------
 path = 'E:\ieee33bus37.dss'
 report_folder = "E:/pg_fisr_develop/code/report/"
-voltages_ftr = 'E:/data/' + str(ties) + 'ties_voltages.ftr'
+voltages_ftr = f'E:/data/{ties}ties_voltages.ftr'
 # ##########################################################
 
 env = FisrEnvironment(path, ties, voltages_ftr, time_steps)
@@ -52,8 +52,7 @@ actions = [str(x) for x in env.actions]
 
 # Save q_values
 df_q = pd.DataFrame(data=agent.q, columns=actions)
-df_q.to_feather('E:/q_' + str(ties) + 'ties_' + str(t_runs) + 'r_' +str(t_epi)
-                + 'e_' + str(time_steps) + 'ts_nr_woopendss.ftr')
+df_q.to_feather('E:/q_{ties}ties_{t_runs}r_{t_epi}e_{time_steps}ts_nr_woopendss.ftr')
 
 # -------------------------------------------
 # Production

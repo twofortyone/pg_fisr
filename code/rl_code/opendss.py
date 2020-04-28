@@ -1,10 +1,10 @@
 
 import numpy as np
 # OpenDSSCOM packages
+import sys 
+#assert ('wind32' in sys.platform), 'Opendss runs on Windows only.'
 from win32com.client import makepy
 import win32com.client
-import sys
-
 
 class OpenDSSCircuit:
 
@@ -13,9 +13,10 @@ class OpenDSSCircuit:
         self.com.solve()
         num_tie = ties
         self.lines = self.com.get_lines()
-        num_switches = len(self.lines)
+        self.num_switches = len(self.lines)
         self.nodes = self.com.get_buses()
-        self.ties = self.lines[num_switches-num_tie:num_switches]
+        self.num_nodes = len(self.nodes)
+        self.ties = self.lines[self.num_switches-num_tie:self.num_switches]
 
         for x in self.ties:
             self.open_switch(x)
