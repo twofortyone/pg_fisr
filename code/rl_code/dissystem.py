@@ -35,10 +35,10 @@ class DistributionSystem:
         # Data
         self.start_tie_obs = self.system_data.get_tie()
         self.switches_obs = self.system_data.get_switches()
-        self.update_node_obs()
         self.inc_matrix = self.get_inc_matrix()
         
         # Functions
+        self.update_node_obs()
         self.update_switches()
         return self.opened_switches
 
@@ -73,7 +73,7 @@ class DistributionSystem:
         for x in self.start_tie_obs: 
             z = self.conn[x]
             pos1 = z[0]
-            pos2 = z[0]
+            pos2 = z[1]
             m[pos1, x]= 0
             m[pos2, x]= 0
         return m 

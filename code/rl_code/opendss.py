@@ -16,7 +16,7 @@ class OpenDSSCircuit:
         self.num_switches = len(self.lines)
         self.nodes = self.com.get_buses()
         self.num_nodes = len(self.nodes)
-        self.ties = self.lines[self.num_switches-num_tie:num_switches]
+        self.ties = self.lines[self.num_switches-num_tie:self.num_switches]
 
         for x in self.ties:
             self.open_switch(x)
