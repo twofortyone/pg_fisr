@@ -13,7 +13,7 @@ class FisrEnvironment(BaseEnvironment):
         methods.
     """
     
-    def __init__(self, opendss_path, ties, vol_ftr, ts_cond):
+    def __init__(self, opendss_path, ties, vol_ftr, ts_cond, pos_states_ftr):
         self.system = DistributionSystem(opendss_path, ties, vol_ftr)  # Create a distribution system model
         self.states = self.get_states()  # States depending on number of total and tie switches
         self.states_ls = [int(str(x).strip('[]').replace(',', '').replace(' ', '')) for x in self.states]
@@ -25,13 +25,15 @@ class FisrEnvironment(BaseEnvironment):
         self.reward_obs_term = [reward, observation, termination]
         self.actions = None
 
-        # New
         s_array = np.sort(np.asarray(self.states_ls))
         self.sorted_states = s_array.tolist()
-        #self.pos_states = get_position4sorted(self.states_ls, self.sorted_states)
-        aux = pd.read_feather('E:/pg_fisr_develop/code/data/sorted_pos.ftr')
-        self.pos_states = aux.to_numpy().tolist()
-        #self.pos_states = self.sorted_states
+
+        if pos_states_ftr == 1:
+            self.aux = pd.read_feather(f'E:/pg_fisr/data/{ties}ties_sorted_pos.ftr')
+            self.pos_states = self.aux.to_numpy().tolist()
+            self.pos_states = [int(str(x).strip('[]')) for x in self.pos_states]
+        else:
+            self.pos_states = get_position4sorted(self.states_ls, self.sorted_states)
 
         self.ts_cond = ts_cond
 
@@ -123,7 +125,8 @@ class FisrEnvironment(BaseEnvironment):
         :return: (list) a list of the reward, state observation and boolean if it's terminal
         """
         self.time_step += 1
-        reward = -1
+        #reward = -1
+        reward = 0
         is_terminal = False
         # determine switches to execute
         switches = self.actions[action]
@@ -137,21 +140,28 @@ class FisrEnvironment(BaseEnvironment):
         self.current_state = self.get_observation()  # update current state
         # restrictions
         offline = self.system.nodes_isolated()
-        loop = self.system.nodes_loop()
+        #loop = self.system.nodes_loop()
         #nods = self.system.system_data.get_switches_names(self.states[self.current_state].tolist())
         #print(self.current_state, offline, loop, nods)
 
         if offline > 1: reward -= 100
-        if loop != 0: reward -= 100
+        #if loop != 0: reward -= 100
         if self.get_voltage_limits() != 0: reward -= 100
 
 
-        # end condition
-        if self.time_step == self.ts_cond: 
+        #end condition
+        if self.time_step == self.ts_cond:
             is_terminal = True
             self.time_step = 0
-            #self.system.sys_start()
 
+        #if offline == 1 and loop == 0 and self.get_voltage_limits() == 0:
+        #    is_terminal = True
+        #if self.get_voltage_limits() == 0:
+        #    is_terminal = True
+        #    self.time_step = 0
+        #    reward +=1
+
+            
         self.reward_obs_term = [reward, self.current_state, is_terminal]
         return self.reward_obs_term
 
@@ -179,21 +189,20 @@ class FisrEnvironment(BaseEnvironment):
         self.current_state = self.get_observation()  # update current state
         
         offline = self.system.nodes_isolated()
-        loop = self.system.nodes_loop()
+        # Todo res: loop = self.system.nodes_loop()
 
-        if offline != 0: reward -= 100
-        if loop != 0: reward -= 100
+        if offline > 1: reward -= 100
+        # Todo rest: if loop != 0: reward -= 100
         if self.get_voltage_limits() != 0: reward -= 100
 
-        if offline == 0 and loop == 0 and self.get_voltage_limits() == 0:
+        # Todo rest: if offline == 1 and loop == 0 and self.get_voltage_limits() == 0:
+        if offline == 1 and self.get_voltage_limits() == 0:
             is_terminal = True
             self.system.sys_start()
         elif self.time_step == 100:
             is_terminal = True
             self.time_step = 0
             self.system.sys_start()
-            print('')
-
         self.reward_obs_term = [reward, self.current_state, is_terminal]
 
         return [self.reward_obs_term, switches.tolist()]

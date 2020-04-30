@@ -8,26 +8,27 @@ import time
 
 # ##########################################################
 # Update before use
-ties = 5
-time_steps = 1000000
-t_epi = 100
+ties = 3
+time_steps = 10000
+t_epi = 200
 t_runs = 1
+pos_states_ftr = 1 # if pos_states form ftr
 # ----------------------------------------------------------
 path = 'E:\ieee33bus37.dss'
-report_folder = "E:/pg_fisr_develop/code/report/"
+report_folder = "E:/pg_fisr/report/"
 voltages_ftr = f'E:/data/{ties}ties_voltages.ftr'
 # ##########################################################
 
-env = FisrEnvironment(path, ties, voltages_ftr, time_steps)
+env = FisrEnvironment(path, ties, voltages_ftr, time_steps, pos_states_ftr)
 agent = QLearningAgent()
-num_nodes = len(env.system.nodes_obs)
-num_switches = len(env.system.switches_obs)
+num_nodes = env.system.num_nodes
+num_switches = env.system.num_switches
 num_tie = len(env.system.start_tie_obs)
 
 # q values info
-#q = pd.read_feather('E:/q_{ties}ties_{t_runs}r_{t_epi}e_{time_steps}ts_nr_woopendss.ftr')
+q = pd.read_feather(f'E:/q_{ties}ties_{t_runs}r_{t_epi}e_{time_steps}ts_nr_woopendss.ftr')
 
-q = pd.read_feather('E:/q_3nuevo.ftr')
+#q = pd.read_feather('E:/q_3nuevo.ftr')
 q_values = q.to_numpy()
 
 # -------------------------------------------

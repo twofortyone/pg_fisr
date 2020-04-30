@@ -27,7 +27,7 @@ class Training:
         self.num_states = int(comb(num_switches, num_tie))
 
         self.agent_info = {'num_actions': num_actions, 'num_states': self.num_states,
-                           'epsilon': 0.1, 'discount': 1.0, 'step_size': 0.8}
+                           'epsilon': 0.1, 'discount': 1.0, 'step_size': 0.1}
         self.env_info = {}
         self.all_reward_sums = []
         self.all_state_visits = []

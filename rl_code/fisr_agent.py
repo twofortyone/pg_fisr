@@ -46,9 +46,8 @@ class QLearningAgent(BaseAgent):
         self.q = agent_init_info['q_values']
 
     def agent_start(self, state):
-        
         # choose action using epsilon greedy
-        current_q = self.q[state, :]
+        current_q = self.q[state]
         if self.rand_generator.rand() < self.epsilon:
             action = self.rand_generator.randint(self.num_actions)
         else:
@@ -58,6 +57,7 @@ class QLearningAgent(BaseAgent):
         return action
 
     def agent_start_pro(self, state):
+
         current_q = self.q[state, self.failure_actions]  # array with all q values for a given state
         action = self.argmax(current_q)
 

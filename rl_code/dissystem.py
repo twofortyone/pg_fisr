@@ -40,7 +40,7 @@ class DistributionSystem:
         self.nodes_adj_matrix = self.get_adj_matrix()
         
         # Functions
-        self.update_node_obs()
+        # Todo restaurar: self.update_node_obs()
         self.update_switches()
         return self.opened_switches
 
@@ -124,7 +124,7 @@ class DistributionSystem:
         self.nodes_adj_matrix[pos1, pos2] = 0
         self.nodes_adj_matrix[pos2, pos1] = 0
         # update node obs
-        self.update_node_obs()
+        # Todo restaurar: self.update_node_obs()
 
 
     def connect_nodes(self, switch):
@@ -141,7 +141,7 @@ class DistributionSystem:
         self.nodes_adj_matrix[pos1, pos2] = 1
         self.nodes_adj_matrix[pos2, pos1] = 1
         # update node obs
-        self.update_node_obs()
+        # Todo restarurar: self.update_node_obs()
 
     def close_switch(self, switch):
         """Close a switch
