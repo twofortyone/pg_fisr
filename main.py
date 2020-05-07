@@ -18,12 +18,11 @@ t_epi = 200
 t_runs = 1
 pos_states_ftr = 0  # 1 if pos_states from ftr
 # ----------------------------------------------------------
-path = 'E:\ieee33bus37.dss'
 report_folder = "E:/pg_fisr/report/"
 voltages_ftr = f'E:/data/{ties}ties_voltages.ftr'
 # ##########################################################
 
-env = FisrEnvironment(path, ties, voltages_ftr, time_steps, pos_states_ftr)
+env = FisrEnvironment(ties, voltages_ftr, time_steps, pos_states_ftr)
 agent = QLearningAgent()
 # ------------------------------------------
 # Training
