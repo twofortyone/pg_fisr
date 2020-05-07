@@ -4,7 +4,7 @@ import numpy as np
 
 class QLearningAgent(BaseAgent):
 
-    def __init__(self):
+    def __init__(self):  # checked
         self.num_actions = None
         self.num_states = None
         self.epsilon = None
