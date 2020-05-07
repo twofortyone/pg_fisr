@@ -100,6 +100,15 @@ class DistributionSystem:
     def operate_switch(self, switch, action):  # checked
         self.opendssg.write_switch_status(self.switches[switch], action)
 
+    def failure_line(self, failure):
+        cmd = f'open line.{self.lines[failure]} 0 0'
+        return self.opendssg.send_command(cmd)
+
+    def fix_failure(self, failure):
+        cmd = f'close line.{self.lines[failure]} 0 0'
+        return self.opendssg.send_command(cmd)
+
+
     def inc_exploration(self, node_init):
         for x in node_init:
             vertex = self.inc_matrix[:, x]

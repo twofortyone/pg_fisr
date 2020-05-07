@@ -10,7 +10,7 @@ name = 'IEEE 33 BUS Test Case'
 
 # ##########################################################
 # Update before use
-ties = 5
+ties = 12
 time_steps = 10000
 t_epi = 1
 t_runs = 1

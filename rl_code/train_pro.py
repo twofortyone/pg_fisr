@@ -14,17 +14,9 @@ class Training:
         self.agent = agent
         self.rf = report_folder
         # number of actions
-        closed = self.env.system.closed_switches
-        opened = self.env.system.opened_switches
-        num_closed = len(closed)
-        num_opened = len(opened)
-        num_actions = num_closed * num_opened
+        num_actions = self.env.system.num_switches
         # number of states
-        start_tie = self.env.system.start_tie_obs
-        switches_obs = self.env.system.switches_obs
-        num_tie = len(start_tie)
-        num_switches = len(switches_obs)
-        self.num_states = int(comb(num_switches, num_tie))
+        self.num_states = self.env.system.num_lines * self.env.num_switch_states
 
         self.agent_info = {'num_actions': num_actions, 'num_states': self.num_states,
                            'epsilon': 0.1, 'discount': 1.0, 'step_size': 0.1}
@@ -44,8 +36,8 @@ class Training:
 
             reward_sums = []
             state_visits = np.zeros(self.num_states)
-            for episode in tqdm(range(num_episodes)):
-                if episode < num_episodes - 10:
+            for episode in range(num_episodes):
+                if episode < num_episodes: # - 10:
                     rl_glue.rl_episode(0)
                 else:
                     state, action = rl_glue.rl_start()

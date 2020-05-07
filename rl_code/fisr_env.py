@@ -15,7 +15,11 @@ class FisrEnvironment(BaseEnvironment):
     def __init__(self, ts_cond):
         self.system = DistributionSystem()  # Create a distribution system model
         self.states = self.get_states()  # States depending on number of total and tie switches
-        self.states_dict = self.get_states_dict()
+        self.switch_states_dict = self.get_switch_states_dict()
+        self.failures_dict = self.get_failures_dict()
+        self.num_switch_states = 2**self.system.num_switches
+        self.rand_generator = np.random.RandomState(412)
+        self.failure = None
         reward = None
         observation = None
         termination = None
@@ -44,7 +48,7 @@ class FisrEnvironment(BaseEnvironment):
         num_states = (2**num_switches)*num_lines
         return np.arange(num_states)
 
-    def get_states_dict(self):  # checked
+    def get_switch_states_dict(self):  # checked
         """States list depending on tie and total switches
         :return states: (np array) total switches combing tie switches list
         """
@@ -53,46 +57,36 @@ class FisrEnvironment(BaseEnvironment):
         switch_states = list(product(switch_state, repeat=num_switches))
         ss_list = [str(x).strip('()').replace(',', '').replace(' ', '') for x in switch_states]
         ss_dict = dict(zip(ss_list, range(len(ss_list))))
+        return ss_dict
+
+    def get_failures_dict(self):
         lines = self.system.lines
-        states = {}
-        for line in lines:
-            states[line] = ss_dict
-        return states
+        return dict(zip(lines, range(self.system.num_lines)))
 
     def get_actions(self):  # checked
         """Actions list depending on current state
         :returns actions: (np.array) action list to take
         """
-        current_state = np.asarray(self.current_state)
+        current_state = np.asarray(self.system.get_switches_status())
         return np.where(current_state == 1, 0, 1)
 
     def get_observation(self):  # checked
         """ Get state index
         :return pos: (int) index of current_state in states list
         """
-        self.current_state = self.system.get_switches_status()
-        cs = str(self.current_state).strip('[]').replace(',', '').replace(' ', '')
-        # update possible actions
-        self.actions = self.get_actions()
-        return self.states[cs]
+        current_state = self.system.get_switches_status()
+        cs = str(current_state).strip('[]').replace(',', '').replace(' ', '')
 
-    def get_failure_actions(self, failure):
-        actions = self.get_actions()
-        aux = actions[:, 0]
-        pos = np.where(aux == failure)
-        return pos[0]
-
-    def get_post_facts(self, failure):
-        actions = self.get_actions()
-        aux = actions[:, 1]
-        pos = np.where(aux != failure)
-        return pos[0]
+        switch_state_pos = self.switch_states_dict[cs]
+        return self.failure* self.num_switch_states + switch_state_pos
 
     # -----------------------------------------------------------------------------------
     # Setters
     # -----------------------------------------------------------------------------------
     def env_init(self, env_info={}):
         self.reward_obs_term = [0.0, None, False]
+        self.failure = self.rand_generator.randint(self.system.num_lines)
+        self.system.failure_line(self.failure)
 
     def env_start(self):  # checked
         """The first method called when the experiment starts, called before the
@@ -101,7 +95,9 @@ class FisrEnvironment(BaseEnvironment):
         """
         # Start system data (past in env_step::endcondition)
         #self.system.sys_start()
-        self.get_observation()  # Find and update self.current_state
+        self.current_state = self.get_observation()  # Find and update self.current_state
+        # update possible actions
+        self.actions = self.get_actions()
         self.reward_obs_term[1] = self.current_state
         # print(self.current_state,'-------------------')
         # offline = self.system.nodes_isolated()
@@ -124,6 +120,8 @@ class FisrEnvironment(BaseEnvironment):
         self.system.operate_switch(switch, action)
         # get obs
         self.current_state = self.get_observation()  # update current state
+        # update possible actions
+        self.actions = self.get_actions()
         # restrictions
         #offline = self.system.nodes_isolated()
         # loop = self.system.nodes_loop()
@@ -139,6 +137,7 @@ class FisrEnvironment(BaseEnvironment):
         if self.time_step == self.ts_cond:
             is_terminal = True
             self.time_step = 0
+            self.system.fix_failure(self.failure)
 
         # if offline == 1 and loop == 0 and self.get_voltage_limits() == 0:
         #    is_terminal = True
@@ -208,6 +207,3 @@ class FisrEnvironment(BaseEnvironment):
 
         else:
             return "I don't know how to respond to your message"
-
-
-env = FisrEnvironment(1) # todo borrar antes de depurar
