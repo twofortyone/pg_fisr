@@ -3,6 +3,7 @@ from rl_code.dissystem import DistributionSystem
 from itertools import combinations, product
 import numpy as np
 from tqdm import tqdm
+import time
 import pandas as pd
 
 
@@ -115,13 +116,20 @@ class FisrEnvironment(BaseEnvironment):
         # reward = 0
         is_terminal = False
         # determine switches to execute
+
         action = self.actions[switch]
         # open/close switches
+        te0 = time.time()
         self.system.operate_switch(switch, action)
+        te1 = time.time()
         # get obs
         self.current_state = self.get_observation()  # update current state
+        te2 = time.time()
+        #print(self.system.get_voltage())
         # update possible actions
         self.actions = self.get_actions()
+        #print(self.actions)
+        te3 = time.time()
         # restrictions
         #offline = self.system.nodes_isolated()
         # loop = self.system.nodes_loop()
@@ -131,6 +139,8 @@ class FisrEnvironment(BaseEnvironment):
         #if offline > 1: reward -= 100
         # if loop != 0: reward -= 100
         voltages_out_of_limit = self.get_voltage_limits()
+        te4 = time.time()
+        print(f'ga:{te3-te2}; cs: {te2-te1}; os: {te1-te0}; total:{te3-te0}')
         if voltages_out_of_limit != 0: reward -= 10 * voltages_out_of_limit
 
         # end condition

@@ -5,6 +5,7 @@
 
 from __future__ import print_function
 from tqdm import tqdm
+import time
 
 
 class RLGlue:
@@ -127,7 +128,9 @@ class RLGlue:
             (float, state, action, Boolean): reward, last state observation,
                 last action, boolean indicating termination
         """
+        t0 = time.time()
         (reward, last_state, term) = self.environment.env_step(self.last_action)
+        t1 = time.time()
         self.total_reward += reward
 
         if term:
@@ -138,7 +141,8 @@ class RLGlue:
             self.num_steps += 1
             self.last_action = self.agent.agent_step(reward, last_state)
             roat = (reward, last_state, self.last_action, term)
-
+        t2 = time.time()
+        print(f'env time:{t1-t0}; agent time: {t2-t1}')
         return roat
 
     def rl_cleanup(self):

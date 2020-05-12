@@ -1,17 +1,21 @@
 from scipy.special import comb
 import numpy as np
 from rl_bases.rl_glue import RLGlue
-from tqdm import tqdm
+from tqdm import tqdm, trange
 from rl_bases.rl_glue_pro import Pro
 from report.report import make_figure
+import time
 
 
 class Training:
 
     def __init__(self, environment, agent, report_folder):
-
+        t0 = time.time()
         self.env = environment
+        t1 = time.time()
         self.agent = agent
+        t2 = time.time()
+        print(f'env init time: {t1-t0}; agent init time: {t2-t1}')
         self.rf = report_folder
         # number of actions
         num_actions = self.env.system.num_switches
@@ -31,12 +35,16 @@ class Training:
 
         for run in range(num_runs):
             self.agent_info['seed'] = run
+            tr5 = time.time()
             rl_glue = RLGlue(self.env, self.agent)
             rl_glue.rl_init(self.agent_info, self.env_info)
+            tr6 = time.time()
 
             reward_sums = []
+
             state_visits = np.zeros(self.num_states)
-            for episode in range(num_episodes):
+            tr7= time.time()
+            for episode in trange(num_episodes):
                 if episode < num_episodes: # - 10:
                     rl_glue.rl_episode(0)
                 else:
@@ -48,7 +56,8 @@ class Training:
                         state_visits[state] += 1
 
                 reward_sums.append(rl_glue.rl_return())
-
+            tr8 = time.time()
+            print(f'rlglue t: {tr5-tr5}; state_visits:{tr7-tr6}; episode time:{tr8-tr7}')
             self.all_reward_sums.append(reward_sums)
             self.all_state_visits.append(state_visits)
         return make_figure(None, np.mean(self.all_reward_sums, axis=0), self.rf + 'training.html')

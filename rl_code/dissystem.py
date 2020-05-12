@@ -177,3 +177,4 @@ class DistributionSystem:
         self.nodes_obs[0] = 1
         node_init = np.where(self.inc_matrix[0, :] == -1)[0]
         self.inc_exploration(node_init)
+

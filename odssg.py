@@ -8,11 +8,10 @@ class OpenDSSG:
         # Connection data
         self.host = '127.0.0.1'
         self.port = 6345
-        self.bz = 100000
+        self.bz = 8192
         self.s = None
 
         self.start()
-
 
     def start(self):
         # Socket creation
@@ -70,17 +69,11 @@ class OpenDSSG:
         msg = ('28;' + '{0:04X}'.format(len(line)) + f'{line};').encode('UTF-8')
         return self.send(msg)
 
-    def write_switch_status(self,switch, status):
+    def write_switch_status(self, switch, status):
         cmd = f'{switch}={status}'
         msg = ('18;' + '{0:04X}'.format(len(cmd)) + f'{cmd};').encode('UTf-8')
         return self.send(msg)
 
 
-
 def decode_message(msg):
     return msg.decode()[8:-1].split()
-
-
-g = OpenDSSG()
-
-# lm = list(product(l, repeat = 12))
