@@ -11,8 +11,8 @@ name = 'IEEE 33 BUS Test Case'
 # ##########################################################
 # Update before use
 ties = 12
-time_steps = 10000
-t_epi = 1
+time_steps = 1000
+t_epi = 100
 t_runs = 1
 # ----------------------------------------------------------
 report_folder = "E:/pg_fisr/report/"
@@ -29,11 +29,11 @@ training = Training(env, agent, report_folder)
 t1 = time.time()
 train_path = training.run_training(t_runs, t_epi)
 t4 = time.time()
-print(f'{t1-t0}; et: {t3-t2}; at: {t0-t3}; training: {t4-t1}')
+#print(f'{t1-t0}; et: {t3-t2}; at: {t0-t3}; training: {t4-t1}')
 
 # System info
-num_nodes = env.system.num_nodes
-num_switches = env.system.num_switches
+num_nodes = env.opendss.get_buses
+num_switches = env.opendss.num_switches
 data_system = [name, num_nodes, num_switches, ties]
 ds_label = ['Name:', 'Nodes:', 'Switches:', 'Tie:']
 

@@ -62,8 +62,8 @@ class QLearningAgent(BaseAgent):
         action = self.argmax(current_q)
 
         self.prev_state = state
-        self.prev_action = self.failure_actions[action]
-        return self.failure_actions[action]
+        #self.prev_action = self.failure_actions[action]
+        #return self.failure_actions[action]
 
     def agent_step(self, reward, state):
         """A step taken by the agent 

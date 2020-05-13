@@ -142,7 +142,7 @@ class RLGlue:
             self.last_action = self.agent.agent_step(reward, last_state)
             roat = (reward, last_state, self.last_action, term)
         t2 = time.time()
-        print(f'env time:{t1-t0}; agent time: {t2-t1}')
+        #print(f'env time:{t1-t0}; agent time: {t2-t1}')
         return roat
 
     def rl_cleanup(self):
@@ -188,13 +188,13 @@ class RLGlue:
 
         self.rl_start()
 
-        pbar = tqdm(total=10000, position=1)
+        #pbar = tqdm(total=1000, position=1)
         while (not is_terminal) and ((max_steps_this_episode == 0) or
                                      (self.num_steps < max_steps_this_episode)):
             rl_step_result = self.rl_step()
             is_terminal = rl_step_result[3]
-            pbar.update(1)
-        pbar.close()
+            #pbar.update(1)
+        #pbar.close()
         return is_terminal
 
     def rl_return(self):

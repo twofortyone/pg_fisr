@@ -15,12 +15,12 @@ class Training:
         t1 = time.time()
         self.agent = agent
         t2 = time.time()
-        print(f'env init time: {t1-t0}; agent init time: {t2-t1}')
+        #print(f'env init time: {t1-t0}; agent init time: {t2-t1}')
         self.rf = report_folder
         # number of actions
-        num_actions = self.env.system.num_switches
+        num_actions = self.env.num_actions
         # number of states
-        self.num_states = self.env.system.num_lines * self.env.num_switch_states
+        self.num_states = self.env.num_states
 
         self.agent_info = {'num_actions': num_actions, 'num_states': self.num_states,
                            'epsilon': 0.1, 'discount': 1.0, 'step_size': 0.1}
@@ -57,7 +57,7 @@ class Training:
 
                 reward_sums.append(rl_glue.rl_return())
             tr8 = time.time()
-            print(f'rlglue t: {tr5-tr5}; state_visits:{tr7-tr6}; episode time:{tr8-tr7}')
+            #print(f'rlglue t: {tr5-tr5}; state_visits:{tr7-tr6}; episode time:{tr8-tr7}')
             self.all_reward_sums.append(reward_sums)
             self.all_state_visits.append(state_visits)
         return make_figure(None, np.mean(self.all_reward_sums, axis=0), self.rf + 'training.html')

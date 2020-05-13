@@ -77,3 +77,5 @@ class OpenDSSG:
 
 def decode_message(msg):
     return msg.decode()[8:-1].split()
+
+g = OpenDSSG()

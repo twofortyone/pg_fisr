@@ -1,26 +1,24 @@
-# Shared packages
 import numpy as np
-
-# DistributionSystem packages
 import pandas as pd
 from scipy.sparse import csgraph
-from odssg import OpenDSSG
+from rl_code.opendss import OpenDSSCOM
 
 
 class DistributionSystem:
 
     def __init__(self):
-        self.opendssg = OpenDSSG()
+        self.opendss = OpenDSSCOM('E:\IEEE_123_FLISR_Case\Master.dss')
 
         # Variables declaration
-        self.num_nodes = len(self.opendssg.get_buses())
-        self.num_switches = len(self.opendssg.get_switch_status_names())
-        self.num_lines = len(self.opendssg.get_lines())
+        
+        self.num_buses = len(self.opendss.buses)
+        self.num_switches = len(self.opendss.switches)
+        self.num_lines = len(self.opendss.lines)
         self.switches_obs = np.asarray(self.get_switches_status())
         self.switches = self.get_switches()
-        self.lines = self.opendssg.get_lines()
+        self.lines = self.opendss.get_lines()
 
-        self.nodes_obs = np.zeros(len(self.opendssg.get_buses())) # Todo revisar uso
+        self.nodes_obs = np.zeros(len(self.opendss.get_buses())) # Todo revisar uso
         self.inc_matrix = None
         self.nodes_adj_matrix = None
         #self.closed_switches = None
@@ -44,21 +42,17 @@ class DistributionSystem:
     # GETTERS METHODS
     # --------------------------------
     def get_voltage(self):  # checked
-        return np.asarray(self.opendssg.get_voltage_magpu())
-
-    def get_switches(self):  # checked
-        sws = self.opendssg.get_switch_status_names()
-        return [x[1] for x in sws]
+        return np.asarray(self.opendss.get_voltage_magpu())
 
     def get_switches_status(self):  # checked
-        sws = self.opendssg.get_switch_status_names()
+        sws = self.opendss.get_switch_status_names()
         return [int(x[0]) for x in sws]
 
     def get_adj_matrix(self): # todo borrar
         """ Get the node adjacency matrix (only use at start)
         :return adj: (np array) node adjacency matrix
         """
-        adj = np.zeros((self.num_nodes, self.num_nodes))
+        adj = np.zeros((self.num_buses, self.num_buses))
         for x in self.conn:
             pos1 = x[0]
             pos2 = x[1]
@@ -75,7 +69,7 @@ class DistributionSystem:
         return np.count_nonzero(self.nodes_obs > 1)
     
     def get_inc_matrix(self): # todo borrar
-        m = np.zeros((self.num_nodes, self.num_switches))
+        m = np.zeros((self.num_buses, self.num_switches))
 
         i = 0 
         for x in self.conn: 
@@ -98,15 +92,15 @@ class DistributionSystem:
     # --------------------------------
 
     def operate_switch(self, switch, action):  # checked
-        self.opendssg.write_switch_status(self.switches[switch], action)
+        self.opendss.write_switch_status(self.switches[switch], action)
 
     def failure_line(self, failure):
         cmd = f'open line.{self.lines[failure]} 0 0'
-        return self.opendssg.send_command(cmd)
+        return self.opendss.send_command(cmd)
 
     def fix_failure(self, failure):
         cmd = f'close line.{self.lines[failure]} 0 0'
-        return self.opendssg.send_command(cmd)
+        return self.opendss.send_command(cmd)
 
 
     def inc_exploration(self, node_init):
@@ -159,7 +153,7 @@ class DistributionSystem:
             # update nodes connection
             self.connect_nodes(switch)
             # open opendss-g
-            self.opendssg.write_switch_status(switch, 1)
+            self.opendss.write_switch_status(switch, 1)
 
     def open_switch(self, switch):
         """Open a switch and update closed and opened switches and node adjacency matrix
@@ -169,7 +163,7 @@ class DistributionSystem:
             # update node connections
             self.isolate_nodes(switch)
             # open opendss-g
-            self.opendssg.write_switch_status(switch, 0)
+            self.opendss.write_switch_status(switch, 0)
 
     def update_node_obs(self):
         """Update node_obs after check node adjacency matrix"""
