@@ -35,7 +35,7 @@ num_actions = []
 action_times = []
 lines_to_fail = env.opendss_g.lines
 
-for i in trange(num_lines):  # for closed switches
+for i in trange(15):  # for closed switches # todo cambiar a num_lines
     production = Production(env, agent, q_values, i, report_folder)
     t2 = time.time()
     pro = production.run_production(1, 1)

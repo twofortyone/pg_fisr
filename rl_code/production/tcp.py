@@ -15,11 +15,11 @@ class OpenDSSG:
         # Variables
         self.lines = self.get_lines()
         self.buses = self.get_buses()
-        self.ss = self.get_switch_status_names()
         self.switches = self.get_switches()
         self.num_lines = len(self.lines)
         self.num_switches = len(self.switches)
-        self.start_status = np.asarray(self.get_switches_status())
+        self.start_status = np.asarray([1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1])
+        self.openddsg_init()  # Initial parameters
 
     def openddsg_init(self):
         status = np.asarray(self.get_switches_status())
@@ -45,10 +45,10 @@ class OpenDSSG:
         return lines
 
     def get_switches(self):
-        return [ss[1] for ss in self.ss]
+        return [ss[1] for ss in self.get_switch_status_names()]
 
     def get_switches_status(self):
-        return [int(ss[0]) for ss in self.ss]
+        return [int(ss[0]) for ss in self.get_switch_status_names()]
 
     def get_voltage_magpu(self):
         """Get voltage mag for all nodes in pu

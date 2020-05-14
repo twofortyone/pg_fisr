@@ -91,6 +91,8 @@ class FisrEnvironment(BaseEnvironment):
         # update possible actions
         self.actions = self.get_actions()
         self.reward_obs_term[1] = self.current_state
+        print(f'estado inicial:{self.current_state}: {self.opendss_g.get_switches_status()}')
+        print(f'voltages out of limits:{self.get_voltage_limits()}')
         #print(self.current_state,'-------------------')
 
         return self.reward_obs_term[1]
@@ -106,27 +108,30 @@ class FisrEnvironment(BaseEnvironment):
         is_terminal = False
         # determine action to execute
         action = self.actions[switch]
+        print(f'switch: {switch}; action:{action}')
         if action == 1: self.opendss_g.write_switch_status(switch, 1)
         elif action == 0: self.opendss_g.write_switch_status(switch, 0)
 
         self.current_state = self.get_observation()  # update current state
         self.actions = self.get_actions()
-
         num_loads_offline = None
         num_loops = None
         voltages_out_of_limit = self.get_voltage_limits()
-
+        print(f'state:{self.current_state}; {self.opendss_g.get_switches_status()};voltages: {voltages_out_of_limit}')
         #if num_loads_offline !=0: reward -= 100 * num_loads_offline
         #if num_loops != 0: reward -= 100
         if voltages_out_of_limit != 0: reward -= 10 * voltages_out_of_limit      
 
         # Todo rest: if offline == 1 and loop == 0 and self.get_voltage_limits() == 0:
-        if self.get_voltage_limits() == 0:
-            is_terminal = True
-            self.opendss_g.openddsg_init()
-        elif self.time_step == 100:
+        #if self.get_voltage_limits() == 0:
+        #    is_terminal = True
+        #    self.opendss_g.openddsg_init()
+        #elif self.time_step == 100:
+        if self.time_step == 1:
             is_terminal = True
             self.time_step = 0
+            print(f' cs: {self.current_state}')
+            print(self.opendss_g.get_switches_status())
             self.opendss_g.openddsg_init()
         self.reward_obs_term = [reward, self.current_state, is_terminal]
 
