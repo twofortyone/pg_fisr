@@ -11,14 +11,15 @@ name = 'IEEE 33 BUS Test Case'
 # ##########################################################
 # Update before use
 ties = 12
-time_steps = 700
-t_epi = 100
+time_steps = 10000
+t_epi = 50
 t_runs = 1
 # ----------------------------------------------------------
+path = 'E:\pg_fisr\IEEE_123_FLISR_Case\Master.dss'
 report_folder = "E:/pg_fisr/report/"
 # ##########################################################
 t2 = time.time()
-env = FisrEnvironment(time_steps)
+env = FisrEnvironment(path, ties, time_steps)
 t3 = time.time()
 agent = QLearningAgent(1)
 # ------------------------------------------
@@ -32,10 +33,10 @@ t4 = time.time()
 #print(f'{t1-t0}; et: {t3-t2}; at: {t0-t3}; training: {t4-t1}')
 
 # System info
-num_nodes = env.opendss.buses
+num_nodes = len(env.opendss.buses)
 num_switches = env.opendss.num_switches
-data_system = [name, num_nodes, num_switches, ties]
-ds_label = ['Name:', 'Nodes:', 'Switches:', 'Tie:']
+data_system = [name, num_nodes, num_switches]
+ds_label = ['Name:', 'Nodes:', 'Switches:']
 
 # Training info
 t_time = round(t1-t0, 2)
@@ -61,5 +62,5 @@ report.make_report()
 
 # Save q_values
 df_q = pd.DataFrame(data=agent.q, columns=actions)
-df_q.to_feather(f'E:/q_{ties}ties_{t_runs}r_{t_epi}e_{time_steps}ts_nr_woopendss.ftr')
+df_q.to_feather(f'E:/q_{ties}ties_{t_runs}r_{t_epi}e_{time_steps}ts.ftr')
 

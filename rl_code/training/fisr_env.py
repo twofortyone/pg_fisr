@@ -11,8 +11,8 @@ class FisrEnvironment(BaseEnvironment):
         env_init, env_start, env_step, env_cleanup, and env_message are required
         methods.
     """
-    def __init__(self, ts_cond):
-        self.opendss = OpenDSSCOM(12, 'E:\pg_fisr\IEEE_123_FLISR_Case\Master.dss')  # Create a distribution system model
+    def __init__(self, path, ties, ts_cond):
+        self.opendss = OpenDSSCOM(ties, path)  # Create a distribution system model
         self.states = self.get_states()  # States depending on number of total and tie switches
         self.switch_states_dict = self.get_switch_states_dict() # todo revisar si mejor busqueda binaria
         self.num_switch_states = 2**self.opendss.num_switches
@@ -56,10 +56,6 @@ class FisrEnvironment(BaseEnvironment):
         ss_list = [str(x).strip('()').replace(',', '').replace(' ', '') for x in switch_states]
         ss_dict = dict(zip(ss_list, range(len(ss_list))))
         return ss_dict
-
-    def get_failures_dict(self): # todo borrar
-        lines = self.opendss.lines
-        return dict(zip(lines, range(self.opendss.num_lines)))
 
     def get_actions(self):  # checked
         """Actions list depending on current state
@@ -105,10 +101,9 @@ class FisrEnvironment(BaseEnvironment):
         :return: (list) a list of the reward, state observation and boolean if it's terminal
         """
         self.time_step += 1
-        reward = -1
+        #reward = -1
         # reward = 0
         is_terminal = False
-        # determine switches to execute
         action = self.actions[switch]
         # open/close switches
         te0 = time.time()

@@ -1,33 +1,30 @@
-from rl_code.training.fisr_env import FisrEnvironment
+from rl_code.production.fisr_env_pro import FisrEnvironment
 from rl_code.fisr_agent_q import QLearningAgent
 from rl_code.production.pclass import Production
 import pandas as pd
 from report.pro_report import Report
-from tqdm import tqdm
+from tqdm import tqdm, trange
 import time
 
 # ##########################################################
 # Update before use
-ties = 3
-time_steps = 10000
-t_epi = 200
+ties = 12
+time_steps = 700
+t_epi = 100
 t_runs = 1
-pos_states_ftr = 1 # if pos_states form ftr
 # ----------------------------------------------------------
 report_folder = "E:/pg_fisr/report/"
-voltages_ftr = f'E:/data/{ties}ties_voltages.ftr'
 # ##########################################################
 
-env = FisrEnvironment(ties, voltages_ftr, time_steps, pos_states_ftr)
+env = FisrEnvironment(time_steps)
 agent = QLearningAgent(0)
-num_nodes = env.system.num_nodes
-num_switches = env.system.num_switches
-num_tie = len(env.system.start_tie_obs)
+num_switches = env.opendss_g.num_switches
+num_lines = env.opendss_g.num_lines
 
 # q values info
-q = pd.read_feather(f'E:/q_{ties}ties_{t_runs}r_{t_epi}e_{time_steps}ts_nr_woopendss.ftr')
-
+q = pd.read_feather(f'E:/q_{ties}ties_{t_runs}r_{t_epi}e_{time_steps}ts_intento1.ftr')
 #q = pd.read_feather('E:/q_3nuevo.ftr')
+
 q_values = q.to_numpy()
 
 # -------------------------------------------
@@ -36,9 +33,9 @@ q_values = q.to_numpy()
 all_actions = []
 num_actions = []
 action_times = []
-switches = env.system.system_data.switches
+lines_to_fail = env.opendss_g.lines
 
-for i in tqdm(range(2, num_switches-num_tie)):  # for closed switches
+for i in trange(num_lines):  # for closed switches
     production = Production(env, agent, q_values, i, report_folder)
     t2 = time.time()
     pro = production.run_production(1, 1)
@@ -49,11 +46,11 @@ for i in tqdm(range(2, num_switches-num_tie)):  # for closed switches
 # -------------------------------------------
 # Report
 # -------------------------------------------
-actions = [str(x) for x in env.actions]
+actions = env.opendss_g.switches
 
 # Actions data frame
 list_of_acts = [str(x) for x in all_actions]
-actions_df = pd.DataFrame(data=switches[2:num_switches-num_tie], columns=['Failure'])
+actions_df = pd.DataFrame(data=lines_to_fail, columns=['Failure'])
 actions_df.insert(1, 'Actions', list_of_acts, True)
 actions_df.insert(2, 'Number of actions', num_actions, True)
 actions_df.insert(3, 'Time elapsed', action_times, True)

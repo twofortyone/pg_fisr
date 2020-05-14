@@ -1,5 +1,5 @@
 from rl_bases.environment import BaseEnvironment
-from rl_code.training.com import OpenDSSCOM
+from rl_code.production.tcp import OpenDSSG
 from itertools import product
 import numpy as np
 import time
@@ -12,11 +12,11 @@ class FisrEnvironment(BaseEnvironment):
         methods.
     """
     def __init__(self, ts_cond):
-        self.opendss = OpenDSSCOM(12, 'E:\pg_fisr\IEEE_123_FLISR_Case\Master.dss')  # Create a distribution system model
+        self.opendss_g = OpenDSSG()  # Create a distribution system model
         self.states = self.get_states()  # States depending on number of total and tie switches
-        self.switch_states_dict = self.get_switch_states_dict() # todo revisar si mejor busqueda binaria
-        self.num_switch_states = 2**self.opendss.num_switches
-        self.num_states = self.num_switch_states*self.opendss.num_lines
+        self.switch_states_dict = self.get_switch_states_dict()  # todo revisar si mejor busqueda binaria
+        self.num_switch_states = 2**self.opendss_g.num_switches
+        self.num_states = self.num_switch_states*self.opendss_g.num_lines
         self.failure = None
         reward = None
         observation = None
@@ -25,15 +25,15 @@ class FisrEnvironment(BaseEnvironment):
         self.current_state = None
         self.reward_obs_term = [reward, observation, termination]
         self.actions = None
-        self.num_actions = self.opendss.num_switches
+        self.num_actions = self.opendss_g.num_switches
         self.ts_cond = ts_cond
 
     # -----------------------------------------------------------------------------------
     # Getters
     # -----------------------------------------------------------------------------------
     def get_states(self):
-        num_switches = self.opendss.num_switches
-        num_lines = self.opendss.num_lines 
+        num_switches = self.opendss_g.num_switches
+        num_lines = self.opendss_g.num_lines
         num_states = (2**num_switches)*num_lines
         return np.arange(num_states)
 
@@ -41,7 +41,7 @@ class FisrEnvironment(BaseEnvironment):
         """Number of nodes out of limits
         :return: number of nodes out of limits
         """
-        v_aux = self.opendss.get_voltage_magpu()
+        v_aux = self.opendss_g.get_voltage_magpu()
         v_aux1 = v_aux[np.where(v_aux < 0.9)]
         v_aux2 = v_aux[np.where(v_aux > 1.05)]
         return len(v_aux1) + len(v_aux2)
@@ -50,33 +50,29 @@ class FisrEnvironment(BaseEnvironment):
         """States list depending on tie and total switches
         :return states: (np array) total switches combing tie switches list
         """
-        num_switches = self.opendss.num_switches
+        num_switches = self.opendss_g.num_switches
         switch_state = [0, 1]
         switch_states = list(product(switch_state, repeat=num_switches))
         ss_list = [str(x).strip('()').replace(',', '').replace(' ', '') for x in switch_states]
         ss_dict = dict(zip(ss_list, range(len(ss_list))))
         return ss_dict
 
-    def get_failures_dict(self): # todo borrar
-        lines = self.opendss.lines
-        return dict(zip(lines, range(self.opendss.num_lines)))
-
     def get_actions(self):  # checked
         """Actions list depending on current state
         :returns actions: (np.array) action list to take
         """
-        current_state = np.asarray(self.opendss.get_switches_status())
+        current_state = np.asarray(self.opendss_g.get_switches_status())
         return np.where(current_state == 1, 0, 1)
 
     def get_observation(self):  # checked
         """ Get state index
         :return pos: (int) index of current_state in states list
         """
-        current_state = self.opendss.get_switches_status()
+        current_state = self.opendss_g.get_switches_status()
         cs = str(current_state).strip('[]').replace(',', '').replace(' ', '')
 
         switch_state_pos = self.switch_states_dict[cs]
-        return self.failure* self.num_switch_states + switch_state_pos
+        return self.failure * self.num_switch_states + switch_state_pos
 
     # -----------------------------------------------------------------------------------
     # Setters
@@ -99,7 +95,7 @@ class FisrEnvironment(BaseEnvironment):
 
         return self.reward_obs_term[1]
 
-    def env_step(self, action):
+    def env_step(self, switch):
         """A step taken by the environment
         :param action: (int) the action taken by the agent (action, switch)
         :return: (list) a list of the reward, state observation and boolean if it's terminal
@@ -108,38 +104,33 @@ class FisrEnvironment(BaseEnvironment):
         self.time_step += 1
         reward = -1
         is_terminal = False
-        # determine switches to execute
-        switches = self.actions[action]
-        switch2open = switches[0]
-        switch2close = switches[1]
-
-        # print('action:', action)
-        # print('switches: ', switches)
-
-        self.opendss.open_switch(switch2open)
-        self.opendss.close_switch(switch2close)
+        # determine action to execute
+        action = self.actions[switch]
+        if action == 1: self.opendss_g.write_switch_status(switch, 1)
+        elif action == 0: self.opendss_g.write_switch_status(switch, 0)
 
         self.current_state = self.get_observation()  # update current state
+        self.actions = self.get_actions()
 
-        num_loads_offline = self.opendss.get_num_isolated_loads()
-        num_loops = self.opendss.get_num_loops()
+        num_loads_offline = None
+        num_loops = None
         voltages_out_of_limit = self.get_voltage_limits()
 
-        if num_loads_offline !=0: reward -= 100 * num_loads_offline
-        if num_loops != 0: reward -= 100
+        #if num_loads_offline !=0: reward -= 100 * num_loads_offline
+        #if num_loops != 0: reward -= 100
         if voltages_out_of_limit != 0: reward -= 10 * voltages_out_of_limit      
 
         # Todo rest: if offline == 1 and loop == 0 and self.get_voltage_limits() == 0:
-        if offline == 1 and self.get_voltage_limits() == 0:
+        if self.get_voltage_limits() == 0:
             is_terminal = True
-            self.opendss.com_init()
+            self.opendss_g.openddsg_init()
         elif self.time_step == 100:
             is_terminal = True
             self.time_step = 0
-            self.opendss.com_init()
+            self.opendss_g.openddsg_init()
         self.reward_obs_term = [reward, self.current_state, is_terminal]
 
-        return [self.reward_obs_term, switches.tolist()]
+        return [self.reward_obs_term, [f'S:{switch}', f'A:{action}']]
 
     def env_cleanup(self):  # checked
         """Cleanup done after the environment ends"""

@@ -85,8 +85,7 @@ class OpenDSSCOM:
     def get_num_loops(self):
         return self.DSSTopology.NumLoops
 
-    # Todo: revisar
-    def get_ae_conn(self):
+    def get_ae_conn(self):  # Todo: revisar
         """Active element nodes connection
         :return: (tuple)
         """
