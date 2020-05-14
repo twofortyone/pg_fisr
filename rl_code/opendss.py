@@ -7,8 +7,8 @@ import sys
 
 class OpenDSSCOM:
 
-    def __init__(self, path):
-        self.path = path
+    def __init__(self):
+        self.path = 'E:\opfi\IEEE_123_FLISR_Case\Master.dss'
         sys.argv = ["makepy", "OpenDSSEngine.DSS"]
         makepy.main()
         self.DSSObj = win32com.client.Dispatch("OpenDSSEngine.DSS")
@@ -162,7 +162,7 @@ class OpenDSSCOM:
         self.DSSCktElement.Close(0, 0)
 
 
-opendss = OpenDSSCOM('E:\IEEE_123_FLISR_Case\Master.dss')
+opendss = OpenDSSCOM()
 
 # Todo: borrar 
 def get_conn(self):
@@ -186,4 +186,4 @@ def get_conn_element(self):
     """
     return self.com.get_ae_conn()
 
-opendss = OpenDSSCOM('E:\IEEE_123_FLISR_Case\Master.dss')
+#opendss = OpenDSSCOM('E:\opfi\IEEE_123_FLISR_Case\Hola.dss')
