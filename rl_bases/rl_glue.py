@@ -36,17 +36,13 @@ class RLGlue:
 
     def rl_start(self, agent_start_info={}, env_start_info={}):
         """Starts RLGlue experiment
-
         Returns:
             tuple: (state, action)
         """
-        
         self.total_reward = 0.0
         self.num_steps = 1
-
         last_state = self.environment.env_start()
         self.last_action = self.agent.agent_start(last_state)
-
         observation = (last_state, self.last_action)
 
         return observation

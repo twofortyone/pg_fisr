@@ -1,6 +1,6 @@
-from rl_code.fisr_env import FisrEnvironment
+from rl_code.training.fisr_env import FisrEnvironment
 from scipy.special import comb
-from rl_code.fisr_agent import QLearningAgent
+from rl_code.fisr_agent_q import QLearningAgent
 import numpy as np
 import time
 

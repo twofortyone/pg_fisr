@@ -1,4 +1,3 @@
-from rl_code.fisr_env import FisrEnvironment
 import numpy as np
 import pandas as pd
 from tqdm import trange

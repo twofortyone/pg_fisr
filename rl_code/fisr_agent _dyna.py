@@ -4,7 +4,7 @@ import numpy as np
 
 class QLearningAgent(BaseAgent):
 
-    def __init__(self):  # checked
+    def __init__(self, mode):  # checked
         self.num_actions = None
         self.num_states = None
         self.epsilon = None
@@ -16,6 +16,7 @@ class QLearningAgent(BaseAgent):
         self.failure_actions = None
         # Create an array for action-value estimates and initialize to zero
         self.q = None
+        self.mode = mode  # 1 = training and 0 for production
 
     def agent_init(self, agent_init_info={}):
 
@@ -28,22 +29,10 @@ class QLearningAgent(BaseAgent):
         self.prev_action = None
         self.prev_state = None
 
-        # Create an array for action-value estimates and initialize to zero
-        self.q = np.zeros((self.num_states, self.num_actions))
+        # Mode == 1 for training and 0 for production
+        if self.mode == 1: self.q = np.zeros((self.num_states, self.num_actions))
+        elif self.mode == 0: self.q = agent_init_info['q_values']
 
-    def agent_init_pro(self, agent_init_info={}):
-
-        self.num_actions = agent_init_info['num_actions']
-        self.num_states = agent_init_info['num_states']
-        self.epsilon = agent_init_info['epsilon']
-        self.step_size = agent_init_info['step_size']
-        self.discount = agent_init_info['discount']
-        self.rand_generator = np.random.RandomState(agent_init_info['seed'])
-        self.prev_action = None
-        self.prev_state = None
-
-        # Create an array for action-value estimates and initialize to zero
-        self.q = agent_init_info['q_values']
 
     def agent_start(self, state):
         # choose action using epsilon greedy
@@ -55,15 +44,6 @@ class QLearningAgent(BaseAgent):
         self.prev_state = state
         self.prev_action = action
         return action
-
-    def agent_start_pro(self, state):
-
-        current_q = self.q[state, self.failure_actions]  # array with all q values for a given state
-        action = self.argmax(current_q)
-
-        self.prev_state = state
-        #self.prev_action = self.failure_actions[action]
-        #return self.failure_actions[action]
 
     def agent_step(self, reward, state):
         """A step taken by the agent 
@@ -88,30 +68,6 @@ class QLearningAgent(BaseAgent):
         self.prev_state = state
         self.prev_action = action
         return action 
-    
-    def agent_step_pro(self, reward, state, post_facts):
-        """A step taken by the agent 
-
-        :param reward: (float) the reward received for the last action taken
-        :param state: (int) the state from the environment's step based on where
-            the agent ended up after the last step 
-        :return action(int): the last action the agent is taking
-        """
-        current_q = self.q[state, post_facts]
-        if self.rand_generator.rand() < self.epsilon: 
-            action = self.rand_generator.randint(len(current_q))
-        else: 
-            action = self.argmax(current_q)
-
-        # Perform an update 
-        ps = self.prev_state
-        pa = self.prev_action
-        aux = reward + self.discount * np.amax(current_q) - self.q[ps, pa]
-        self.q[ps, pa] = self.q[ps, pa] + self.step_size * aux
-
-        self.prev_state = state
-        self.prev_action = post_facts[action]
-        return post_facts[action]
 
     def agent_end(self, reward):
         """Run when the agent terminates

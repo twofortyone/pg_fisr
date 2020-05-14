@@ -1,10 +1,8 @@
 from rl_bases.environment import BaseEnvironment
-from rl_code.opendss import OpenDSSCOM
-from itertools import combinations, product
+from rl_code.training.com import OpenDSSCOM
+from itertools import product
 import numpy as np
-from tqdm import tqdm
 import time
-import pandas as pd
 
 
 class FisrEnvironment(BaseEnvironment):
@@ -101,60 +99,7 @@ class FisrEnvironment(BaseEnvironment):
 
         return self.reward_obs_term[1]
 
-    def env_step(self, switch):
-        """A step taken by the environment
-        :param action: (int) the action taken by the agent (action, switch)
-        :return: (list) a list of the reward, state observation and boolean if it's terminal
-        """
-        self.time_step += 1
-        reward = -1
-        # reward = 0
-        is_terminal = False
-        # determine switches to execute
-        action = self.actions[switch]
-        # open/close switches
-        te0 = time.time()
-        if action==1: self.opendss.close_switch(switch)
-        elif action==0: self.opendss.open_switch(switch)
-        self.opendss.solve()
-        te1 = time.time()
-        # get obs
-        self.current_state = self.get_observation()  # update current state
-        te2 = time.time()
-        #print(self.opendss.get_voltage_magpu())
-        # update possible actions
-        self.actions = self.get_actions()
-        #print(self.current_state, switch, action, self.actions)
-        te3 = time.time()
-        # restrictions
-        num_loads_offline = self.opendss.get_num_isolated_loads()
-        num_loops = self.opendss.get_num_loops()
-        voltages_out_of_limit = self.get_voltage_limits()
-        # nods = self.system.system_data.get_switches_names(self.states[self.current_state].tolist())
-        # print(self.current_state, offline, loop, nods)
-
-        if num_loads_offline !=0: reward -= 100 * num_loads_offline
-        if num_loops != 0: reward -= 100
-        if voltages_out_of_limit != 0: reward -= 100
-        te4 = time.time()
-        #print(f'ga:{te3-te2}; cs: {te2-te1}; os: {te1-te0}; total:{te3-te0}')      
-
-        # end condition
-        if self.time_step == self.ts_cond:
-            is_terminal = True
-            self.time_step = 0
-            self.opendss.com_init()
-
-        # if offline == 1 and loop == 0 and self.get_voltage_limits() == 0:
-        #    is_terminal = True
-        # if self.get_voltage_limits() == 0:
-        #    is_terminal = True
-        #    self.time_step = 0
-        #    reward +=1
-        self.reward_obs_term = [reward, self.current_state, is_terminal]
-        return self.reward_obs_term
-
-    def env_step_pro(self, action):
+    def env_step(self, action):
         """A step taken by the environment
         :param action: (int) the action taken by the agent (action, switch)
         :return: (list) a list of the reward, state observation and boolean if it's terminal

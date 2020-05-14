@@ -1,6 +1,6 @@
-from rl_code.fisr_env import FisrEnvironment
-from rl_code.fisr_agent import QLearningAgent
-from rl_code.train_pro import Training
+from rl_code.training.fisr_env import FisrEnvironment
+from rl_code.fisr_agent_q import QLearningAgent
+from rl_code.training.tclass import Training
 import pandas as pd
 from report.train_report import Report
 import time
@@ -20,7 +20,7 @@ report_folder = "E:/pg_fisr/report/"
 t2 = time.time()
 env = FisrEnvironment(time_steps)
 t3 = time.time()
-agent = QLearningAgent()
+agent = QLearningAgent(1)
 # ------------------------------------------
 # Training
 # ------------------------------------------

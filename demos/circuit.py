@@ -1,4 +1,4 @@
-from rl_code.opendss import OpenDss
+from rl_code.training.com import OpenDss
 import numpy as np
 
 

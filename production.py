@@ -1,6 +1,6 @@
-from rl_code.fisr_env import FisrEnvironment
-from rl_code.fisr_agent import QLearningAgent
-from rl_code.train_pro import Production
+from rl_code.training.fisr_env import FisrEnvironment
+from rl_code.fisr_agent_q import QLearningAgent
+from rl_code.production.pclass import Production
 import pandas as pd
 from report.pro_report import Report
 from tqdm import tqdm
@@ -19,7 +19,7 @@ voltages_ftr = f'E:/data/{ties}ties_voltages.ftr'
 # ##########################################################
 
 env = FisrEnvironment(ties, voltages_ftr, time_steps, pos_states_ftr)
-agent = QLearningAgent()
+agent = QLearningAgent(0)
 num_nodes = env.system.num_nodes
 num_switches = env.system.num_switches
 num_tie = len(env.system.start_tie_obs)

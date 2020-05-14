@@ -1,4 +1,4 @@
-from rl_code.opendss import Circuit
+from rl_code.training.com import Circuit
 import numpy as np
 
 path = 'D:\Bus_37\ieee37.dss'
