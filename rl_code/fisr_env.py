@@ -14,13 +14,11 @@ class FisrEnvironment(BaseEnvironment):
         methods.
     """
     def __init__(self, ts_cond):
-        self.opendss = OpenDSSCOM('E:/IEEE_123_FLISR_Case/Master.dss')  # Create a distribution system model
+        self.opendss = OpenDSSCOM(12, 'E:\pg_fisr\IEEE_123_FLISR_Case\Master.dss')  # Create a distribution system model
         self.states = self.get_states()  # States depending on number of total and tie switches
         self.switch_states_dict = self.get_switch_states_dict() # todo revisar si mejor busqueda binaria
-        self.failures_dict = self.get_failures_dict()
         self.num_switch_states = 2**self.opendss.num_switches
         self.num_states = self.num_switch_states*self.opendss.num_lines
-        self.rand_generator = np.random.RandomState(412)
         self.failure = None
         reward = None
         observation = None
@@ -61,7 +59,7 @@ class FisrEnvironment(BaseEnvironment):
         ss_dict = dict(zip(ss_list, range(len(ss_list))))
         return ss_dict
 
-    def get_failures_dict(self):
+    def get_failures_dict(self): # todo borrar
         lines = self.opendss.lines
         return dict(zip(lines, range(self.opendss.num_lines)))
 
@@ -87,8 +85,6 @@ class FisrEnvironment(BaseEnvironment):
     # -----------------------------------------------------------------------------------
     def env_init(self, env_info={}):
         self.reward_obs_term = [0.0, None, False]
-        self.failure = self.rand_generator.randint(self.opendss.num_lines)
-        self.opendss.fail_line(self.failure)
 
     def env_start(self):  # checked
         """The first method called when the experiment starts, called before the
@@ -96,15 +92,13 @@ class FisrEnvironment(BaseEnvironment):
         :return: (list) the first observation from the environment
         """
         # Start system data (past in env_step::endcondition)
-        #self.system.sys_start()
+        #self.opendss.com_init()
         self.current_state = self.get_observation()  # Find and update self.current_state
         # update possible actions
         self.actions = self.get_actions()
         self.reward_obs_term[1] = self.current_state
-        # print(self.current_state,'-------------------')
-        # offline = self.system.nodes_isolated()
-        # loop = self.system.nodes_loop()
-        # print(self.current_state, offline, loop)
+        #print(self.current_state,'-------------------')
+
         return self.reward_obs_term[1]
 
     def env_step(self, switch):
@@ -127,10 +121,10 @@ class FisrEnvironment(BaseEnvironment):
         # get obs
         self.current_state = self.get_observation()  # update current state
         te2 = time.time()
-        #print(self.system.get_voltage())
+        #print(self.opendss.get_voltage_magpu())
         # update possible actions
         self.actions = self.get_actions()
-        #print(self.actions)
+        #print(self.current_state, switch, action, self.actions)
         te3 = time.time()
         # restrictions
         num_loads_offline = self.opendss.get_num_isolated_loads()
@@ -141,7 +135,7 @@ class FisrEnvironment(BaseEnvironment):
 
         if num_loads_offline !=0: reward -= 100 * num_loads_offline
         if num_loops != 0: reward -= 100
-        if voltages_out_of_limit != 0: reward -= 10 * voltages_out_of_limit
+        if voltages_out_of_limit != 0: reward -= 100
         te4 = time.time()
         #print(f'ga:{te3-te2}; cs: {te2-te1}; os: {te1-te0}; total:{te3-te0}')      
 
@@ -149,7 +143,7 @@ class FisrEnvironment(BaseEnvironment):
         if self.time_step == self.ts_cond:
             is_terminal = True
             self.time_step = 0
-            self.opendss.failure_restoration(self.failure)
+            self.opendss.com_init()
 
         # if offline == 1 and loop == 0 and self.get_voltage_limits() == 0:
         #    is_terminal = True

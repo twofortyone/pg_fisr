@@ -7,8 +7,9 @@ import sys
 
 class OpenDSSCOM:
 
-    def __init__(self):
-        self.path = 'E:\opfi\IEEE_123_FLISR_Case\Master.dss'
+    def __init__(self, ties, path):
+        self.path = path
+        self.ties = ties
         sys.argv = ["makepy", "OpenDSSEngine.DSS"]
         makepy.main()
         self.DSSObj = win32com.client.Dispatch("OpenDSSEngine.DSS")
@@ -64,19 +65,18 @@ class OpenDSSCOM:
         return self.DSSCircuit.AllBusNames
 
     def get_switches(self):
-        return self.DSSReclosers.AllNames
+        return self.DSSLines.AllNames[-self.ties:]
 
     def get_switches_status(self):
-        self.DSSReclosers.First
         status = []
-        for i in range(self.num_switches):
+        for switch in self.switches:
+            self.DSSCircuit.SetActiveElement(f'Line.{switch}')
             boolean = self.DSSCktElement.IsOpen(0, 0)
             if boolean == True:
                 value = 0
             elif boolean == False:
                 value = 1
             status.append(value)
-            self.DSSReclosers.Next
         return status
 
     def get_num_isolated_loads(self):
@@ -140,50 +140,24 @@ class OpenDSSCOM:
         self.DSSSolution.Solve()
 
     def fail_line(self, line):
-        self.DSSCircuit.SetActiveElement(f'Line.{line}')
+        self.DSSCircuit.SetActiveElement(f'Line.{self.lines[line]}')
         self.DSSCktElement.Open(0, 0)
 
     def failure_restoration(self, line):
-        self.DSSCircuit.SetActiveElement(f'Line.{line}')
+        self.DSSCircuit.SetActiveElement(f'Line.{self.lines[line]}')
         self.DSSCktElement.Close(0, 0)
 
     def open_switch(self, switch):
         """Open switch in both terminals
-        :param line: (name str)
+        :param switch: (int)
         """
-        self.DSSCircuit.SetActiveElement(f'Line.{switch}')
+        self.DSSCircuit.SetActiveElement(f'Line.{self.switches[switch]}')
         self.DSSCktElement.Open(0, 0)
 
     def close_switch(self, switch):
         """Close switch in both terminals
-        :param line: (name str)
+        :param switch: (int)
         """
-        self.DSSCircuit.SetActiveElement(f'Line.{switch}')
+        self.DSSCircuit.SetActiveElement(f'Line.{self.switches[switch]}')
         self.DSSCktElement.Close(0, 0)
 
-
-opendss = OpenDSSCOM()
-
-# Todo: borrar 
-def get_conn(self):
-    """Get line connection scheme between nodes
-    :return conn: (tuple 2d) line connections
-    """
-    conn = []
-    for x in self.lines:
-        self.set_active_line(x)
-        nodes = self.get_conn_element()
-        aux = []
-        for y in nodes:
-            aux.append(y.split('.')[0])
-        conn.append(tuple(aux))
-    return tuple(conn)
-
-
-def get_conn_element(self):
-    """Get node connection by active element
-    :return: (tuple) element connection
-    """
-    return self.com.get_ae_conn()
-
-#opendss = OpenDSSCOM('E:\opfi\IEEE_123_FLISR_Case\Hola.dss')

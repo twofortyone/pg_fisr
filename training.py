@@ -11,7 +11,7 @@ name = 'IEEE 33 BUS Test Case'
 # ##########################################################
 # Update before use
 ties = 12
-time_steps = 1000
+time_steps = 700
 t_epi = 100
 t_runs = 1
 # ----------------------------------------------------------
@@ -32,7 +32,7 @@ t4 = time.time()
 #print(f'{t1-t0}; et: {t3-t2}; at: {t0-t3}; training: {t4-t1}')
 
 # System info
-num_nodes = env.opendss.get_buses
+num_nodes = env.opendss.buses
 num_switches = env.opendss.num_switches
 data_system = [name, num_nodes, num_switches, ties]
 ds_label = ['Name:', 'Nodes:', 'Switches:', 'Tie:']
@@ -46,23 +46,20 @@ dt_label = ['States:', 'Actions:', 'Episodes:', 'Runs:', 'Time elapsed:']
 
 # q values info
 q_values = training.agent.q
-states = [str(x) for x in training.env.states]
-actions = [str(x) for x in training.env.actions]
+actions = training.env.opendss.switches
 
 # -------------------------------------------
 # Report
 # -------------------------------------------
 # System data frame
 s_df = pd.DataFrame(data_system, ds_label, ['Values'])
-
 # Training data frame
 t_df = pd.DataFrame(data_training, dt_label, ['Values'])
-
 # Report generation
 report = Report('training.html', s_df, t_df, report_folder)
 report.make_report()
 
 # Save q_values
-#df_q = pd.DataFrame(data=agent.q, columns=actions)
-#df_q.to_feather(f'E:/q_{ties}ties_{t_runs}r_{t_epi}e_{time_steps}ts_nr_woopendss.ftr')
+df_q = pd.DataFrame(data=agent.q, columns=actions)
+df_q.to_feather(f'E:/q_{ties}ties_{t_runs}r_{t_epi}e_{time_steps}ts_nr_woopendss.ftr')
 

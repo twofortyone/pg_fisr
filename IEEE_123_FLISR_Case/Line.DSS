@@ -9,7 +9,7 @@ New "Line.l7" phases=3 bus1=7.1.2.3 bus2=8.1.2.3 linecode=1 Seasons=1 Ratings=[4
 New "Line.l8" phases=1 bus1=8.2 bus2=12.2 linecode=10 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.225 units=kft
 New "Line.l9" phases=1 bus1=8.1 bus2=9.1 linecode=9 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.225 units=kft
 New "Line.l10" phases=3 bus1=8.1.2.3 bus2=13.1.2.3 linecode=1 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.3 units=kft
-New "Line.l11" phases=1 bus1=9r.1 bus2=14.1 linecode=9 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.425 units=kft
+New "Line.l11" phases=1 bus1=9.1 bus2=14.1 linecode=9 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.425 units=kft
 New "Line.l12" phases=1 bus1=13.3 bus2=34.3 linecode=11 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.15 units=kft
 New "Line.l13" phases=3 bus1=13.1.2.3 bus2=18.1.2.3 linecode=2 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.825 units=kft
 New "Line.l14" phases=1 bus1=14.1 bus2=11.1 linecode=9 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.25 units=kft
@@ -23,7 +23,7 @@ New "Line.l21" phases=1 bus1=21.2 bus2=22.2 linecode=10 Seasons=1 Ratings=[400,]
 New "Line.l22" phases=3 bus1=21.1.2.3 bus2=n21.1.2.3 linecode=2 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.25 units=kft
 New "Line.l23" phases=1 bus1=23.3 bus2=24.3 linecode=11 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.55 units=kft
 New "Line.l24" phases=3 bus1=23.1.2.3 bus2=25.1.2.3 linecode=2 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.275 units=kft
-New "Line.l25" phases=2 bus1=25r.1.3 bus2=26.1.3 linecode=7 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.35 units=kft
+New "Line.l25" phases=2 bus1=25.1.3 bus2=26.1.3 linecode=7 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.35 units=kft
 New "Line.l26" phases=3 bus1=25.1.2.3 bus2=28.1.2.3 linecode=2 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.2 units=kft
 New "Line.l27" phases=2 bus1=26.1.3 bus2=27.1.3 linecode=7 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.275 units=kft
 New "Line.l28" phases=1 bus1=26.3 bus2=31.3 linecode=11 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.225 units=kft
@@ -114,8 +114,8 @@ New "Line.l112" phases=1 bus1=112.1 bus2=113.1 linecode=9 Seasons=1 Ratings=[400
 New "Line.l113" phases=1 bus1=113.1 bus2=114.1 linecode=9 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.325 units=kft
 New "Line.l114" phases=3 bus1=135.1.2.3 bus2=35.1.2.3 linecode=4 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.375 units=kft
 New "Line.l116" phases=3 bus1=152.1.2.3 bus2=52.1.2.3 linecode=1 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.4 units=kft
-New "Line.l117" phases=3 bus1=160r.1.2.3 bus2=67.1.2.3 linecode=6 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.35 units=kft
-New "Line.sw1" phases=3 bus1=150r bus2=149 Switch=True r1=0.001 r0=0.001 x1=0 x0=0 C1=0 C0=0 length=0.001
+New "Line.l117" phases=3 bus1=160.1.2.3 bus2=67.1.2.3 linecode=6 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.35 units=kft
+New "Line.sw1" phases=3 bus1=150 bus2=149 Switch=True r1=0.001 r0=0.001 x1=0 x0=0 C1=0 C0=0 length=0.001
 New "Line.sw2" phases=3 bus1=13 bus2=152 Switch=True r1=0.001 r0=0.001 x1=0 x0=0 C1=0 C0=0 length=0.001
 New "Line.sw3" phases=3 bus1=18 bus2=135 Switch=True r1=0.001 r0=0.001 x1=0 x0=0 C1=0 C0=0 length=0.001
 New "Line.sw4" phases=3 bus1=60 bus2=160 Switch=True r1=0.001 r0=0.001 x1=0 x0=0 C1=0 C0=0 length=0.001
@@ -127,3 +127,4 @@ New "Line.rcl_5" phases=3 bus1=sup_1.1.2.3 bus2=48.1.2.3 Switch=True
 New "Line.sw9" phases=3 bus1=151.1.2.3 bus2=250.1.2.3 Switch=True
 New "Line.sw10" phases=3 bus1=64.1.2.3 bus2=300.1.2.3 Switch=True
 New "Line.sw11" phases=3 bus1=76.1.2.3 bus2=n86.1.2.3 Switch=True
+

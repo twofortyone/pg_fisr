@@ -46,7 +46,16 @@ class Training:
             tr7= time.time()
             for episode in trange(num_episodes):
                 if episode < num_episodes: # - 10:
-                    rl_glue.rl_episode(0)
+                    num_failures = rl_glue.environment.opendss.num_lines
+                    for i in range(num_failures):
+                        rl_glue.environment.failure = i
+                        rl_glue.environment.opendss.fail_line(i)
+                        rl_glue.environment.opendss.solve()
+                        rl_glue.rl_episode(0)
+                        #print(f'falla{i}')
+                        rl_glue.environment.opendss.failure_restoration(i)
+                        rl_glue.environment.opendss.solve()
+
                 else:
                     state, action = rl_glue.rl_start()
                     state_visits[state] += 1

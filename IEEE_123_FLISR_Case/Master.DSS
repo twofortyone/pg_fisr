@@ -10,8 +10,8 @@ Redirect TCC_Curve.DSS
 Redirect Spectrum.DSS
 Redirect Line.DSS
 Redirect Load.DSS
-Redirect Transformer.DSS
-Redirect RegControl.DSS
+!Redirect Transformer.DSS
+!Redirect RegControl.DSS
 Redirect Capacitor.DSS
 !Redirect Recloser.DSS
 MakeBusList
@@ -23,4 +23,4 @@ Open Line.sw4 0 0
 Open Line.sw9 0 0 
 Open Line.sw10 0 0 
 solve
-show voltages ln nodes
+!show voltages ln nodes
