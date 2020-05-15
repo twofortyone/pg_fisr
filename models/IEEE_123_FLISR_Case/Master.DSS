@@ -17,10 +17,3 @@ Redirect Capacitor.DSS
 MakeBusList
 Redirect BusVoltageBases.dss  ! set voltage bases
 Buscoords buscoords.dss
-Open Line.sw2 0 0 
-Open Line.sw3 0 0 
-Open Line.sw4 0 0
-Open Line.sw9 0 0 
-Open Line.sw10 0 0 
-solve
-!show voltages ln nodes

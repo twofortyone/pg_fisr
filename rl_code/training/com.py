@@ -7,9 +7,8 @@ import sys
 
 class OpenDSSCOM:
 
-    def __init__(self, ties, path):
+    def __init__(self, path):
         self.path = path
-        self.ties = ties
         sys.argv = ["makepy", "OpenDSSEngine.DSS"]
         makepy.main()
         self.DSSObj = win32com.client.Dispatch("OpenDSSEngine.DSS")
@@ -36,15 +35,29 @@ class OpenDSSCOM:
         self.DSSText.Command = 'compile ' + self.path
 
         # Variables
-        self.lines = self.get_lines()
-        self.buses = self.get_buses()
+        # Note: Inicialization order matters for swithes and lines
         self.switches = self.get_switches()
+        self.lines = self.get_lines()
+        # --------------------------------------------------------
+        self.buses = self.get_buses()
         self.num_lines = len(self.lines)
         self.num_switches = len(self.switches)
+        self.start_status = np.asarray([1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1])
+        self.switches_init()
 
     def com_init(self):
         self.send_command('ClearAll')
         self.DSSText.Command = 'compile ' + self.path
+        self.switches_init()
+
+    def switches_init(self):
+        # Switch initialization
+        status = np.asarray(self.get_switches_status())
+        positions = np.where(self.start_status != status)[0]
+        for pos in positions:
+            if self.start_status[pos] == 1: self.close_switch(pos)
+            else: self.open_switch(pos)
+        return self.get_switches_status()
 
     # -----------------------------------------
     # Getters
@@ -65,7 +78,13 @@ class OpenDSSCOM:
         return self.DSSCircuit.AllBusNames
 
     def get_switches(self):
-        return self.DSSLines.AllNames[-self.ties:]
+        lines = self.DSSLines.AllNames
+        switches = []
+        for line in lines:
+            self.DSSText.Command = f'? Line.{line}.switch'
+            boolean = self.DSSText.Result
+            if boolean == 'True': switches.append(line)
+        return switches
 
     def get_switches_status(self):
         status = []
@@ -159,4 +178,3 @@ class OpenDSSCOM:
         """
         self.DSSCircuit.SetActiveElement(f'Line.{self.switches[switch]}')
         self.DSSCktElement.Close(0, 0)
-

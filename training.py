@@ -14,12 +14,13 @@ ties = 12
 time_steps = 10000
 t_epi = 50
 t_runs = 1
+v_ftr = 1  # 1 if voltages are simulated, 0 otherwise
 # ----------------------------------------------------------
-path = 'E:\pg_fisr\IEEE_123_FLISR_Case\Master.dss'
+path = 'E:\pg_fisr\models\IEEE_123_FLISR_Case\Master.dss'
 report_folder = "E:/pg_fisr/report/"
 # ##########################################################
 t2 = time.time()
-env = FisrEnvironment(path, ties, time_steps)
+env = FisrEnvironment(path, time_steps, v_ftr)
 t3 = time.time()
 agent = QLearningAgent(1)
 # ------------------------------------------
@@ -62,5 +63,5 @@ report.make_report()
 
 # Save q_values
 df_q = pd.DataFrame(data=agent.q, columns=actions)
-df_q.to_feather(f'E:/q_{ties}ties_{t_runs}r_{t_epi}e_{time_steps}ts.ftr')
+df_q.to_feather(f'E:/q_{ties}ties_{t_runs}r_{t_epi}e_{time_steps}ts_simulated.ftr')
 

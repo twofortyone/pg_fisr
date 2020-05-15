@@ -1,5 +1,6 @@
 from rl_bases.environment import BaseEnvironment
 from rl_code.training.com import OpenDSSCOM
+import pandas as pd
 from itertools import product
 import numpy as np
 import time
@@ -11,8 +12,8 @@ class FisrEnvironment(BaseEnvironment):
         env_init, env_start, env_step, env_cleanup, and env_message are required
         methods.
     """
-    def __init__(self, path, ties, ts_cond):
-        self.opendss = OpenDSSCOM(ties, path)  # Create a distribution system model
+    def __init__(self, path, ts_cond, v_ftr):
+        self.opendss = OpenDSSCOM(path)  # Create a distribution system model
         self.states = self.get_states()  # States depending on number of total and tie switches
         self.switch_states_dict = self.get_switch_states_dict() # todo revisar si mejor busqueda binaria
         self.num_switch_states = 2**self.opendss.num_switches
@@ -27,7 +28,9 @@ class FisrEnvironment(BaseEnvironment):
         self.actions = None
         self.num_actions = self.opendss.num_switches
         self.ts_cond = ts_cond
-
+        self.v_vtr = v_ftr
+        if v_ftr== 1:
+            self.voltages = np.asarray(pd.read_feather('E:/123bus_voltages.ftr'))
     # -----------------------------------------------------------------------------------
     # Getters
     # -----------------------------------------------------------------------------------
@@ -37,11 +40,15 @@ class FisrEnvironment(BaseEnvironment):
         num_states = (2**num_switches)*num_lines
         return np.arange(num_states)
 
-    def get_voltage_limits(self):  # checked
+    def get_voltage_limits(self, state):  # checked
         """Number of nodes out of limits
         :return: number of nodes out of limits
         """
-        v_aux = self.opendss.get_voltage_magpu()
+        v_aux = None
+        if self.v_vtr ==1:
+            v_aux = self.voltages[:, state]
+        else:
+            v_aux = self.opendss.get_voltage_magpu()
         v_aux1 = v_aux[np.where(v_aux < 0.9)]
         v_aux2 = v_aux[np.where(v_aux > 1.05)]
         return len(v_aux1) + len(v_aux2)
@@ -102,14 +109,14 @@ class FisrEnvironment(BaseEnvironment):
         """
         self.time_step += 1
         #reward = -1
-        # reward = 0
+        reward = 0
         is_terminal = False
         action = self.actions[switch]
         # open/close switches
         te0 = time.time()
         if action==1: self.opendss.close_switch(switch)
         elif action==0: self.opendss.open_switch(switch)
-        self.opendss.solve()
+        if self.v_vtr ==0: self.opendss.solve()
         te1 = time.time()
         # get obs
         self.current_state = self.get_observation()  # update current state
@@ -122,7 +129,7 @@ class FisrEnvironment(BaseEnvironment):
         # restrictions
         num_loads_offline = self.opendss.get_num_isolated_loads()
         num_loops = self.opendss.get_num_loops()
-        voltages_out_of_limit = self.get_voltage_limits()
+        voltages_out_of_limit = self.get_voltage_limits(self.current_state)
         # nods = self.system.system_data.get_switches_names(self.states[self.current_state].tolist())
         # print(self.current_state, offline, loop, nods)
 
