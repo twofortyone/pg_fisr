@@ -1,0 +1,6 @@
+New "Recloser.sw1" GroundDelayed=tlink GroundFast=tlink MonitoredObj=line.sw1 SwitchedObj=line.sw1 GroundTrip=780.000000 PhaseTrip=780.000000 NumFast=3 Action=Close
+New "Recloser.sw2" GroundDelayed=tlink GroundFast=tlink MonitoredObj=line.sw2 SwitchedObj=line.sw2 GroundTrip=380.000000 PhaseTrip=380.000000 Action=Close
+New "Recloser.sw3" GroundDelayed=tlink GroundFast=tlink MonitoredObj=line.sw3 SwitchedObj=line.sw3 PhaseTrip=180.000000 GroundTrip=180.000000 Action=Open
+New "Recloser.sw4" GroundDelayed=tlink GroundFast=tlink MonitoredObj=line.sw4 SwitchedObj=line.sw4 GroundTrip=320.000000 PhaseTrip=320.000000 Action=Close
+New "Recloser.sw5" GroundDelayed=tlink GroundFast=tlink MonitoredObj=line.sw5 SwitchedObj=line.sw5 GroundTrip=180.000000 PhaseTrip=180.000000 Action=Close
+New "Recloser.sw6" GroundDelayed=tlink GroundFast=tlink MonitoredObj=line.sw6 SwitchedObj=line.sw6 GroundTrip=150.000000 PhaseTrip=150.000000 Action=Open

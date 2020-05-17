@@ -1,6 +1,7 @@
 from rl_code.production.fisr_env_pro import FisrEnvironment
 from rl_code.fisr_agent_q import QLearningAgent
 from rl_code.production.pclass import Production
+import numpy as np
 import pandas as pd
 from report.pro_report import Report
 from tqdm import tqdm, trange
@@ -9,8 +10,8 @@ import time
 # ##########################################################
 # Update before use
 ties = 12
-time_steps = 700
-t_epi = 100
+time_steps = 10000
+t_epi = 50
 t_runs = 1
 # ----------------------------------------------------------
 report_folder = "E:/pg_fisr/report/"
@@ -22,10 +23,26 @@ num_switches = env.opendss_g.num_switches
 num_lines = env.opendss_g.num_lines
 
 # q values info
-q = pd.read_feather(f'E:/q_{ties}ties_{t_runs}r_{t_epi}e_{time_steps}ts_intento1.ftr')
+q = pd.read_feather(f'E:/q_{ties}ties_{t_runs}r_{t_epi}e_{time_steps}ts_simulated.ftr')
 #q = pd.read_feather('E:/q_3nuevo.ftr')
 
-q_values = q.to_numpy()
+q_values_aux = q.to_numpy()
+q_values = np.zeros(q_values_aux.shape)
+q_values[:,0] = q_values_aux[:,5]
+q_values[:,1] = q_values_aux[:,7]
+q_values[:,2] = q_values_aux[:,6]
+q_values[:,3] = q_values_aux[:,8]
+q_values[:,4] = q_values_aux[:,0]
+q_values[:,5] = q_values_aux[:,1]
+q_values[:,6] = q_values_aux[:,2]
+q_values[:,7] = q_values_aux[:,3]
+q_values[:,8] = q_values_aux[:,4]
+q_values[:,9] = q_values_aux[:,9]
+q_values[:,10] = q_values_aux[:,10]
+q_values[:,11] = q_values_aux[:,11]
+
+#q_values = q.to_numpy()
+
 
 # -------------------------------------------
 # Production

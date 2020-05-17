@@ -123,11 +123,11 @@ class FisrEnvironment(BaseEnvironment):
         if voltages_out_of_limit != 0: reward -= 10 * voltages_out_of_limit      
 
         # Todo rest: if offline == 1 and loop == 0 and self.get_voltage_limits() == 0:
-        #if self.get_voltage_limits() == 0:
-        #    is_terminal = True
-        #    self.opendss_g.openddsg_init()
-        #elif self.time_step == 100:
-        if self.time_step == 1:
+        if self.get_voltage_limits() <= 1:
+            is_terminal = True
+            self.opendss_g.openddsg_init()
+        elif self.time_step == 100:
+        #if self.time_step == 1:
             is_terminal = True
             self.time_step = 0
             print(f' cs: {self.current_state}')

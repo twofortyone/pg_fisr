@@ -11,8 +11,8 @@ name = 'IEEE 33 BUS Test Case'
 # ##########################################################
 # Update before use
 ties = 12
-time_steps = 10000
-t_epi = 50
+time_steps = 100
+t_epi = 100
 t_runs = 1
 v_ftr = 1  # 1 if voltages are simulated, 0 otherwise
 # ----------------------------------------------------------
@@ -63,5 +63,5 @@ report.make_report()
 
 # Save q_values
 df_q = pd.DataFrame(data=agent.q, columns=actions)
-df_q.to_feather(f'E:/q_{ties}ties_{t_runs}r_{t_epi}e_{time_steps}ts_simulated.ftr')
+df_q.to_feather(f'E:/q_{ties}ties_{t_runs}r_{t_epi}e_{time_steps}ts_simulated_2.ftr')
 

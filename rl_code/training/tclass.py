@@ -42,10 +42,10 @@ class Training:
 
             state_visits = np.zeros(self.num_states)
             tr7= time.time()
-            for episode in range(num_episodes):
+            for episode in trange(num_episodes):
                 if episode < num_episodes: # - 10:
                     num_failures = rl_glue.environment.opendss.num_lines
-                    for i in trange(num_failures):
+                    for i in range(num_failures):
                         rl_glue.environment.failure = i
                         rl_glue.environment.opendss.fail_line(i)
                         rl_glue.environment.opendss.solve()

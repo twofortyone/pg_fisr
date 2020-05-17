@@ -116,8 +116,9 @@ class FisrEnvironment(BaseEnvironment):
         te0 = time.time()
         if action==1: self.opendss.close_switch(switch)
         elif action==0: self.opendss.open_switch(switch)
-        if self.v_vtr ==0: self.opendss.solve()
-        te1 = time.time()
+        self.opendss.solve()
+        #if self.v_vtr ==0: self.opendss.solve()
+        #te1 = time.time()
         # get obs
         self.current_state = self.get_observation()  # update current state
         te2 = time.time()
@@ -162,3 +163,5 @@ class FisrEnvironment(BaseEnvironment):
         else:
             return "I don't know how to respond to your message"
 
+
+env = FisrEnvironment(('E:/pg_fisr/models/IEEE_123_FLISR_Case/Master.dss'), 1, 1)

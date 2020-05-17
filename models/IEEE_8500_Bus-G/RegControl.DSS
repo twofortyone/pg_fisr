@@ -1,0 +1,12 @@
+New "RegControl.feeder_rega" transformer=FEEDER_REGA winding=2 tapwinding=2 vreg=126.5 ptratio=60 band=2
+New "RegControl.feeder_regb" transformer=FEEDER_REGB winding=2 tapwinding=2 vreg=126.5 ptratio=60 band=2
+New "RegControl.feeder_regc" transformer=FEEDER_REGC winding=2 tapwinding=2 vreg=126.5 ptratio=60 band=2
+New "RegControl.vreg2_a" transformer=VREG2_A winding=2 tapwinding=2 vreg=125 ptratio=60 band=2
+New "RegControl.vreg2_b" transformer=VREG2_B winding=2 tapwinding=2 vreg=125 ptratio=60 band=2
+New "RegControl.vreg2_c" transformer=VREG2_C winding=2 tapwinding=2 vreg=125 ptratio=60 band=2
+New "RegControl.vreg3_a" transformer=VREG3_A winding=2 tapwinding=2 vreg=125 ptratio=60 band=2
+New "RegControl.vreg3_b" transformer=VREG3_B winding=2 tapwinding=2 vreg=125 ptratio=60 band=2
+New "RegControl.vreg3_c" transformer=VREG3_C winding=2 tapwinding=2 vreg=125 ptratio=60 band=2
+New "RegControl.vreg4_a" transformer=VREG4_A winding=2 tapwinding=2 vreg=125 ptratio=60 band=2
+New "RegControl.vreg4_b" transformer=VREG4_B winding=2 tapwinding=2 vreg=125 ptratio=60 band=2
+New "RegControl.vreg4_c" transformer=VREG4_C winding=2 tapwinding=2 vreg=125 ptratio=60 band=2

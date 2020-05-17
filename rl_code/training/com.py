@@ -33,6 +33,7 @@ class OpenDSSCOM:
         else:
             print("Unable to start the OpenDSS Engine")
         self.DSSText.Command = 'compile ' + self.path
+        self.solve()
 
         # Variables
         # Note: Inicialization order matters for swithes and lines
@@ -40,15 +41,19 @@ class OpenDSSCOM:
         self.lines = self.get_lines()
         # --------------------------------------------------------
         self.buses = self.get_buses()
+        self.loads = self.get_loads()
         self.num_lines = len(self.lines)
         self.num_switches = len(self.switches)
-        self.start_status = np.asarray([1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1])
+        self.num_loads = len(self.loads)
+        self.start_status = np.asarray([1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1])
         self.switches_init()
+        self.solve()
 
     def com_init(self):
         self.send_command('ClearAll')
         self.DSSText.Command = 'compile ' + self.path
         self.switches_init()
+        self.solve()
 
     def switches_init(self):
         # Switch initialization
@@ -86,6 +91,19 @@ class OpenDSSCOM:
             if boolean == 'True': switches.append(line)
         return switches
 
+    def get_loads(self):
+        return self.DSSLoads.AllNames
+
+    def get_loads_status(self):
+        status = []
+        self.DSSLoads.First
+        for i in range(self.num_loads):
+            powers = self.DSSCktElement.Powers.count(0)
+            if powers == 4: status.append(0)
+            else: status.append(1)
+            self.DSSLoads.Next
+        return status
+
     def get_switches_status(self):
         status = []
         for switch in self.switches:
@@ -99,7 +117,27 @@ class OpenDSSCOM:
         return status
 
     def get_num_isolated_loads(self):
-        return self.DSSTopology.NumIsolatedLoads
+        return self.get_loads_status().count(0)
+
+    def get_currents(self):
+        num_lines = self.DSSLines.Count
+        currents = []
+        self.DSSLines.First
+        for i in range(num_lines):
+            phases = self.DSSLines.Phases
+            current = self.DSSCktElement.CurrentsMagAng
+            if phases==3:
+                currents.append(current[0])
+                currents.append(current[2])
+                currents.append(current[4])
+            if phases==2:
+                currents.append(current[0])
+                currents.append(current[2])
+            if phases ==1:
+                currents.append(current[0])
+            self.DSSLines.Next
+        return currents
+
 
     def get_num_loops(self):
         return self.DSSTopology.NumLoops
@@ -178,3 +216,7 @@ class OpenDSSCOM:
         """
         self.DSSCircuit.SetActiveElement(f'Line.{self.switches[switch]}')
         self.DSSCktElement.Close(0, 0)
+
+
+#com = OpenDSSCOM('E:/pg_fisr/models/IEEE_123_FLISR_Case/Master.dss')
+#com.get_currents()
