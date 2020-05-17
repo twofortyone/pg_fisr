@@ -1,3 +1,4 @@
+from rl_code.training.com import OpenDSSCOM
 from rl_code.training.fisr_env import FisrEnvironment
 from rl_code.fisr_agent_q import QLearningAgent
 from rl_code.training.tclass import Training
@@ -6,21 +7,17 @@ from report.train_report import Report
 import time
 
 
-name = 'IEEE 33 BUS Test Case'
-
 # ##########################################################
 # Update before use
-ties = 12
-time_steps = 100
 t_epi = 100
 t_runs = 1
-v_ftr = 1  # 1 if voltages are simulated, 0 otherwise
 # ----------------------------------------------------------
-path = 'E:\pg_fisr\models\IEEE_123_FLISR_Case\Master.dss'
 report_folder = "E:/pg_fisr/report/"
 # ##########################################################
 t2 = time.time()
-env = FisrEnvironment(path, time_steps, v_ftr)
+com = OpenDSSCOM('E:\pg_fisr\models\IEEE_123_FLISR_Case\Master.dss')
+circuit_name = com.DSSCircuit.Name
+env = FisrEnvironment(com)
 t3 = time.time()
 agent = QLearningAgent(1)
 # ------------------------------------------
@@ -36,7 +33,7 @@ t4 = time.time()
 # System info
 num_nodes = len(env.opendss.buses)
 num_switches = env.opendss.num_switches
-data_system = [name, num_nodes, num_switches]
+data_system = [circuit_name, num_nodes, num_switches]
 ds_label = ['Name:', 'Nodes:', 'Switches:']
 
 # Training info
@@ -63,5 +60,5 @@ report.make_report()
 
 # Save q_values
 df_q = pd.DataFrame(data=agent.q, columns=actions)
-df_q.to_feather(f'E:/q_{ties}ties_{t_runs}r_{t_epi}e_{time_steps}ts_simulated_2.ftr')
+df_q.to_feather(f'E:/q_{circuit_name}_{t_runs}r_{t_epi}e.ftr')
 
