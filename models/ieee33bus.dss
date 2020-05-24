@@ -40,8 +40,8 @@ New Line.L31   Phases=3  Bus1=N30.1.2.3  Bus2=N31.1.2.3    R1=0.3105  X1=0.3619
 New Line.L32   Phases=3  Bus1=N31.1.2.3  Bus2=N32.1.2.3    R1=0.3410  X1=0.5302
 
 !values for r1 and x1 for S33 - S37 are waiting confirmation
-!New Line.S33   Phases=3  Bus1=N7.1.2.3  Bus2=N20.1.2.3     R1=2  X1=2 Switch=True
-!New Line.S34   Phases=3  Bus1=N14.1.2.3    Bus2=N8.1.2.3   R1=2  X1=2 Switch=True
+New Line.S33   Phases=3  Bus1=N7.1.2.3  Bus2=N20.1.2.3     R1=2  X1=2 Switch=True
+New Line.S34   Phases=3  Bus1=N14.1.2.3    Bus2=N8.1.2.3   R1=2  X1=2 Switch=True
 New Line.S35   Phases=3  Bus1=N11.1.2.3  Bus2=N21.1.2.3   R1=2 X1=2 Switch=True
 New Line.S36   Phases=3  Bus1=N17.1.2.3  Bus2=N32.1.2.3   R1=0.5  X1=0.5 Switch=True
 New Line.S37   Phases=3  Bus1=N28.1.2.3  Bus2=N24.1.2.3   R1=0.5  X1=0.5 Switch=True

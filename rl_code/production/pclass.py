@@ -20,7 +20,7 @@ class Production:
         self.num_states = self.env.num_states
 
         self.agent_info = {'num_actions': num_actions, 'num_states': self.num_states, 'epsilon': 0.1,
-                           'discount': 1.0, 'step_size': 0.8, 'q_values': q_values}
+                           'discount': 0.1, 'step_size': 0.8, 'q_values': q_values}
 
         self.env_info = {}
         self.all_reward_sums = []
