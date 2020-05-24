@@ -12,7 +12,7 @@ class FisrEnvironment(BaseEnvironment):
         env_init, env_start, env_step, env_cleanup, and env_message are required
         methods.
     """
-    def __init__(self, OpenDSSCOM):
+    def __init__(self, OpenDSSCOM, voltages, iso_loads, term_states):
         self.opendss = OpenDSSCOM  # Create a distribution system model
         self.states = self.get_states()  # States depending on number of total and tie switches
         self.switch_states_dict = self.get_switch_states_dict() # todo revisar si mejor busqueda binaria
@@ -28,9 +28,9 @@ class FisrEnvironment(BaseEnvironment):
         self.actions = None
         self.num_actions = self.opendss.num_switches
 
-        self.voltages = voltages = pd.read_feather('E:/123bus_voltages_2020-05-16.ftr').to_numpy()
-        self.isolated_loads = num_isolated_loads = pd.read_feather('E:/123bus_isolated_loads_2020-05-16.ftr').to_numpy()
-        self.terminal_states= pd.read_feather('E:/ieee123bus_terminal_states_2020-05-16.ftr').to_numpy()
+        self.voltages = voltages
+        self.isolated_loads = iso_loads
+        self.terminal_states= term_states
     # -----------------------------------------------------------------------------------
     # Getters
     # -----------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ class FisrEnvironment(BaseEnvironment):
         """Number of nodes out of limits
         :return: number of nodes out of limits
         """
-        va = self.voltages[state]
+        va = np.asarray(self.voltages[state])
         violations = va[(va >= 0.95) & (va <= 1.05)]
         return violations.shape[0]
 
@@ -129,15 +129,16 @@ class FisrEnvironment(BaseEnvironment):
         # nods = self.system.system_data.get_switches_names(self.states[self.current_state].tolist())
         # print(self.current_state, offline, loop, nods)
 
-        if num_loads_offline !=0: reward -= 1 * int(num_loads_offline)
+        if num_loads_offline !=0: reward -= 10 * int(num_loads_offline)
         #if num_loops != 0: reward -= 100
-        if voltages_out_of_limit != 0: reward -= 1
+        if voltages_out_of_limit != 0: reward -= 10
         te4 = time.time()
         #print(f'ga:{te3-te2}; cs: {te2-te1}; os: {te1-te0}; total:{te3-te0}')
         # end condition
-        if self.current_state == self.terminal_states[self.failure]:
+        #if self.current_state == self.terminal_states[self.failure]:
+        if self.time_step ==1000:
             is_terminal = True
-            reward += 100
+            reward += 10
             self.time_step = 0
             self.opendss.com_init()
         self.reward_obs_term = [reward, self.current_state, is_terminal]
@@ -158,3 +159,16 @@ class FisrEnvironment(BaseEnvironment):
 
         else:
             return "I don't know how to respond to your message"
+
+    def save_system_data(self,path):
+        labels = ['num_lines', 'num_switches', 'num_loads', 'num_states', 'num_actions', 'num_qvalues']
+        nl = self.opendss.num_lines
+        nsw = self.opendss.num_switches
+        nlo = self.opendss.num_loads
+        ns = self.num_states
+        na = self.num_actions
+        nq = ns * na
+        data = [nl, nsw, nlo, ns, na, nq]
+        df = pd.DataFrame(data=data, columns=['data'], index= labels)
+        df.to_excel(path)
+        return [data, labels]

@@ -6,22 +6,10 @@ import datetime
 from rl_code.training.com import OpenDSSCOM
 
 
-def get_num_voltage_violations(va):
-    #va = np.asarray(voltages)
-    violations = va[(va >= 0.95) & (va <= 1.05)]
-    return violations.shape[0]
-
-
-def save_to_feather(circuit_name, data, name, num_columns):
-    date = datetime.date.today()
-    labels = [str(x) for x in range(num_columns)]
-    df_data = pd.DataFrame(data=data, columns=labels)
-    df_data.to_feather(f'E:/{circuit_name}bus_{name}_{date}.ftr')
-
-
 class DataSimulation:
-    def __init__(self, OpenDSSCOM):
+    def __init__(self, path, OpenDSSCOM):
         self.opendss = OpenDSSCOM
+        self.path = path
         self.circuit_name = self.opendss.DSSCircuit.Name
         num_switches = self.opendss.num_switches
         switch_state = [0, 1]
@@ -58,9 +46,9 @@ class DataSimulation:
                 currents.append(current)
             self.opendss.failure_restoration(line)  # restore current failure
         # Save data
-        save_to_feather(self.circuit_name, voltages, 'voltages', len(voltages[0]))
-        save_to_feather(self.circuit_name, currents, 'currents', len(currents[0]))
-        save_to_feather(self.circuit_name, num_isolated_loads, 'isolated_loads', 1)
+        save_to_feather(self.path, self.circuit_name, voltages, 'voltages', len(voltages[0]))
+        save_to_feather(self.path, self.circuit_name, currents, 'currents', len(currents[0]))
+        save_to_feather(self.path, self.circuit_name, num_isolated_loads, 'isolated_loads', 1)
         return [voltages, currents, num_isolated_loads]
 
     def get_terminal_states(self, nils, vs):
@@ -68,22 +56,22 @@ class DataSimulation:
         terminal_states = []
         prev_state = 0
         for line in trange(self.num_lines):
-            com.fail_line(line)  # failure current line
+            self.opendss.fail_line(line)  # failure current line
             terminal = None
             for switch_state in range(self.num_switch_states):
                 state = self.ss_arrray[switch_state, :]
                 positions = np.where(state != prev_state)[0]
                 for pos in positions:
                     if state[pos] == 1:
-                        com.close_switch(pos)
+                        self.opendss.close_switch(pos)
                     else:
-                        com.open_switch(pos)
+                        self.opendss.open_switch(pos)
 
                 current_state = line * self.num_switch_states + switch_state
                 prev_nil = nils[prev_state]
                 nil = nils[current_state]
-                prev_num_vv = get_num_voltage_violations(vs[prev_state])
-                num_vv = get_num_voltage_violations(vs[current_state])
+                prev_num_vv = get_num_voltage_violations(np.asarray(vs[prev_state]))
+                num_vv = get_num_voltage_violations(np.asarray(vs[current_state]))
                 if nil == prev_nil:
                     if num_vv < prev_num_vv:  # todo: add current limits and radiality constrains
                         terminal = current_state
@@ -93,17 +81,29 @@ class DataSimulation:
                     pass
                 prev_state = current_state
             terminal_states.append(terminal)
-        save_to_feather(self.circuit_name, terminal_states, 'terminal_states', 1)
+        save_to_feather(self.path, self.circuit_name, terminal_states, 'terminal_states', 1)
         return terminal_states
 
 
+def get_num_voltage_violations(va):
+    violations = va[(va >= 0.95) & (va <= 1.05)]
+    return violations.shape[0]
 
-com = OpenDSSCOM('E:\pg_fisr\models\IEEE_123_FLISR_Case\Master.dss')
-DS = DataSimulation(com)
-# voltages, currents, num_is = DS.get_data()
 
-voltages = pd.read_feather('E:/123bus_voltages_2020-05-16.ftr').to_numpy()
+def save_to_feather(path, circuit_name, data, name, num_columns):
+    date = datetime.date.today()
+    labels = [str(x) for x in range(num_columns)]
+    df_data = pd.DataFrame(data=data, columns=labels)
+    df_data.to_feather(f'{path}/{circuit_name}bus_{name}_{date}.ftr')
+
+
+#com = OpenDSSCOM('E:\pg_fisr\models\IEEE_123_FLISR_Case\Master.dss')
+#com = OpenDSSCOM('E:\pg_fisr\models\IEEE_8500_Bus-G\Master.DSS')
+#DS = DataSimulation(com)
+#voltages, currents, num_is = DS.get_data()
+
+#voltages = pd.read_feather('E:/123bus_voltages_2020-05-16.ftr').to_numpy()
 #currents = pd.read_feather('E:/123bus_currents_2020-05-16.ftr')
-num_isolated_loads = pd.read_feather('E:/123bus_isolated_loads_2020-05-16.ftr').to_numpy()
+#num_isolated_loads = pd.read_feather('E:/123bus_isolated_loads_2020-05-16.ftr').to_numpy()
 
-ts = DS.get_terminal_states(num_isolated_loads, voltages)
+#ts = DS.get_terminal_states(np.asarray(num_is), np.asarray(voltages))

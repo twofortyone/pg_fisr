@@ -1,0 +1,92 @@
+clearall
+New object=circuit.ieee37
+~ basekv=12.66 pu=1.00
+
+! Lines 
+New Line.L1     Phases=3  Bus1=sourcebus.1.2.3    Bus2=N1.1.2.3     R1=0.0922  X1=0.0470 
+New Line.L2     Phases=3  Bus1=N1.1.2.3    Bus2=N2.1.2.3     R1=0.4930  X1=0.2511
+New Line.L3     Phases=3  Bus1=N2.1.2.3    Bus2=N3.1.2.3     R1=0.3660  X1=0.1864
+New Line.L4     Phases=3  Bus1=N3.1.2.3    Bus2=N4.1.2.3     R1=0.3811  X1=0.1941
+New Line.L5     Phases=3  Bus1=N4.1.2.3    Bus2=N5.1.2.3     R1=0.8190  X1=0.7070
+New Line.L6     Phases=3  Bus1=N5.1.2.3    Bus2=N6.1.2.3     R1=0.1872  X1=0.6188
+New Line.L7     Phases=3  Bus1=N6.1.2.3    Bus2=N7.1.2.3     R1=1.7114  X1=1.2351
+New Line.L8     Phases=3  Bus1=N7.1.2.3    Bus2=N8.1.2.3     R1=1.0300  X1=0.7400
+New Line.L9     Phases=3  Bus1=N8.1.2.3    Bus2=N9.1.2.3     R1=1.0440  X1=0.7400
+New Line.L10   Phases=3  Bus1=N9.1.2.3    Bus2=N10.1.2.3    R1=0.1966  X1=0.0650
+New Line.L11   Phases=3  Bus1=N10.1.2.3  Bus2=N11.1.2.3    R1=0.3744  X1=0.1238
+New Line.L12   Phases=3  Bus1=N11.1.2.3  Bus2=N12.1.2.3    R1=1.4680  X1=1.1550
+New Line.L13   Phases=3  Bus1=N12.1.2.3  Bus2=N13.1.2.3    R1=0.5416  X1=0.7129
+New Line.L14   Phases=3  Bus1=N13.1.2.3  Bus2=N14.1.2.3    R1=0.5910  X1=0.5260
+New Line.L15   Phases=3  Bus1=N14.1.2.3  Bus2=N15.1.2.3    R1=0.7463  X1=0.5450
+New Line.L16   Phases=3  Bus1=N15.1.2.3  Bus2=N16.1.2.3    R1=1.2890  X1=1.7210
+New Line.L17   Phases=3  Bus1=N16.1.2.3  Bus2=N17.1.2.3    R1=0.7320  X1=0.5750
+
+New Line.L18   Phases=3  Bus1=N1.1.2.3    Bus2=N18.1.2.3    R1=0.1640  X1=0.1565
+New Line.L19   Phases=3  Bus1=N18.1.2.3  Bus2=N19.1.2.3    R1=1.5042  X1=1.3554
+New Line.L20   Phases=3  Bus1=N19.1.2.3  Bus2=N20.1.2.3    R1=0.4095  X1=0.4784
+New Line.L21   Phases=3  Bus1=N20.1.2.3  Bus2=N21.1.2.3    R1=0.7089  X1=0.9373
+
+New Line.L22   Phases=3  Bus1=N2.1.2.3    Bus2=N22.1.2.3    R1=0.4512  X1=0.3083
+New Line.L23   Phases=3  Bus1=N22.1.2.3  Bus2=N23.1.2.3    R1=0.8980  X1=0.7091
+New Line.L24   Phases=3  Bus1=N23.1.2.3  Bus2=N24.1.2.3    R1=0.8960  X1=0.7011
+
+New Line.L25   Phases=3  Bus1=N5.1.2.3    Bus2=N25.1.2.3    R1=0.2030  X1=0.1034
+New Line.L26   Phases=3  Bus1=N25.1.2.3  Bus2=N26.1.2.3    R1=0.2842  X1=0.1447
+New Line.L27   Phases=3  Bus1=N26.1.2.3  Bus2=N27.1.2.3    R1=1.0590  X1=0.9337
+New Line.L28   Phases=3  Bus1=N27.1.2.3  Bus2=N28.1.2.3    R1=0.8042  X1=0.7006
+New Line.L29   Phases=3  Bus1=N28.1.2.3  Bus2=N29.1.2.3    R1=0.5075  X1=0.2585
+New Line.L30   Phases=3  Bus1=N29.1.2.3  Bus2=N30.1.2.3    R1=0.9744  X1=0.9630
+New Line.L31   Phases=3  Bus1=N30.1.2.3  Bus2=N31.1.2.3    R1=0.3105  X1=0.3619
+New Line.L32   Phases=3  Bus1=N31.1.2.3  Bus2=N32.1.2.3    R1=0.3410  X1=0.5302
+
+!values for r1 and x1 for S33 - S37 are waiting confirmation
+!New Line.S33   Phases=3  Bus1=N7.1.2.3  Bus2=N20.1.2.3     R1=2  X1=2 Switch=True
+!New Line.S34   Phases=3  Bus1=N14.1.2.3    Bus2=N8.1.2.3   R1=2  X1=2 Switch=True
+New Line.S35   Phases=3  Bus1=N11.1.2.3  Bus2=N21.1.2.3   R1=2 X1=2 Switch=True
+New Line.S36   Phases=3  Bus1=N17.1.2.3  Bus2=N32.1.2.3   R1=0.5  X1=0.5 Switch=True
+New Line.S37   Phases=3  Bus1=N28.1.2.3  Bus2=N24.1.2.3   R1=0.5  X1=0.5 Switch=True
+
+
+!Loads 
+New Load.C1     Bus1=N1     kW=100    kvar=60      kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C2     Bus1=N2     kW=90      kvar=40      kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C3     Bus1=N3     kW=120    kvar=80      kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C4     Bus1=N4     kW=60      kvar=30      kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C5     Bus1=N5     kW=60      kvar=20      kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C6     Bus1=N6     kW=200    kvar=100     kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C7     Bus1=N7     kW=200    kvar=100     kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C8     Bus1=N8     kW=60      kvar=20      kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C9     Bus1=N9     kW=60      kvar=20      kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C10   Bus1=N10    kW=45      kvar=30      kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C11   Bus1=N11    kW=60      kvar=35      kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C12   Bus1=N12    kW=60      kvar=35       kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C13   Bus1=N13    kW=120    kvar=80       kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C14   Bus1=N14    kW=60      kvar=10       kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C15   Bus1=N15    kW=60      kvar=20       kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C16   Bus1=N16    kW=60      kvar=20       kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C17   Bus1=N17    kW=90      kvar=40       kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C18   Bus1=N18    kW=90      kvar=40       kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C19   Bus1=N19    kW=90      kvar=40       kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C20   Bus1=N20    kW=90      kvar=40       kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C21   Bus1=N21    kW=90      kvar=40       kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C22   Bus1=N22    kW=90      kvar=50       kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C23   Bus1=N23    kW=420    kvar=200     kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C24   Bus1=N24    kW=420    kvar=200     kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C25   Bus1=N25    kW=60      kvar=25      kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C26   Bus1=N26    kW=60      kvar=25      kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C27   Bus1=N27    kW=60      kvar=20     kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C28   Bus1=N28    kW=120    kvar=70      kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C29   Bus1=N19    kW=200    kvar=600    kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C30   Bus1=N30    kW=150    kvar=70      kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C31   Bus1=N31    kW=210    kvar=100    kv=12.66 vminpu=0.95 vmaxpu=1.05
+New Load.C32   Bus1=N32    kW=60      kvar=40      kv=12.66 vminpu=0.95 vmaxpu=1.05
+set voltagebases=[12.66] 
+calcvoltagebases     ! **** let DSS compute voltage bases
+!solve
+!Show Voltage  LL Nodes
+!show voltages LN Nodes 
+!show currents resid=yes elements  ! this shows sum of phase currents
+!Show Powers kva Elements
+
+
+

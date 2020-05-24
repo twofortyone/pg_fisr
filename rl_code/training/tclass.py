@@ -3,7 +3,7 @@ from rl_bases.rl_glue import RLGlue
 from report.report import make_figure
 import time
 from tqdm import trange
-
+import  pandas as pd
 
 class Training:
 
@@ -45,7 +45,7 @@ class Training:
             for episode in trange(num_episodes):
                 if episode < num_episodes: # - 10:
                     num_failures = rl_glue.environment.opendss.num_lines
-                    for i in range(num_failures):
+                    for i in range(1, num_failures):
                         rl_glue.environment.failure = i
                         rl_glue.environment.opendss.fail_line(i)
                         rl_glue.rl_episode(0)
@@ -65,4 +65,6 @@ class Training:
             #print(f'rlglue t: {tr5-tr5}; state_visits:{tr7-tr6}; episode time:{tr8-tr7}')
             self.all_reward_sums.append(reward_sums)
             self.all_state_visits.append(state_visits)
+            df = pd.DataFrame(np.mean(self.all_reward_sums, axis=0), columns=['r_sums'])
+            df.to_excel(f'{self.rf}ars.xlsx')
         return make_figure(None, np.mean(self.all_reward_sums, axis=0), self.rf + 'training.html')

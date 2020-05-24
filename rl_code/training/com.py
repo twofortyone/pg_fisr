@@ -46,7 +46,7 @@ class OpenDSSCOM:
         self.num_switches = len(self.switches)
         self.num_loads = len(self.loads)
         self.start_status = np.asarray([1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1])
-        self.switches_init()
+        #self.switches_init()
         self.solve()
 
     def com_init(self):
@@ -99,7 +99,7 @@ class OpenDSSCOM:
         self.DSSLoads.First
         for i in range(self.num_loads):
             powers = self.DSSCktElement.Powers.count(0)
-            if powers == 4: status.append(0)
+            if powers >= 4: status.append(0)
             else: status.append(1)
             self.DSSLoads.Next
         return status
@@ -218,5 +218,5 @@ class OpenDSSCOM:
         self.DSSCktElement.Close(0, 0)
 
 
-#com = OpenDSSCOM('E:/pg_fisr/models/IEEE_123_FLISR_Case/Master.dss')
-#com.get_currents()
+#com = OpenDSSCOM('E:\pg_fisr\models\IEEE_13_Bus-G\Master.dss')
+#com = OpenDSSCOM('E:/pg_fisr/models/ieee33bus.dss')

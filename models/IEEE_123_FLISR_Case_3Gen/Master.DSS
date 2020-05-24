@@ -11,7 +11,11 @@ Redirect Spectrum.DSS
 Redirect Line.DSS
 Redirect Load.DSS
 Redirect Transformer.DSS
+!Redirect RegControl.DSS
 Redirect Capacitor.DSS
+!Redirect Recloser.DSS
 MakeBusList
 Redirect BusVoltageBases.dss  ! set voltage bases
 Buscoords buscoords.dss
+
+! Note: regcontrol and  reclosers are turned off 

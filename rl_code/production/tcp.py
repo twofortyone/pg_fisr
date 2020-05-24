@@ -8,7 +8,7 @@ class OpenDSSG:
         # Connection data
         self.host = '127.0.0.1'
         self.port = 6345
-        self.bz = 8192
+        self.bz = 20000
         self.s = None
         self.start()
 
@@ -19,7 +19,7 @@ class OpenDSSG:
         self.num_lines = len(self.lines)
         self.num_switches = len(self.switches)
         self.start_status = np.asarray([1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1])
-        self.openddsg_init()  # Initial parameters
+        #self.openddsg_init()  # Initial parameters
 
     def openddsg_init(self):
         status = np.asarray(self.get_switches_status())
@@ -36,19 +36,25 @@ class OpenDSSG:
         :return: (list)
         """
         buses = self.send(b'42;')
+        self.close()
         return buses
 
     def get_lines(self):
         """Get lines list
         :return: (list) """
         lines = self.send(b'33;')
+        self.close()
         return lines
 
     def get_switches(self):
-        return [ss[1] for ss in self.get_switch_status_names()]
+        sws = [ss[1] for ss in self.get_switch_status_names()]
+        self.close()
+        return sws
 
     def get_switches_status(self):
-        return [int(ss[0]) for ss in self.get_switch_status_names()]
+        ss = [int(ss[0]) for ss in self.get_switch_status_names()]
+        self.close()
+        return ss
 
     def get_voltage_magpu(self):
         """Get voltage mag for all nodes in pu
@@ -80,6 +86,10 @@ class OpenDSSG:
             self.s.sendall(msg)
             recv = decode_message(self.s.recv(self.bz))
         except ConnectionAbortedError:
+            self.start()
+            self.s.sendall(msg)
+            recv = decode_message(self.s.recv(self.bz))
+        except OSError:
             self.start()
             self.s.sendall(msg)
             recv = decode_message(self.s.recv(self.bz))
