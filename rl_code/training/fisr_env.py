@@ -34,6 +34,10 @@ class FisrEnvironment(BaseEnvironment):
     # -----------------------------------------------------------------------------------
     # Getters
     # -----------------------------------------------------------------------------------
+    def get_default_state(self):
+        status = str(self.opendss.start_status).strip('[]').replace(' ', '')
+        return self.switch_states_dict[status]
+
     def get_states(self):
         num_switches = self.opendss.num_switches
         num_lines = self.opendss.num_lines 
@@ -94,7 +98,6 @@ class FisrEnvironment(BaseEnvironment):
         self.actions = self.get_actions()
         self.reward_obs_term[1] = self.current_state
         #print(self.current_state,'-------------------')
-
         return self.reward_obs_term[1]
 
     def env_step(self, switch):
@@ -104,39 +107,29 @@ class FisrEnvironment(BaseEnvironment):
         """
         self.time_step += 1
         reward = -1
-        #reward = 0
         is_terminal = False
         action = self.actions[switch]
-        # open/close switches
-        te0 = time.time()
+        # switching operations
         if action==1: self.opendss.close_switch(switch)
         elif action==0: self.opendss.open_switch(switch)
-        #self.opendss.solve()
-        #if self.v_vtr ==0: self.opendss.solve()
-        #te1 = time.time()
+
         # get obs
         self.current_state = self.get_observation()  # update current state
-        te2 = time.time()
-        #print(self.opendss.get_voltage_magpu())
-        # update possible actions
-        self.actions = self.get_actions()
-        #print(self.current_state, switch, action, self.actions)
-        te3 = time.time()
+        self.actions = self.get_actions() # update possible actions
         # restrictions
         num_loads_offline = self.isolated_loads[self.current_state]
-        #num_loops = self.opendss.get_num_loops()
         voltages_out_of_limit = self.get_num_voltage_violations(self.current_state)
         # nods = self.system.system_data.get_switches_names(self.states[self.current_state].tolist())
         # print(self.current_state, offline, loop, nods)
 
         if num_loads_offline !=0: reward -= 10 * int(num_loads_offline)
         #if num_loops != 0: reward -= 100
-        #if voltages_out_of_limit != 0: reward -= 10
+        if voltages_out_of_limit != 0: reward -= 10
         te4 = time.time()
         #print(f'ga:{te3-te2}; cs: {te2-te1}; os: {te1-te0}; total:{te3-te0}')
         # end condition
-        #if self.current_state == self.terminal_states[self.failure]:
-        if self.time_step ==1000:
+        if self.current_state == self.terminal_states[self.failure]:
+        #if self.time_step ==1000:
             is_terminal = True
             reward += 10
             self.time_step = 0

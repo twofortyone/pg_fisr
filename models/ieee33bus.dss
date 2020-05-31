@@ -80,6 +80,9 @@ New Load.C29   Bus1=N19    kW=200    kvar=600    kv=12.66 vminpu=0.95 vmaxpu=1.0
 New Load.C30   Bus1=N30    kW=150    kvar=70      kv=12.66 vminpu=0.95 vmaxpu=1.05
 New Load.C31   Bus1=N31    kW=210    kvar=100    kv=12.66 vminpu=0.95 vmaxpu=1.05
 New Load.C32   Bus1=N32    kW=60      kvar=40      kv=12.66 vminpu=0.95 vmaxpu=1.05
+
+New EnergyMeter.EM1 Element = Line.L1 Terminal=1 Action=Save
+
 set voltagebases=[12.66] 
 calcvoltagebases     ! **** let DSS compute voltage bases
 !solve
@@ -88,5 +91,4 @@ calcvoltagebases     ! **** let DSS compute voltage bases
 !show currents resid=yes elements  ! this shows sum of phase currents
 !Show Powers kva Elements
 
-
-
+solve

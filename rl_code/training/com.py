@@ -24,6 +24,7 @@ class OpenDSSCOM:
         self.DSSCktElement = self.DSSCircuit.ActiveCktElement # Return interface to active element
         self.DSSStart = self.DSSObj.Start(0)
         self.DSSTopology = self.DSSCircuit.Topology
+        self.DSSMeter = self.DSSCircuit.Meters
         if self.DSSStart:
             print("OpenDSS Engine started successfully")
         else:
@@ -43,7 +44,7 @@ class OpenDSSCOM:
         self.num_buses = len(self.buses)
         self.num_loads = len(self.loads)
         self.start_status = np.asarray([0,0,0,0,0]) # start tie para 33 bus
-        # self.start_status = np.asarray([1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1])
+        #self.start_status = np.asarray([1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1])
         self.switches_init()
         self.solve()
         # --------------------------------------------------------------------------------------------------------------
@@ -261,4 +262,3 @@ class OpenDSSCOM:
 
 #com = OpenDSSCOM('E:\pg_fisr\models\IEEE_13_Bus-G\Master.dss')
 com = OpenDSSCOM('E:/pg_fisr/models/ieee33bus.dss')
-a = com.get_adj_matrix()

@@ -35,23 +35,24 @@ iso_loads = None
 term_states = None
 
 # ----------------------------------------------------------
-this_path = os.getcwd()
+this_path = os.path.abspath(os.path.dirname(__file__))
 report_folder = f'{this_path}/report/'
 
 # Object initialization
 com = OpenDSSCOM(path)
+circuit_name = com.DSSCircuit.Name
+env = None
+agent = QLearningAgent(1)
 if data_simulated == 2:
     voltages = pd.read_feather(input('Enter voltages path:')).to_numpy()
     iso_loads = pd.read_feather(input('Enter currents path:')).to_numpy()
     term_states = pd.read_feather(input('Enter isolated loads path')).to_numpy()
+    env = FisrEnvironment(com, voltages, iso_loads, term_states)
 elif data_simulated == 1:
     ds = DataSimulation(f'{this_path}/data/', com)
     voltages, currents, iso_loads = ds.get_data()
-    term_states = ds.get_terminal_states(iso_loads, voltages)
-
-circuit_name = com.DSSCircuit.Name
-env = FisrEnvironment(com, voltages, iso_loads, term_states)
-agent = QLearningAgent(1)
+    env = FisrEnvironment(com, voltages, iso_loads, term_states)
+    term_states = ds.get_terminal_states(env, iso_loads, voltages)
 
 # Training
 t0 = time.time()

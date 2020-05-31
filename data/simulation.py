@@ -4,7 +4,7 @@ from tqdm import trange
 from itertools import product
 import datetime
 from rl_code.training.com import OpenDSSCOM
-
+from rl_code.training.fisr_env import FisrEnvironment
 
 class DataSimulation:
     def __init__(self, path, OpenDSSCOM):
@@ -14,7 +14,7 @@ class DataSimulation:
         num_switches = self.opendss.num_switches
         switch_state = [0, 1]
         switch_states = list(product(switch_state, repeat=num_switches))
-        self.ss_arrray = np.asarray(switch_states)
+        self.ss_array = np.asarray(switch_states)
         self.num_switch_states = len(switch_states)
         self.num_lines = self.opendss.num_lines
 
@@ -26,7 +26,7 @@ class DataSimulation:
         for line in trange(self.num_lines):
             self.opendss.fail_line(line)  # failure current line
             for j in range(self.num_switch_states):
-                state = self.ss_arrray[j, :]
+                state = self.ss_array[j, :]
                 positions = np.where(state != prev_state)[0]
                 for pos in positions:
                     if state[pos] == 1:
@@ -51,21 +51,22 @@ class DataSimulation:
         save_to_feather(self.path, self.circuit_name, num_isolated_loads, 'isolated_loads', 1)
         return [voltages, currents, num_isolated_loads]
 
-    def get_terminal_states(self, nils, vs):
+    def get_terminal_states(self, env, nils, vs):
 
         terminal_states = []
         prev_state = 0
         for line in trange(self.num_lines):
-            self.opendss.fail_line(line)  # failure current line
-            terminal = None
+            env.opendss.fail_line(line)  # failure current line
+            terminal = line * self.num_switch_states + env.get_default_state()
+            print(terminal)
             for switch_state in range(self.num_switch_states):
-                state = self.ss_arrray[switch_state, :]
+                state = self.ss_array[switch_state, :]
                 positions = np.where(state != prev_state)[0]
                 for pos in positions:
                     if state[pos] == 1:
-                        self.opendss.close_switch(pos)
+                        env.opendss.close_switch(pos)
                     else:
-                        self.opendss.open_switch(pos)
+                        env.opendss.open_switch(pos)
 
                 current_state = line * self.num_switch_states + switch_state
                 prev_nil = nils[prev_state]
@@ -99,8 +100,13 @@ def save_to_feather(path, circuit_name, data, name, num_columns):
 
 #com = OpenDSSCOM('E:\pg_fisr\models\IEEE_123_FLISR_Case\Master.dss')
 #com = OpenDSSCOM('E:\pg_fisr\models\IEEE_8500_Bus-G\Master.DSS')
-#DS = DataSimulation(com)
-#voltages, currents, num_is = DS.get_data()
+
+com = OpenDSSCOM('E:/pg_fisr/models/ieee33bus.dss')
+DS = DataSimulation('E:/', com)
+voltages, currents, num_is = DS.get_data()
+
+env = FisrEnvironment(com, voltages, num_is, num_is)
+terms = DS.get_terminal_states(env, num_is, voltages)
 
 #voltages = pd.read_feather('E:/123bus_voltages_2020-05-16.ftr').to_numpy()
 #currents = pd.read_feather('E:/123bus_currents_2020-05-16.ftr')

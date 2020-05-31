@@ -1,29 +1,44 @@
+from data.simulation import DataSimulation
 from rl_code.training.fisr_env import FisrEnvironment
 from rl_code.fisr_agent_q import QLearningAgent
 from rl_code.training.tclass import Training
-from rl_code.production.pclass import Production
+from rl_code.training.t_pclass import Production
+from rl_code.training.com import OpenDSSCOM
+from rl_code.training.t_env_pro import FisrEnvironment_Pro
 import pandas as pd
 from report.report import Report
-from tqdm import tqdm
+from tqdm import trange
 import time
+import os
 
-
-name = 'IEEE 33 BUS Test Case'
-
-# ##########################################################
-# Update before use
-ties = 3
-time_steps = 10000
+# ----------------------------------------------------------
+# Pablo Alejandro Parra Gómez
+# pa.parra12@uniandes.edu.co
+# Los Andes University, Colombia.
+# Mayo, 2020
+# ----------------------------------------------------------
+print('''
+============================================================
+|       Welcome to Service Restoration RL Algorithm        | 
+============================================================
+''')
 t_epi = 200
 t_runs = 1
-pos_states_ftr = 0  # 1 if pos_states from ftr
+path = 'E:/pg_fisr/models/ieee33bus.dss'
 # ----------------------------------------------------------
-report_folder = "E:/pg_fisr/report/"
-voltages_ftr = f'E:/data/{ties}ties_voltages.ftr'
+this_path = os.path.abspath(os.path.dirname(__file__))
+report_folder = f'{this_path}/report/'
+
 # ##########################################################
 
-env = FisrEnvironment(ties, voltages_ftr, time_steps, pos_states_ftr)
-agent = QLearningAgent()
+com = OpenDSSCOM(path)
+ds = DataSimulation(f'{this_path}/data/', com)
+voltages, currents, iso_loads = ds.get_data()
+term_states = ds.get_terminal_states(iso_loads, voltages)
+
+circuit_name = com.DSSCircuit.Name
+env = FisrEnvironment(com, voltages, iso_loads, term_states)
+agent = QLearningAgent(1)
 # ------------------------------------------
 # Training
 # ------------------------------------------
@@ -33,37 +48,32 @@ train_path = training.run_training(t_runs, t_epi)
 t1 = time.time()
 
 # System info
-num_nodes = env.system.num_nodes
-num_switches = env.system.num_switches
-num_tie = len(env.system.start_tie_obs)
-data_system = [name, num_nodes, num_switches, num_tie]
-ds_label = ['Name:', 'Nodes:', 'Switches:', 'Tie:']
+data_system, ds_label = env.save_system_data(f'{this_path}/data/data_{circuit_name}.xlsx')
+s_df = pd.DataFrame(data_system[0:3], ds_label[0:3], ['Values'])  # System data frame
 
 # Training info
 t_time = round(t1-t0, 2)
-num_states = str(len(env.states))
-num_actions = str(len(env.actions))
-data_training = [num_states, num_actions, str(t_epi), str(t_runs), str(t_time) + ' seconds']
+data_training = [env.num_states, env.num_actions, str(t_epi), str(t_runs), str(t_time) + ' seconds']
 dt_label = ['States:', 'Actions:', 'Episodes:', 'Runs:', 'Time elapsed:']
-
-# q values info
-q_values = agent.q
-actions = [str(x) for x in env.actions]
+t_df = pd.DataFrame(data_training, dt_label, ['Values'])  # Training data frame
 
 # Save q_values
-df_q = pd.DataFrame(data=agent.q, columns=actions)
-df_q.to_feather(f'E:/q_{ties}ties_{t_runs}r_{t_epi}e_{time_steps}ts_nr_woopendss.ftr')
+df_q = pd.DataFrame(data=training.agent.q, columns=com.switches)
+df_q.to_feather(f'{this_path}/data/q_{circuit_name}_{t_runs}r_{t_epi}e.ftr')
 
 # -------------------------------------------
 # Production
 # -------------------------------------------
+agent_pro = QLearningAgent(0)
+env_pro = FisrEnvironment_Pro(com, voltages, iso_loads, term_states)
+
 all_actions = []
 num_actions = []
 action_times = []
-switches = env.system.system_data.switches
+lines_to_fail = com.lines[1:]
 
-for i in tqdm(range(2, num_switches-num_tie)):  # for closed switches
-    production = Production(env, agent, q_values, i, report_folder)
+for i in trange(1, com.num_lines):  # for closed switches
+    production = Production(env_pro, agent_pro, agent.q, i, report_folder)
     t2 = time.time()
     pro = production.run_production(1, 1)
     t3 = time.time()
@@ -76,19 +86,12 @@ for i in tqdm(range(2, num_switches-num_tie)):  # for closed switches
 
 # Actions data frame
 list_of_acts = [str(x) for x in all_actions]
-actions_df = pd.DataFrame(data=switches[2:num_switches-num_tie], columns=['Failure'])
+actions_df = pd.DataFrame(data=lines_to_fail, columns=['Failure'])
 actions_df.insert(1, 'Actions', list_of_acts, True)
 actions_df.insert(2, 'Number of actions', num_actions, True)
 actions_df.insert(3, 'Time elapsed', action_times, True)
 
-# Statistics data frame
-statistics = actions_df.describe()
-
-# System data frame
-s_df = pd.DataFrame(data_system, ds_label, ['Values'])
-
-# Training data frame
-t_df = pd.DataFrame(data_training, dt_label, ['Values'])
+statistics = actions_df.describe()  # Statistics data frame
 
 # Report generation
 report = Report(report_folder, 'training.html', actions_df, statistics, s_df, t_df)
