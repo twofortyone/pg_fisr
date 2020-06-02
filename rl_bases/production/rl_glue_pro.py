@@ -141,7 +141,7 @@ class Pro:
             self.last_action = self.agent.agent_step(reward, last_state)
             roat = (reward, last_state, self.last_action, term)
 
-        return [roat, data_step[1]]
+        return [roat, data_step[1], data_step[2:]]
 
     def rl_cleanup(self):
         """Cleanup done at end of experiment."""

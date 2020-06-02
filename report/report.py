@@ -49,9 +49,7 @@ class Report:
                         </div>
                          <iframe width="500" height="300" frameborder="0" seamless="seamless" scrolling="no" \
                                 src="''' + self.plot_url1 + '''"></iframe>
-                        <p>GE had the most predictable stock price in 2014. IBM had the highest mean stock price. \
-                         The red lines are kernel density estimations of each stock price - the peak of each red lines \
-                          corresponds to its mean stock price for 2014 on the x axis.</p>
+                        <p>                     </p>
                       </div>
                       <div class="col-sm">
                         <div class=row>
@@ -64,9 +62,7 @@ class Report:
                                 ''' + self.tb_training + '''
                             </div>
                         </div>
-                        <p>GE had the most predictable stock price in 2014. IBM had the highest mean stock price. \
-                        The red lines are kernel density estimations of each stock price - the peak of each red lines\
-                         corresponds to its mean stock price for 2014 on the x axis.</p>
+                        <p>                        </p>
                       </div>
                     </div>
                   </div>

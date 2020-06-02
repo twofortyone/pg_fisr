@@ -1,7 +1,0 @@
-rcl_0:rcl_1:rcl_2:rcl_3:rcl_4:rcl_5:sw1:sw2:sw3:sw4:sw5:sw6,0
-0,rcl_0:rcl_1:rcl_2:sw1:sw2:sw3:sw4:sw5:sw6
-sw2:sw3:sw4:sw5:sw6:rcl_2:rcl_1:rcl_0,rcl_1:rcl_3:rcl_4:rcl_5
-sw3:sw4:sw5:sw6:rcl_2:rcl_1:rcl_0,rcl_1:rcl_2:rcl_3:sw1:sw3
-sw2:sw4:sw5:sw6:rcl_0:rcl_1:rcl_2,rcl_0:rcl_2:sw1:sw2:sw4:sw5:sw6
-sw3:sw5:sw6:rcl_0:rcl_1:rcl_2,rcl_1:rcl_2:sw1:sw2:sw3:sw6
-sw3:sw6:rcl_0:rcl_1:rcl_2,rcl_1:rcl_2:sw1:sw2:sw3:sw4:sw6

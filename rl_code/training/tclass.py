@@ -21,7 +21,7 @@ class Training:
         self.num_states = self.env.num_states
 
         self.agent_info = {'num_actions': num_actions, 'num_states': self.num_states,
-                           'epsilon': 0.1, 'discount': 1.0, 'step_size': 0.1}
+                           'epsilon': 0.1, 'discount': 0.9, 'step_size': 0.1}
         self.env_info = {}
         self.all_reward_sums = []
         self.all_state_visits = []
@@ -45,7 +45,7 @@ class Training:
             for episode in trange(num_episodes):
                 if episode < num_episodes: # - 10:
                     num_failures = rl_glue.environment.opendss.num_lines
-                    for i in range(1, num_failures):
+                    for i in range(num_failures):
                         rl_glue.environment.failure = i
                         rl_glue.environment.opendss.fail_line(i)
                         rl_glue.rl_episode(0)

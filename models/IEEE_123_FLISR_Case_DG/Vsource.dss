@@ -1,0 +1,4 @@
+Edit "Vsource.source" basekv=4.16 bus1=150 pu=1.00 R1=0 X1=0.0001 R0=0 X0=0.0001
+New "Vsource.vsource_1" bus1=sup_2.1.2.3 phases=3 basekv=4.160000 enabled=false ENABLED=NO
+New "Vsource.vsource_2" bus1=sup_1.1.2.3 phases=3 basekv=4.160000 enabled=false ENABLED=NO
+New "Vsource.vsource_3" bus1=sup_3.1.2.3 phases=3 basekv=4.160000 enabled=false ENABLED=NO

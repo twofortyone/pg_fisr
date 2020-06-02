@@ -1,0 +1,12 @@
+!New "Recloser.rcl_3" GroundDelayed=tlink GroundFast=tlink MonitoredObj=line.rcl_3 SwitchedObj=line.rcl_3 GroundTrip=140.000000 PhaseTrip=140.000000 Action=Close
+!New "Recloser.rcl_4" GroundDelayed=tlink GroundFast=tlink MonitoredObj=line.rcl_4 SwitchedObj=line.rcl_4 GroundTrip=150.000000 PhaseTrip=150.000000 Action=Open
+!New "Recloser.rcl_5" GroundDelayed=tlink GroundFast=tlink MonitoredObj=line.rcl_5 SwitchedObj=line.rcl_5 GroundTrip=150.000000 PhaseTrip=150.000000 Action=Close
+!New "Recloser.sw1" GroundDelayed=tlink GroundFast=tlink MonitoredObj=Line.sw1 SwitchedObj=Line.sw1 GroundTrip=750.000000 PhaseTrip=750.000000 Action=Close
+!New "Recloser.sw2" GroundDelayed=tlink GroundFast=tlink MonitoredObj=Line.sw2 SwitchedObj=Line.sw2 GroundTrip=450.000000 PhaseTrip=450.000000 Action=Open
+!New "Recloser.sw3" GroundDelayed=tlink GroundFast=tlink MonitoredObj=Line.sw3 SwitchedObj=Line.sw3 GroundTrip=400.000000 PhaseTrip=400.000000 Action=Open
+!New "Recloser.sw4" GroundDelayed=tlink GroundFast=tlink GroundTrip=350.000000 PhaseTrip=350.000000 MonitoredObj=Line.sw4 SwitchedObj=Line.sw4 Action=Open
+!New "Recloser.sw5" GroundDelayed=tlink GroundFast=tlink MonitoredObj=Line.sw5 SwitchedObj=Line.sw5 GroundTrip=100.000000 PhaseTrip=100.000000 Action=Close
+!New "Recloser.sw8" GroundDelayed=tlink GroundFast=tlink MonitoredTerm=1 SwitchedTerm=1 PhaseInst=0 GroundInst=0 basefreq=60 enabled=true RecloseIntervals=(0, 0, 2, 0, 0, 1.21530864763705E-311, ) MonitoredObj=line.sw8 SwitchedObj=line.sw8
+!New "Recloser.sw9" RecloseIntervals=(0, 0, 2, 0, 2.4615507350135E-312, 1.21530864763705E-311, ) GroundTrip=400.000000 PhaseTrip=400.000000 GroundDelayed=tlink GroundFast=tlink MonitoredObj=line.sw9 SwitchedObj=line.sw9 Action=Open
+!New "Recloser.sw10" RecloseIntervals=(0, 0, 2, 0, 0, 1.21576451294138E-311, ) GroundTrip=400.000000 PhaseTrip=400.000000 GroundDelayed=tlink GroundFast=tlink MonitoredTerm=1 SwitchedTerm=1 PhaseInst=0 GroundInst=0 basefreq=60 enabled=true MonitoredObj=line.sw10 SwitchedObj=line.sw10 Action=Open
+!New "Recloser.sw11" RecloseIntervals=(0, 0, 2, 0, 0, 1.21576451294138E-311, ) GroundDelayed=tlink GroundFast=tlink MonitoredObj=line.sw11 SwitchedObj=line.sw11

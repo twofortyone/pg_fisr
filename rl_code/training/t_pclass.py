@@ -19,7 +19,7 @@ class Production:
         self.num_states = self.env.num_states
 
         self.agent_info = {'num_actions': num_actions, 'num_states': self.num_states, 'epsilon': 0.1,
-                           'discount': 0.1, 'step_size': 0.8, 'q_values': q_values}
+                           'discount': 0.1, 'step_size': 0.9, 'q_values': q_values}
 
         self.env_info = {}
         self.all_reward_sums = []
@@ -30,7 +30,7 @@ class Production:
         num_runs = runs
         num_episodes = episodes
         taken_actions = []
-
+        system_data = []
         for run in range(num_runs):
             self.agent_info['seed'] = run
             rl_glue = Pro(self.env, self.agent)
@@ -52,6 +52,7 @@ class Production:
                     reward, state, action, is_terminal = rl_step_data[0]
                     # record actions data
                     taken_actions.append(rl_step_data[1])
+                    system_data.append(rl_step_data[2])
                     state_visits[state] += 1
 
                 rl_glue.environment.opendss.failure_restoration(self.failure) # todo revisar si se debe restaurar
@@ -60,5 +61,4 @@ class Production:
             self.all_reward_sums.append(reward_sums)
             self.all_state_visits.append(state_visits)
 
-        return [make_figure(None, np.mean(self.all_reward_sums, axis=0), 'production.html'),
-                taken_actions]
+        return [0, taken_actions, system_data]

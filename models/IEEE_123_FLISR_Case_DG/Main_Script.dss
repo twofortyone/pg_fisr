@@ -1,0 +1,17 @@
+clearall
+
+!compile "C:\Users\pdmo005\Documents\Support_OpenDSS\C_Dimas\Other\Master.DSS"
+compile "C:\Users\pdmo005\Documents\Support_OpenDSS\C_Dimas\123Bus\IEEE123Master.DSS"
+
+
+redirect LoadShape1.DSS
+batchedit load..* yearly=LoadShape1
+
+!new Monitor.Trp2 Transformer.reg1a 2 mode=2
+!new Monitor.ld50 Load.s68a mode=0 // se puede ver el sobrevoltaje sin función de taps
+
+solve
+set mode=yearly stepsize=1h number=8760
+solve
+show monitor ld50
+show monitor Trp2

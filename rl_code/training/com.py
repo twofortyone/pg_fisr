@@ -43,10 +43,12 @@ class OpenDSSCOM:
         self.num_lines = len(self.lines)
         self.num_buses = len(self.buses)
         self.num_loads = len(self.loads)
-        self.start_status = np.asarray([0,0,0,0,0]) # start tie para 33 bus
-        #self.start_status = np.asarray([1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1])
-        self.switches_init()
-        self.solve()
+        #self.default_status = np.asarray([1,1,1,1,1])
+        #self.start_status = np.asarray([0,0,0,0,0]) # start tie para 33 bus
+        self.default_status = np.asarray([1,1,1,1,1,1,1,1,1,1])
+        self.start_status = np.asarray([1,1,1,1,0,1,0,1,0,1])  # start tie para 123 bus
+        #self.switches_init()
+        #self.solve()
         # --------------------------------------------------------------------------------------------------------------
         # Distribution Network Representation
         # --------------------------------------------------------------------------------------------------------------
@@ -55,6 +57,7 @@ class OpenDSSCOM:
         self.adj_matrix = self.get_adj_matrix()
         self.update_node_obs() # Call after adj_matrix()
         self.inc_matrix = None
+        self.time_step = 0
 
 
     def com_init(self):
@@ -62,6 +65,13 @@ class OpenDSSCOM:
         self.DSSText.Command = 'compile ' + self.path
         self.switches_init()
         self.solve()
+
+    def clear_run(self):
+        self.send_command('ClearAll')
+        self.DSSText.Command = 'compile ' + self.path
+
+    def topology(self):
+        return self.DSSTopology.NumLoops
 
     def switches_init(self):
         # Switch initialization
@@ -188,6 +198,9 @@ class OpenDSSCOM:
 
 
     def get_num_loops(self):
+        self.send_command(f'New EnergyMeter.EM{self.time_step} Element = Line.{self.lines[0]} Terminal=1')
+        self.solve()
+        self.time_step += 1
         return self.DSSTopology.NumLoops
 
     def get_ae_current(self):
@@ -261,4 +274,4 @@ class OpenDSSCOM:
 
 
 #com = OpenDSSCOM('E:\pg_fisr\models\IEEE_13_Bus-G\Master.dss')
-com = OpenDSSCOM('E:/pg_fisr/models/ieee33bus.dss')
+#com = OpenDSSCOM('E:/pg_fisr/models/IEEE_123_FLISR_Case/Master.dss')
