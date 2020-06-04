@@ -45,8 +45,10 @@ class OpenDSSCOM:
         self.num_loads = len(self.loads)
         #self.default_status = np.asarray([1,1,1,1,1])
         #self.start_status = np.asarray([0,0,0,0,0]) # start tie para 33 bus
-        self.default_status = np.asarray([1,1,1,1,1,1,1,1,1,1])
-        self.start_status = np.asarray([1,1,1,1,0,1,0,1,0,1])  # start tie para 123 bus
+        #self.default_status = np.asarray([1,1,1,1,1,1,1,1,1,1])
+        #self.start_status = np.asarray([1,1,1,1,0,1,0,1,0,1])  # start tie para 123 bus
+        self.default_status = self.get_switches_status()
+        self.start_status = self.get_switches_status()
         #self.switches_init()
         #self.solve()
         # --------------------------------------------------------------------------------------------------------------

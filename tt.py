@@ -24,8 +24,9 @@ print('''
 ''')
 t_epi = 200
 t_runs = 1
-path = 'E:/pg_fisr/models/IEEE_123_FLISR_Case/Master.dss'
-#path = 'E:/pg_fisr/models/ieee33bus.dss'
+# path = 'E:/pg_fisr/models/IEEE_8500_Bus-G/Master.DSS' # IEEE 8500 Node Test Feeder
+path = 'E:/pg_fisr/models/IEEE_123_FLISR_Case/Master.dss'  # IEEE 123 Node Test Feeder
+#path = 'E:/pg_fisr/models/ieee33bus.dss' # IEEE 33 Node Test Feeder
 # ----------------------------------------------------------
 this_path = os.path.abspath(os.path.dirname(__file__))
 report_folder = f'{this_path}/report/'
@@ -33,13 +34,21 @@ report_folder = f'{this_path}/report/'
 # ##########################################################
 t0 = time.time()
 com = OpenDSSCOM(path)
-voltages = pd.read_feather('E:/pg_fisr/data/ieee123bus_voltages_2020-06-02.ftr').to_numpy()
-iso_loads = pd.read_feather('E:/pg_fisr/data/ieee123bus_isolated_loads_2020-06-02.ftr').to_numpy()
-num_loops = pd.read_feather('E:/pg_fisr/data/ieee123bus_num_loops_2020-06-02.ftr').to_numpy()
+# 'E:/pg_fisr/data/33bus_training06022020_new_simultation/'
+voltages = pd.read_feather('E:/pg_fisr/data/123_06022020_nsimulation/ieee123bus_voltages_2020-06-02.ftr').to_numpy()
+iso_loads = pd.read_feather('E:/pg_fisr/data/123_06022020_nsimulation/ieee123bus_isolated_loads_2020-06-02.ftr').to_numpy()
+num_loops = pd.read_feather('E:/pg_fisr/data/123_06022020_nsimulation/ieee123bus_num_loops_2020-06-02.ftr').to_numpy()
+
+#voltages = pd.read_feather('E:/pg_fisr/data/33bus_training06022020_new_simultation/ieee37bus_voltages_2020-06-02.ftr').to_numpy()
+#iso_loads = pd.read_feather('E:/pg_fisr/data/33bus_training06022020_new_simultation/ieee37bus_isolated_loads_2020-06-02.ftr').to_numpy()
+#num_loops = pd.read_feather('E:/pg_fisr/data/33bus_training06022020_new_simultation/ieee37bus_num_loops_2020-06-02.ftr').to_numpy()
+
+
 
 circuit_name = com.DSSCircuit.Name
 env = FisrEnvironment(com, voltages, iso_loads, num_loops)
-term_states = pd.read_feather('E:/pg_fisr/data/ieee123bus_terminal_states_2020-06-02.ftr').to_numpy()
+term_states = pd.read_feather('E:/pg_fisr/data/123_06022020_nsimulation/ieee123bus_terminal_states_2020-06-02.ftr').to_numpy()
+#term_states = pd.read_feather('E:/pg_fisr/data/33bus_training06022020_new_simultation/ieee37bus_terminal_states_2020-06-02.ftr').to_numpy()
 env.terminal_states = term_states
 agent = QLearningAgent(1)
 # ------------------------------------------

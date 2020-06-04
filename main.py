@@ -22,10 +22,11 @@ print('''
 |       Welcome to Service Restoration RL Algorithm        | 
 ============================================================
 ''')
-t_epi = 500
+t_epi = 200
 t_runs = 1
-path = 'E:/pg_fisr/models/IEEE_123_FLISR_Case/Master.dss'
+#path = 'E:/pg_fisr/models/IEEE_123_FLISR_Case/Master.dss'
 #path = 'E:/pg_fisr/models/ieee33bus.dss'
+path = 'E:/pg_fisr/models/IEEE_8500_Bus-G/Master.DSS'
 # ----------------------------------------------------------
 this_path = os.path.abspath(os.path.dirname(__file__))
 report_folder = f'{this_path}/report/'
