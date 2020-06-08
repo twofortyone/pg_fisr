@@ -1,4 +1,5 @@
 from bases.environment import BaseEnvironment
+from training.com import OpenDSSCOM
 import pandas as pd
 from itertools import product
 import numpy as np
@@ -68,8 +69,11 @@ class FisrEnvironment(BaseEnvironment):
         return np.asarray(list(product(switch_state, repeat=self.opendss.num_switches)))
 
     def get_ss_from_state(self, state):
-        switch_state_pos = state - self.failure * self.num_switch_states
-        return self.switch_states[switch_state_pos]
+        return self.switch_states[self.get_ss_pos(state)]
+
+    def get_ss_pos(self, state):
+        return state - self.failure * self.num_switch_states
+
 
     def get_actions(self):  # checked
         """Actions list depending on current state
@@ -179,3 +183,7 @@ class FisrEnvironment(BaseEnvironment):
         df = pd.DataFrame(data=data, columns=['data'], index= labels)
         df.to_excel(path)
         return [data, labels]
+
+
+com = OpenDSSCOM('E:/pg_fisr/data/models/IEEE_123_FLISR_Case/Master.DSS')
+env = FisrEnvironment(com, [], [], [])

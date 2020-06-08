@@ -22,18 +22,16 @@ class DataSimulation:
         num_isolated_loads = []
         currents = []
         num_loops = []
-        prev_state = None
         for line in trange(self.num_lines):
             for j in range(self.num_switch_states):
                 self.opendss.fail_line(line)  # failure current line
                 state = self.ss_array[j, :]
-                positions = np.where(state != self.opendss.default_status)[0]
+                positions = np.where(state != self.opendss.start_status)[0]
                 for pos in positions:
                     if state[pos] == 1:
                         self.opendss.close_switch(pos)
                     else:
                         self.opendss.open_switch(pos)
-                prev_state = state
                 self.opendss.solve()  # Updates previous changes
                 num_loops.append(self.opendss.topology())  # Save number of loops
                 voltages.append(get_num_voltage_violations(self.opendss.get_voltage_magpu()))  # Save voltages
@@ -52,13 +50,16 @@ class DataSimulation:
 
         terminal_states = []
         prev_state = 0
-        for line in trange(self.num_lines):
+        for line in trange( self.num_lines):
             env.opendss.fail_line(line)  # failure current line
+            env.failure = line
             terminal = line * self.num_switch_states + env.get_default_state()
-            #print(terminal)
+            print(f'falla en: {line}; state: {terminal}')
+            prev_state = self.ss_array[env.get_ss_pos(terminal), :]
+            aux = 0
             for switch_state in range(self.num_switch_states):
                 state = self.ss_array[switch_state, :]
-                positions = np.where(state != prev_state)[0]
+                positions = np.where(state != prev_state )[0]
                 for pos in positions:
                     if state[pos] == 1:
                         env.opendss.close_switch(pos)
@@ -66,21 +67,24 @@ class DataSimulation:
                         env.opendss.open_switch(pos)
 
                 current_state = line * self.num_switch_states + switch_state
-                prev_nil = nils[prev_state]
+                prev_nil = nils[terminal]
                 nil = nils[current_state]
-                prev_num_vv = get_num_voltage_violations(np.asarray(vs[prev_state]))
+                prev_num_vv = get_num_voltage_violations(np.asarray(vs[terminal]))
                 num_vv = get_num_voltage_violations(np.asarray(vs[current_state]))
-                prev_nloops = loops[prev_state]
+                prev_nloops = loops[terminal]
                 nloops = loops[current_state]
-                if nil == prev_nil and nloops == 0:
-                    if num_vv < prev_num_vv:  # todo: add current limits and radiality constrains
+                if nil == prev_nil and nloops == 0 and aux != 0:
+                    if num_vv < prev_num_vv:  # todo: add current limits
                         terminal = current_state
                 elif (nil < prev_nil) and nloops == 0:
                     terminal = current_state
+                    prev_state = current_state
+                    aux += 1
                 else:
                     pass
-                prev_state = current_state
+                prev_state = self.ss_array[env.get_ss_pos(current_state),:]
             terminal_states.append(terminal)
+            print(f'queda con: {terminal}')
         save_to_feather(self.path, self.circuit_name, terminal_states, 'terminal_states', 1)
         return terminal_states
 

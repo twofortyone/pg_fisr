@@ -4,12 +4,11 @@ from bases.production.rl_glue_pro import Pro
 
 class Production:
 
-    def __init__(self, environment, agent, q_values, failure, report_folder):
+    def __init__(self, environment, agent, q_values, failure):
 
         self.env = environment
         self.agent = agent
         self.failure = failure
-        self.rf = report_folder
         # number of actions
         num_actions = self.env.num_actions
         # number of states

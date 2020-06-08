@@ -24,17 +24,16 @@ print('''
 ''')
 t_epi = 200
 t_runs = 1
-#path = 'E:/pg_fisr/models/IEEE_123_FLISR_Case/Master.dss'
+path = 'E:/pg_fisr/data/models/IEEE_123_FLISR_Case/Master.dss'
 #path = 'E:/pg_fisr/models/ieee33bus.dss'
-path = '/models/IEEE_8500_Bus-G/Master.DSS'
+#path = '/models/IEEE_8500_Bus-G/Master.DSS'
 # ----------------------------------------------------------
 this_path = os.path.abspath(os.path.dirname(__file__))
-report_folder = f'{this_path}/report/'
 
 # ##########################################################
 t0 = time.time()
 com = OpenDSSCOM(path)
-ds = DataSimulation(f'{this_path}/data/', com)
+ds = DataSimulation(this_path, com)
 print('Obtaining data...')
 voltages, iso_loads, num_loops = ds.get_data()
 
@@ -47,12 +46,12 @@ agent = QLearningAgent(1)
 # Training
 # ------------------------------------------
 print('Training model ...')
-training = Training(env, agent, report_folder)
+training = Training(env, agent, this_path)
 train_path = training.run_training(t_runs, t_epi)
 t1 = time.time()
 
 # System info
-data_system, ds_label = env.save_system_data(f'{this_path}/data/data_{circuit_name}.xlsx')
+data_system, ds_label = env.save_system_data(f'{this_path}/data_{circuit_name}.xlsx')
 data_label = ['Circuit:', '# Lines', '# Switches', '# Loads']
 s_df = pd.DataFrame(data_system[0:4], data_label, ['Values'])  # System data frame
 
@@ -81,7 +80,7 @@ action_times = []
 lines_to_fail = com.lines
 
 for i in trange(com.num_lines):  # for closed switches
-    production = Production(env_pro, agent_pro, agent.q, i, report_folder)
+    production = Production(env_pro, agent_pro, agent.q, i)
     t2 = time.time()
     pro = production.run_production(1, 1)
     t3 = time.time()
@@ -109,10 +108,10 @@ actions_df.insert(5, 'No. of IL post SR', list_nil, True)
 res_percent = [(x[0]-x[1])/x[0] for x in all_restored_data]
 actions_df.insert(6, 'Restoration Rate', res_percent)
 
-actions_df.to_excel(f'{report_folder}actions_{circuit_name}.xlsx')
+actions_df.to_excel(f'{this_path}/actions_{circuit_name}.xlsx')
 
 statistics = actions_df.describe()  # Statistics data frame
 
 # Report generation
-report = Report(report_folder, 'training.html', actions_df, statistics, s_df, t_df)
+report = Report(this_path, 'training.html', actions_df, statistics, s_df, t_df)
 report.make_report()

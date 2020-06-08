@@ -1,0 +1,381 @@
+
+ISOLATED CIRCUIT ELEMENT REPORT
+
+
+***  THE FOLLOWING BUSES HAVE NO CONNECTION TO THE SOURCE ***
+
+"1"
+"7"
+"8"
+"13"
+"152"
+"52"
+"53"
+"54"
+"57"
+"60"
+"160"
+"67"
+"72"
+"76"
+"n86"
+"86"
+"87"
+"89"
+"91"
+"93"
+"95"
+"17"
+"15"
+"16"
+"34"
+"96"
+"94"
+"92"
+"90"
+"88"
+"77"
+"78"
+"80"
+"81"
+"84"
+"85"
+"82"
+"83"
+"79"
+"73"
+"74"
+"75"
+"68"
+"69"
+"70"
+"71"
+"97"
+"98"
+"99"
+"100"
+"197"
+"101"
+"102"
+"103"
+"104"
+"105"
+"106"
+"107"
+"108"
+"109"
+"110"
+"112"
+"113"
+"114"
+"111"
+"300"
+"64"
+"65"
+"66"
+"63"
+"62"
+"61"
+"58"
+"59"
+"55"
+"56"
+"18"
+"135"
+"35"
+"36"
+"38"
+"39"
+"37"
+"40"
+"41"
+"42"
+"43"
+"44"
+"45"
+"46"
+"47"
+"48"
+"49"
+"50"
+"51"
+"151"
+"250"
+"30"
+"29"
+"28"
+"25"
+"26"
+"31"
+"32"
+"27"
+"33"
+"23"
+"24"
+"n21"
+"21"
+"22"
+"19"
+"20"
+"9"
+"14"
+"10"
+"11"
+"12"
+"3"
+"5"
+"6"
+"4"
+"2"
+"160r"
+"25r"
+"9r"
+
+***********  THE FOLLOWING SUB NETWORKS ARE ISOLATED ************
+
+*** START SUBAREA ***
+(0) Line.l115
+[SHUNT], Load.s1a
+(1) Line.l1
+[SHUNT], Load.s2b
+(1) Line.l2
+(2) Line.l4
+[SHUNT], Load.s4c
+(2) Line.l5
+[SHUNT], Load.s5c
+(3) Line.l6
+[SHUNT], Load.s6c
+(1) Line.l3
+[SHUNT], Load.s7a
+(2) Line.l7
+(3) Line.l8
+[SHUNT], Load.s12b
+(3) Line.l9
+[SHUNT], Load.s9a
+(4) Transformer.reg2a
+(4) Line.l11
+(5) Line.l14
+[SHUNT], Load.s11a
+(5) Line.l15
+[SHUNT], Load.s10a
+(3) Line.l10
+(4) Line.l12
+[SHUNT], Load.s34c
+(5) Line.l34
+(6) Line.l16
+[SHUNT], Load.s16c
+(6) Line.l17
+[SHUNT], Load.s17c
+(7) Line.sw7
+[SHUNT], Load.s95b
+(8) Line.l95
+[SHUNT], Load.s96b
+(8) Line.l94
+(9) Line.l93
+[SHUNT], Load.s94a
+(9) Line.l92
+(10) Line.l91
+[SHUNT], Load.s92c
+[SHUNT], Capacitor.c92c
+(10) Line.l90
+(11) Line.l89
+[SHUNT], Load.s90b
+[SHUNT], Capacitor.c90b
+(11) Line.l88
+[SHUNT], Load.s87b
+(12) Line.l87
+[SHUNT], Load.s88a
+[SHUNT], Capacitor.c88a
+(12) Line.l86
+[SHUNT], Load.s86b
+(13) Line.l77
+(14) Line.sw11
+[SHUNT], Load.s76a
+[SHUNT], Load.s76b
+[SHUNT], Load.s76c
+(15) Line.l76
+[SHUNT], Load.s77b
+(16) Line.l78
+(17) Line.l79
+[SHUNT], Load.s79a
+(17) Line.l80
+[SHUNT], Load.s80b
+(18) Line.l81
+(19) Line.l82
+[SHUNT], Load.s82a
+(20) Line.l84
+[SHUNT], Load.s83c
+[SHUNT], Capacitor.c83
+(19) Line.l83
+[SHUNT], Load.s84c
+(20) Line.l85
+[SHUNT], Load.s85c
+(15) Line.l73
+(16) Line.l72
+[SHUNT], Load.s73c
+(17) Line.l74
+[SHUNT], Load.s74c
+(18) Line.l75
+[SHUNT], Load.s75c
+(16) Line.l67
+(17) Line.l68
+(18) Line.sw5
+(19) Line.l118
+(20) Line.l101
+(21) Line.l105
+(22) Line.l108
+(23) Line.sw10
+[SHUNT], Load.s64b
+(24) Line.l63
+[SHUNT], Load.s63a
+(25) Line.l62
+[SHUNT], Load.s62c
+(26) Line.l61
+[SHUNT], Load.s60a
+(27) Line.l60
+(27) Line.l58
+(28) Line.l57
+[SHUNT], Load.s58b
+(29) Line.l59
+[SHUNT], Load.s59b
+(28) Line.l55
+(29) Line.l54
+[SHUNT], Load.s55a
+(30) Line.l56
+[SHUNT], Load.s56b
+(29) Line.l53
+[SHUNT], Load.s53a
+(30) Line.l52
+[SHUNT], Load.s52a
+(31) Line.l116
+(24) Line.l64
+[SHUNT], Load.s65a
+[SHUNT], Load.s65b
+[SHUNT], Load.s65c
+(25) Line.l65
+[SHUNT], Load.s66c
+(22) Line.l107
+[SHUNT], Load.s109a
+(23) Line.l109
+(24) Line.l110
+[SHUNT], Load.s111a
+(24) Line.l111
+[SHUNT], Load.s112a
+(25) Line.l112
+[SHUNT], Load.s113a
+(26) Line.l113
+[SHUNT], Load.s114a
+(21) Line.l104
+[SHUNT], Load.s106b
+(22) Line.l106
+[SHUNT], Load.s107b
+(20) Line.l100
+[SHUNT], Load.s102c
+(21) Line.l102
+[SHUNT], Load.s103c
+(22) Line.l103
+[SHUNT], Load.s104c
+(18) Line.l96
+[SHUNT], Load.s98a
+(19) Line.l97
+[SHUNT], Load.s99b
+(20) Line.l98
+[SHUNT], Load.s100c
+(17) Line.l66
+[SHUNT], Load.s68a
+(18) Line.l69
+[SHUNT], Load.s69a
+(19) Line.l70
+[SHUNT], Load.s70a
+(20) Line.l71
+[SHUNT], Load.s71a
+(17) Line.l117
+(18) Transformer.reg4
+(4) Line.l13
+(5) Line.l18
+[SHUNT], Load.s19a
+(6) Line.l20
+[SHUNT], Load.s20a
+(5) Line.l19
+(6) Line.l21
+[SHUNT], Load.s22b
+(6) Line.l22
+(5) Line.sw3
+(6) Line.l114
+[SHUNT], Load.s35a
+(7) Line.l36
+(8) Line.l41
+[SHUNT], Load.s42a
+(9) Line.l43
+(10) Line.l45
+[SHUNT], Load.s47
+(11) Line.l48
+[SHUNT], Load.s49a
+[SHUNT], Load.s49b
+[SHUNT], Load.s49c
+(12) Line.l49
+[SHUNT], Load.s50c
+(13) Line.l50
+[SHUNT], Load.s51a
+(14) Line.l51
+(15) Line.sw9
+(16) Line.l32
+[SHUNT], Load.s30c
+(17) Line.l31
+[SHUNT], Load.s29a
+(18) Line.l30
+[SHUNT], Load.s28a
+(19) Line.l26
+(20) Transformer.reg3
+(20) Line.l24
+(21) Line.l23
+[SHUNT], Load.s24c
+(20) Line.l25
+(21) Line.l27
+(22) Line.l29
+[SHUNT], Load.s33a
+(21) Line.l28
+[SHUNT], Load.s31c
+(22) Line.l33
+[SHUNT], Load.s32c
+(11) Line.l47
+[SHUNT], Load.s48
+(10) Line.l44
+[SHUNT], Load.s45a
+(11) Line.l46
+[SHUNT], Load.s46a
+(9) Line.l42
+[SHUNT], Load.s43b
+(8) Line.l40
+[SHUNT], Load.s41c
+(7) Line.l35
+(8) Line.l37
+[SHUNT], Load.s37a
+(8) Line.l38
+[SHUNT], Load.s38b
+(9) Line.l39
+[SHUNT], Load.s39b
+
+*** START SUBAREA ***
+(0) Line.sw2
+
+*** START SUBAREA ***
+(0) Line.sw4
+
+*** START SUBAREA ***
+(0) Line.sw6
+
+
+***********  THE FOLLOWING ENABLED ELEMENTS ARE ISOLATED ************
+
+
+***  THE FOLLOWING BUSES ARE NOT CONNECTED TO ANY POWER DELIVERY ELEMENT ***
+
+
+***********  CONNECTED CIRCUIT ELEMENT TREE ************
+
+(Lexical Level) Element name
+
+(0) Vsource.source
+(1) Transformer.reg1a
+(1) Line.sw1

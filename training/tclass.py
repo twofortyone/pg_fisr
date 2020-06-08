@@ -66,5 +66,5 @@ class Training:
             self.all_reward_sums.append(reward_sums)
             self.all_state_visits.append(state_visits)
             df = pd.DataFrame(np.mean(self.all_reward_sums, axis=0), columns=['r_sums'])
-            df.to_excel(f'{self.rf}ars.xlsx')
-        return make_figure(None, np.mean(self.all_reward_sums, axis=0), self.rf + 'training.html')
+            df.to_excel(f'{self.rf}/ars.xlsx')
+        return make_figure(None, np.mean(self.all_reward_sums, axis=0), f'{self.rf}/training.html')

@@ -94,7 +94,7 @@ class FisrEnvironment_Pro(BaseEnvironment):
         # update possible actions
         self.actions = self.get_actions()
         self.reward_obs_term[1] = self.current_state
-        #print(self.current_state,'-------------------')
+        print(self.current_state,'-------------------')
         return self.reward_obs_term[1]
 
     def env_step(self, switch):

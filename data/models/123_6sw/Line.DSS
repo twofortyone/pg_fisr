@@ -1,0 +1,3 @@
+New "Line.sw10" phases=3 Switch=True bus1=na.1.2.3 bus2=nb.1.2.3
+New "Line.sw11" phases=3 Switch=True bus2=na.1.2.3 bus1=nb.1.2.3
+New "Line.sw7" phases=3 Switch=True bus1=na.1.2.3 bus2=nb.1.2.3

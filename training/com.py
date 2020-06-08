@@ -45,11 +45,11 @@ class OpenDSSCOM:
         self.num_loads = len(self.loads)
         #self.default_status = np.asarray([1,1,1,1,1])
         #self.start_status = np.asarray([0,0,0,0,0]) # start tie para 33 bus
-        #self.default_status = np.asarray([1,1,1,1,1,1,1,1,1,1])
-        #self.start_status = np.asarray([1,1,1,1,0,1,0,1,0,1])  # start tie para 123 bus
+        self.start_status = np.asarray([1,1,1,1,0,1,0,1,0,1])  # start tie para 123 bus
+
         self.default_status = self.get_switches_status()
-        self.start_status = self.get_switches_status()
-        #self.switches_init()
+        #self.start_status = self.get_switches_status()
+        self.switches_init()
         #self.solve()
         # --------------------------------------------------------------------------------------------------------------
         # Distribution Network Representation
@@ -158,7 +158,7 @@ class OpenDSSCOM:
         status = []
         self.DSSLoads.First
         for i in range(self.num_loads):
-            powers = self.DSSCktElement.Powers.count(0)
+            powers = [round(x,3) for x in self.DSSCktElement.Powers].count(0)
             if powers >= 4: status.append(0)
             else: status.append(1)
             self.DSSLoads.Next

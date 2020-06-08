@@ -105,7 +105,7 @@ class Report:
             
             </html>'''
 
-        f = open(self.report_folder + 'report.html', 'w')
+        f = open(f'{self.report_folder}/report.html', 'w')
         f.write(html_string)
         f.close()
 
