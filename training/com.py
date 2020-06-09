@@ -45,10 +45,14 @@ class OpenDSSCOM:
         self.num_loads = len(self.loads)
         #self.default_status = np.asarray([1,1,1,1,1])
         #self.start_status = np.asarray([0,0,0,0,0]) # start tie para 33 bus
-        self.start_status = np.asarray([1,1,1,1,0,1,0,1,0,1])  # start tie para 123 bus
-
-        self.default_status = self.get_switches_status()
+        #self.start_status = np.asarray([1,1,1,1,1])  # 123bus 5sw
+        #self.start_status = np.asarray([1,1,1,1,1,1])  # 123bus 6sw
+        #self.start_status = np.asarray([1,1,0,1,1,1,1])  # 123bus 7sw
+        #self.start_status = np.asarray([1,1,1,1,0,1,0,1])  # 123bus 8sw
+        #self.start_status = np.asarray([1,1,1,0,1,1,0,1,1])  # 123bus 9sw
+        #self.start_status = np.asarray([1,1,1,1,0,1,0,1,0,1])  # start tie para 123 bus 10 sw
         #self.start_status = self.get_switches_status()
+        self.start_status = np.asarray([1,0,0,1,1,0,1,0,0,1,0,0,1,1,0])
         self.switches_init()
         #self.solve()
         # --------------------------------------------------------------------------------------------------------------
@@ -71,6 +75,7 @@ class OpenDSSCOM:
     def clear_run(self):
         self.send_command('ClearAll')
         self.DSSText.Command = 'compile ' + self.path
+        self.switches_init()
 
     def topology(self):
         return self.DSSTopology.NumLoops
@@ -277,4 +282,7 @@ class OpenDSSCOM:
 
 #com = OpenDSSCOM('E:\pg_fisr\models\IEEE_13_Bus-G\Master.dss')
 #com = OpenDSSCOM('E:\IEEE_8500_Bus-G/Master.DSS')
-com = OpenDSSCOM('E:/pg_fisr/data/models/IEEE_123_FLISR_Case/Master.DSS')
+com = OpenDSSCOM('E:/pg_fisr/data/models/123_15sw/Master.DSS')
+#com.fail_line(com.lines.index('l77'))
+#com.solve()
+#print(com.get_switches_status(), com.get_num_isolated_loads())

@@ -22,9 +22,10 @@ print('''
 |       Welcome to Service Restoration RL Algorithm        | 
 ============================================================
 ''')
-t_epi = 200
+t_epi = 50
 t_runs = 1
-path = 'E:/pg_fisr/data/models/IEEE_123_FLISR_Case/Master.dss'
+#path = 'E:/pg_fisr/data/models/IEEE_123_FLISR_Case/Master.dss'
+path = 'E:/pg_fisr/data/models/123_15sw/Master.DSS'
 #path = 'E:/pg_fisr/models/ieee33bus.dss'
 #path = '/models/IEEE_8500_Bus-G/Master.DSS'
 # ----------------------------------------------------------
@@ -64,7 +65,7 @@ t_df = pd.DataFrame(data_training, dt_label, ['Values'])  # Training data frame
 
 # Save q_values
 df_q = pd.DataFrame(data=training.agent.q, columns=com.switches)
-df_q.to_feather(f'{this_path}/data/q_{circuit_name}_{t_runs}r_{t_epi}e.ftr')
+df_q.to_feather(f'{this_path}/q_{circuit_name}_{t_runs}r_{t_epi}e.ftr')
 
 # -------------------------------------------
 # Production
@@ -105,7 +106,7 @@ list_nil = [x[1] for x in all_restored_data]
 list_vol = [x[2] for x in all_restored_data]
 actions_df.insert(4, 'No. of IL pre SR', list_prev_nil, True)
 actions_df.insert(5, 'No. of IL post SR', list_nil, True)
-res_percent = [(x[0]-x[1])/x[0] for x in all_restored_data]
+res_percent = [x[0] for x in all_restored_data]
 actions_df.insert(6, 'Restoration Rate', res_percent)
 
 actions_df.to_excel(f'{this_path}/actions_{circuit_name}.xlsx')

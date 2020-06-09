@@ -130,7 +130,7 @@ class FisrEnvironment_Pro(BaseEnvironment):
             v_out_of_limits = self.voltages[self.current_state]
             num_loops = self.num_loops[self.current_state]
 
-            print(f'state:{self.current_state}; {self.opendss.get_switches_status()};num_vol: {v_out_of_limits}')
+            print(f'state:{self.current_state}; {self.opendss.get_switches_status()}; num_iso: {num_loads_offline}; num_vol: {v_out_of_limits}')
             if num_loads_offline !=0: reward -= 10 * int(num_loads_offline)
             if num_loops != 0: reward -= 100
             if v_out_of_limits != 0: reward -= 10

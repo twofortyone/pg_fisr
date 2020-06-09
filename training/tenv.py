@@ -185,5 +185,5 @@ class FisrEnvironment(BaseEnvironment):
         return [data, labels]
 
 
-com = OpenDSSCOM('E:/pg_fisr/data/models/IEEE_123_FLISR_Case/Master.DSS')
-env = FisrEnvironment(com, [], [], [])
+#com = OpenDSSCOM('E:/pg_fisr/data/models/IEEE_123_FLISR_Case/Master.DSS')
+#env = FisrEnvironment(com, [], [], [])

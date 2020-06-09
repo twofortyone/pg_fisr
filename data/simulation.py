@@ -50,16 +50,20 @@ class DataSimulation:
 
         terminal_states = []
         prev_state = 0
-        for line in trange( self.num_lines):
+        for line in trange(self.num_lines):
             env.opendss.fail_line(line)  # failure current line
             env.failure = line
             terminal = line * self.num_switch_states + env.get_default_state()
             print(f'falla en: {line}; state: {terminal}')
             prev_state = self.ss_array[env.get_ss_pos(terminal), :]
+            reference = self.ss_array[env.get_ss_pos(terminal), :]
+            prev_num_trans = None
             aux = 0
             for switch_state in range(self.num_switch_states):
                 state = self.ss_array[switch_state, :]
                 positions = np.where(state != prev_state )[0]
+                check_trans = np.where(state != reference)[0]
+                num_trans = check_trans.shape[0]
                 for pos in positions:
                     if state[pos] == 1:
                         env.opendss.close_switch(pos)
@@ -73,15 +77,18 @@ class DataSimulation:
                 num_vv = get_num_voltage_violations(np.asarray(vs[current_state]))
                 prev_nloops = loops[terminal]
                 nloops = loops[current_state]
-                if nil == prev_nil and nloops == 0 and aux != 0:
-                    if num_vv < prev_num_vv:  # todo: add current limits
-                        terminal = current_state
-                elif (nil < prev_nil) and nloops == 0:
+                #print(f'cs: {current_state}; prev: {prev_nil} nil: {nil}; prev: {prev_num_vv}; numvv: {num_vv}; loops: {nloops}')
+                if (nil < prev_nil) and nloops == 0:
                     terminal = current_state
-                    prev_state = current_state
+                    print(f'----{terminal}; {nil}')
                     aux += 1
-                else:
-                    pass
+                    prev_num_trans = check_trans.shape[0]
+                elif nil == prev_nil and aux != 0 and nloops == 0:
+                    if (num_trans < prev_num_trans):
+                        #if num_vv < prev_num_vv:  # todo: add current limits
+                        terminal = current_state
+                        print(f'menor numvv {terminal}; {prev_num_trans} -{num_trans}' )
+                        prev_num_trans = check_trans.shape[0]
                 prev_state = self.ss_array[env.get_ss_pos(current_state),:]
             terminal_states.append(terminal)
             print(f'queda con: {terminal}')

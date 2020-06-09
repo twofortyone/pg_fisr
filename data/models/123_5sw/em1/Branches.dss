@@ -23,7 +23,6 @@ New "Line.l20" phases=1 bus1=19.1 bus2=20.1 linecode=9 Seasons=1 Ratings=[400,] 
 New "Line.l19" phases=3 bus1=18.1.2.3 bus2=21.1.2.3 linecode=2 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.3 units=kft
 New "Line.l21" phases=1 bus1=21.2 bus2=22.2 linecode=10 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.525 units=kft
 New "Line.l22" phases=3 bus1=21.1.2.3 linecode=2 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.25 units=kft bus2=23.1.2.3
-New "Line.sw6" phases=3 Switch=True bus1=na.1.2.3 bus2=nb.1.2.3
 New "Line.l23" phases=1 bus1=23.3 bus2=24.3 linecode=11 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.55 units=kft
 New "Line.l24" phases=3 bus1=23.1.2.3 bus2=25.1.2.3 linecode=2 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.275 units=kft
 New "Line.l25" phases=2 bus1=25.1.3 bus2=26.1.3 linecode=7 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.35 units=kft

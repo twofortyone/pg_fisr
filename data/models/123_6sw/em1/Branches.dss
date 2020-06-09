@@ -90,7 +90,6 @@ New "Line.l48" phases=3 bus1=47.1.2.3 bus2=49.1.2.3 linecode=4 Seasons=1 Ratings
 New "Line.l49" phases=3 bus1=49.1.2.3 bus2=50.1.2.3 linecode=4 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.25 units=kft
 New "Line.l50" phases=3 bus1=50.1.2.3 bus2=51.1.2.3 linecode=4 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.25 units=kft
 New "Line.l51" phases=3 bus1=51.1.2.3 bus2=151.1.2.3 linecode=4 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.5 units=kft
-New "Line.sw9" phases=3 Switch=True bus1=na.1.2.3 bus2=nb.1.2.3
 New "Line.l32" phases=3 bus1=30.1.2.3 bus2=250.1.2.3 linecode=2 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.2 units=kft
 New "Line.l31" phases=3 bus1=29.1.2.3 bus2=30.1.2.3 linecode=2 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.35 units=kft
 New "Line.l30" phases=3 bus1=28.1.2.3 bus2=29.1.2.3 linecode=2 Seasons=1 Ratings=[400,] normamps=0.1 emergamps=20 length=0.3 units=kft

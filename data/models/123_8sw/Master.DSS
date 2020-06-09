@@ -12,7 +12,6 @@ Redirect em1\Branches.dss
 Redirect em1\Transformers.dss
 Redirect em1\Loads.dss
 Redirect em1\Capacitors.dss
-Redirect Line.DSS
 Redirect Transformer.DSS
 Redirect EnergyMeter.DSS
 MakeBusList

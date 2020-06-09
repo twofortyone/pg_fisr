@@ -33,9 +33,9 @@ this_path = os.path.abspath(os.path.dirname(__file__))
 t0 = time.time()
 com = OpenDSSCOM(path)
 # 'E:/pg_fisr/data/33bus_training06022020_new_simultation/'
-voltages = pd.read_feather('E:/pg_fisr/data/123_06022020_nsimulation/ieee123bus_voltages_2020-06-02.ftr').to_numpy()
-iso_loads = pd.read_feather('E:/pg_fisr/data/123_06022020_nsimulation/ieee123bus_isolated_loads_2020-06-02.ftr').to_numpy()
-num_loops = pd.read_feather('E:/pg_fisr/data/123_06022020_nsimulation/ieee123bus_num_loops_2020-06-02.ftr').to_numpy()
+voltages = pd.read_feather('E:/pg_fisr/training/ieee123bus_voltages_2020-06-08.ftr').to_numpy()
+iso_loads = pd.read_feather('E:/pg_fisr/training/ieee123bus_isolated_loads_2020-06-08.ftr').to_numpy()
+num_loops = pd.read_feather('E:/pg_fisr/training/ieee123bus_num_loops_2020-06-08.ftr').to_numpy()
 
 #voltages = pd.read_feather('E:/pg_fisr/data/33bus_training06022020_new_simultation/ieee37bus_voltages_2020-06-02.ftr').to_numpy()
 #iso_loads = pd.read_feather('E:/pg_fisr/data/33bus_training06022020_new_simultation/ieee37bus_isolated_loads_2020-06-02.ftr').to_numpy()
@@ -45,7 +45,7 @@ num_loops = pd.read_feather('E:/pg_fisr/data/123_06022020_nsimulation/ieee123bus
 
 circuit_name = com.DSSCircuit.Name
 env = FisrEnvironment(com, voltages, iso_loads, num_loops)
-term_states = pd.read_feather('E:/pg_fisr/training/data_123_0806/ieee123bus_terminal_states_2020-06-08.ftr').to_numpy()
+term_states = pd.read_feather('E:/pg_fisr/training/ieee123bus_terminal_states_2020-06-08.ftr').to_numpy()
 #term_states = pd.read_feather('E:/pg_fisr/data/33bus_training06022020_new_simultation/ieee37bus_terminal_states_2020-06-02.ftr').to_numpy()
 env.terminal_states = term_states
 agent = QLearningAgent(1)
