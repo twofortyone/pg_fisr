@@ -1,2 +1,1 @@
-# pg_fisr
-Reconfiguration algorithm working 
+# Service Restoration algorithm 
